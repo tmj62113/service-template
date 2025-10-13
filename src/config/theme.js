@@ -13,7 +13,7 @@ export const theme = {
   tagline: "Original Artwork & Fine Art Prints",
 
   // Logo and images
-  logo: "/logo.png",
+  logo: "/peterson_logo.png",
   logoAlt: "Mark J Peterson Art Logo",
   favicon: "/favicon.ico",
 
@@ -47,54 +47,54 @@ export const theme = {
   },
 
   // ===================================================
-  // COLOR SCHEME
+  // COLOR SCHEME - Mark J Peterson Art Brand
   // ===================================================
   colors: {
-    // Primary brand colors
-    primary: "#2C3E50", // Deep blue-gray - sophisticated and gallery-like
-    primaryHover: "#1a252f", // Darker shade on hover
-    primaryText: "#FFFFFF", // White text on primary background
+    // Primary brand colors - Dark blues for text and headings
+    primary: "#122D38", // Gunmetal - main text, headings, footer
+    primaryHover: "#0C3A4B", // Charcoal - darker shade on hover
+    primaryText: "#F7F6EF", // Cream text on dark backgrounds
 
-    // Secondary colors
-    secondary: "#8E44AD", // Rich purple - artistic accent
-    secondaryHover: "#732d91", // Darker purple on hover
+    // Secondary colors - Browns for accents
+    secondary: "#692413", // Seal brown - deep brown accent, borders
+    secondaryHover: "#B93A0C", // Rust - accent rust (minimal usage)
 
-    // Accent colors
-    accent: "#E67E22", // Warm orange - creative energy
-    accentHover: "#ca6510", // Darker orange on hover
+    // Accent colors - Golds for CTAs and highlights
+    accent: "#C0A679", // Ecru - primary buttons, CTAs, active states
+    accentHover: "#B49A68", // Lion - hover states, borders (often 20% opacity)
 
-    // Neutral colors
-    background: "#FFFFFF", // Page background
-    surface: "#F9FAFB", // Card/surface background
-    surfaceHover: "#F3F4F6", // Surface on hover
+    // Neutral colors - Cream base
+    background: "#F7F6EF", // Cream - primary background (replaces white everywhere)
+    surface: "#F7F6EF", // Cream - card/surface background
+    surfaceHover: "#EFEEE5", // Slightly darker cream on hover
 
     // Text colors
-    text: "#111827", // Primary text
-    textSecondary: "#6B7280", // Secondary/muted text
-    textTertiary: "#9CA3AF", // Tertiary/very muted text
+    text: "#122D38", // Gunmetal - primary text
+    textSecondary: "#0C3A4B", // Charcoal - secondary/muted text
+    textTertiary: "#B49A68", // Lion - tertiary/accent text
 
     // Border colors
-    border: "#E5E7EB", // Default border
-    borderLight: "#F3F4F6", // Lighter border
-    borderDark: "#D1D5DB", // Darker border
+    border: "rgba(180, 154, 104, 0.2)", // Lion at 20% opacity - subtle borders
+    borderLight: "rgba(180, 154, 104, 0.1)", // Lion at 10% opacity - very subtle
+    borderDark: "#692413", // Seal brown - darker borders
 
     // Feedback colors
-    error: "#EF4444", // Error state
+    error: "#B93A0C", // Rust - error state
     errorLight: "#FEE2E2", // Error background
     success: "#10B981", // Success state
     successLight: "#D1FAE5", // Success background
     warning: "#F59E0B", // Warning state
     warningLight: "#FEF3C7", // Warning background
-    info: "#3B82F6", // Info state
+    info: "#0C3A4B", // Charcoal - info state
     infoLight: "#DBEAFE", // Info background
   },
 
   // ===================================================
-  // TYPOGRAPHY
+  // TYPOGRAPHY - Mark J Peterson Art Brand
   // ===================================================
   fonts: {
-    heading: "system-ui, -apple-system, 'Segoe UI', sans-serif",
-    body: "system-ui, -apple-system, 'Segoe UI', sans-serif",
+    heading: "'Oswald', sans-serif", // All headings (h1-h6)
+    body: "'Cabin', sans-serif", // Body text, paragraphs, UI elements
     mono: "'Courier New', monospace",
   },
 
@@ -121,11 +121,11 @@ export const theme = {
   // LAYOUT & SPACING
   // ===================================================
   layout: {
-    maxWidth: "1280px",
+    maxWidth: "1050px", // MJ Peterson Art design system max container width
     maxWidthNarrow: "800px",
-    borderRadius: "8px",
-    borderRadiusLarge: "12px",
-    borderRadiusSmall: "4px",
+    borderRadius: "8px", // Cards and images
+    borderRadiusLarge: "9999px", // Circular buttons/icons
+    borderRadiusSmall: "4px", // Buttons
 
     spacing: {
       xs: "4px",
