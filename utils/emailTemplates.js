@@ -144,7 +144,7 @@ export function generateOrderConfirmationEmail(orderData) {
               <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e5e7eb;">
                 <p style="color: #6b7280; font-size: 14px; margin: 0; line-height: 1.6;">
                   Questions about your order? Contact us at
-                  <a href="mailto:support@tiffanyjensenportfolio.com" style="color: #1a1a1a; text-decoration: none;">support@tiffanyjensenportfolio.com</a>
+                  <a href="mailto:support@markjpetersonart.com" style="color: #1a1a1a; text-decoration: none;">support@markjpetersonart.com</a>
                 </p>
               </div>
             </td>

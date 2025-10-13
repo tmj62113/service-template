@@ -49,7 +49,7 @@ async function sendOrderConfirmationEmail(orderData) {
     const emailHtml = generateOrderConfirmationEmail(orderData);
 
     const { data, error } = await resend.emails.send({
-      from: 'orders@tiffanyjensenportfolio.com',
+      from: 'Mark J Peterson Art <onboarding@resend.dev>',
       to: orderData.customerEmail,
       subject: `Order Confirmation - #${orderData._id.toString().slice(-8).toUpperCase()}`,
       html: emailHtml,
@@ -1173,7 +1173,7 @@ app.post('/api/messages/send-email', authenticateToken, async (req, res) => {
           <!-- Reply Instructions -->
           <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
             <p style="margin: 0; font-size: 13px; color: #856404;">
-              <strong>Please Note:</strong> Do not reply to this email. To continue this conversation, please send your response to <a href="mailto:admin@tiffanyjensenportfolio.com" style="color: #856404; text-decoration: underline;">admin@tiffanyjensenportfolio.com</a>
+              <strong>Please Note:</strong> Do not reply to this email. To continue this conversation, please send your response to <a href="mailto:support@markjpetersonart.com" style="color: #856404; text-decoration: underline;">support@markjpetersonart.com</a>
             </p>
           </div>
 
@@ -1210,7 +1210,7 @@ app.post('/api/messages/send-email', authenticateToken, async (req, res) => {
           <!-- Reply Instructions -->
           <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin-top: 20px; border-radius: 4px;">
             <p style="margin: 0; font-size: 13px; color: #856404;">
-              <strong>Please Note:</strong> Do not reply to this email. To continue this conversation, please send your response to <a href="mailto:admin@tiffanyjensenportfolio.com" style="color: #856404; text-decoration: underline;">admin@tiffanyjensenportfolio.com</a>
+              <strong>Please Note:</strong> Do not reply to this email. To continue this conversation, please send your response to <a href="mailto:support@markjpetersonart.com" style="color: #856404; text-decoration: underline;">support@markjpetersonart.com</a>
             </p>
           </div>
         </div>
