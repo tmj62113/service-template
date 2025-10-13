@@ -525,3 +525,253 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Break nothing that works
 - Well-tested, DRY code is maintainable code
 - Every feature should be production-ready with comprehensive tests before moving forward
+
+---
+
+## Design & Visual Development
+
+### Design System Documentation
+
+**Mark J Peterson Art Brand Assets:**
+- **Design System Reference**: `/context/design/design-system/DESIGN_SYSTEM.md`
+- **Brand Analysis**: `/context/design/design-system/mjpeterson-art_analysis.json`
+- **Style Guide**: `/context/design/design-system/mjpeterson-art_style_guide.html`
+- **Design Principles**: `/context/design/design-principles.md`
+- **Design Tokens**: `/context/design/design-system/*.json` (colors, typography, spacing, components)
+
+**When making visual (front-end, UI/UX) changes, ALWAYS refer to these files for guidance.**
+
+### Quick Visual Verification
+
+IMMEDIATELY after implementing any front-end change:
+
+1. **Identify what changed** - Review the modified components/pages
+2. **Navigate to affected pages** - Use `mcp__playwright__browser_navigate` to visit each changed view
+3. **Verify design compliance** - Compare against design system documentation
+4. **Validate feature implementation** - Ensure the change fulfills the user's specific request
+5. **Check acceptance criteria** - Review any provided context files or requirements
+6. **Capture evidence** - Take full page screenshot at desktop viewport (1440px) of each changed view
+7. **Check for errors** - Run `mcp__playwright__browser_console_messages`
+
+This verification ensures changes meet design standards and user requirements.
+
+### Comprehensive Design Review
+
+Invoke the `design-review` agent for thorough design validation when:
+
+- Completing significant UI/UX features
+- Before finalizing PRs with visual changes
+- Needing comprehensive accessibility and responsiveness testing
+- Want to ensure world-class design quality
+
+**Usage:**
+```bash
+# Use the agent directly
+@design-review
+
+# Or use the slash command
+/design-review
+```
+
+The design review agent will systematically test:
+- ✅ User interaction flows
+- ✅ Responsive design (desktop, tablet, mobile)
+- ✅ Visual polish and consistency
+- ✅ Accessibility (WCAG 2.1 AA compliance)
+- ✅ Robustness and edge cases
+- ✅ Code quality and design token usage
+- ✅ Console errors and warnings
+
+### CSS Styling Workflow
+
+**Design System Architecture:**
+- `/src/styles/design-system.css` - Core utility classes and design tokens (DO NOT EDIT directly)
+- `/src/styles/client.css` - Mark J Peterson Art specific overrides (EDIT HERE)
+- `/src/config/theme.js` - Whitelabel configuration including colors, fonts, spacing
+
+**When Adding Styles:**
+
+1. **First, search for existing utility classes:**
+   ```bash
+   grep -r "btn\|card\|badge" src/styles/design-system.css
+   ```
+
+2. **Use existing utilities when possible:**
+   ```css
+   /* ✅ GOOD: Use existing utility classes */
+   <button className="btn btn--primary">
+
+   /* ❌ BAD: Create duplicate styles */
+   <button className="custom-button">
+   ```
+
+3. **For client-specific styles, add to client.css:**
+   ```css
+   /* /src/styles/client.css */
+
+   /* Override design system variables */
+   :root {
+     --color-primary: #8E44AD;  /* Mark's purple */
+   }
+
+   /* Add client-specific classes */
+   .artwork-card {
+     /* Use design system variables */
+     padding: var(--spacing-md);
+     border-radius: var(--radius-md);
+   }
+   ```
+
+4. **Never hardcode values - use CSS variables:**
+   ```css
+   /* ✅ GOOD */
+   padding: var(--spacing-md);
+   color: var(--color-primary);
+
+   /* ❌ BAD */
+   padding: 16px;
+   color: #8E44AD;
+   ```
+
+### Design Iteration Process
+
+1. **Review Design Context** - Read relevant files in `/context/design/`
+2. **Implement Changes** - Make CSS/component changes following design system
+3. **Quick Verification** - Follow quick visual check steps above
+4. **Run Tests** - Ensure no regressions: `npm run test:run`
+5. **Design Review** - Use `design-review` agent for comprehensive validation
+6. **Iterate** - Address any issues found in review
+7. **Commit** - Follow git commit requirements with design changes documented
+
+### Accessibility Requirements
+
+All UI changes MUST meet WCAG 2.1 AA standards:
+
+- **Keyboard Navigation**: All interactive elements must be keyboard accessible
+- **Focus States**: Visible focus indicators on all interactive elements
+- **Color Contrast**: Minimum 4.5:1 ratio for text
+- **Semantic HTML**: Use proper HTML elements (`<button>`, `<nav>`, etc.)
+- **Alt Text**: All images must have descriptive alt attributes
+- **Form Labels**: All form inputs must have associated labels
+- **ARIA**: Use ARIA attributes only when semantic HTML insufficient
+
+The `design-review` agent will automatically test for these requirements.
+
+### Responsive Design Standards
+
+Test all changes at these breakpoints:
+
+- **Desktop**: 1440px (primary development viewport)
+- **Tablet**: 768px (verify layout adaptation)
+- **Mobile**: 375px (ensure touch optimization)
+
+**Requirements:**
+- No horizontal scrolling at any breakpoint
+- Touch targets minimum 44x44px on mobile
+- Readable text without zooming
+- Proper spacing and layout at all sizes
+
+### Browser Testing
+
+Test in multiple browsers before finalizing:
+- Chrome (primary)
+- Firefox
+- Safari
+- Edge
+
+Use `mcp__playwright__browser_console_messages` to catch browser-specific issues.
+
+---
+
+## Design Review Agent Usage
+
+The `design-review` agent conducts systematic reviews following Silicon Valley best practices (Stripe, Airbnb, Linear standards).
+
+### When to Use
+
+- After completing UI features
+- Before merging visual changes
+- When unsure about design quality
+- To validate accessibility compliance
+- To test responsive behavior
+
+### What It Tests
+
+**Phase 1: Interaction & User Flow**
+- Primary user workflows
+- Interactive states (hover, active, disabled)
+- Destructive action confirmations
+- Perceived performance
+
+**Phase 2: Responsiveness**
+- Desktop (1440px) viewport
+- Tablet (768px) adaptation
+- Mobile (375px) optimization
+- No overlap or scrolling issues
+
+**Phase 3: Visual Polish**
+- Layout alignment
+- Spacing consistency
+- Typography hierarchy
+- Color palette usage
+- Image quality
+
+**Phase 4: Accessibility**
+- Keyboard navigation (Tab order)
+- Focus states visibility
+- Keyboard operability (Enter/Space)
+- Semantic HTML
+- Form labels
+- Alt text
+- Color contrast ratios
+
+**Phase 5: Robustness**
+- Form validation
+- Content overflow scenarios
+- Loading states
+- Empty states
+- Error states
+- Edge cases
+
+**Phase 6: Code Health**
+- Component reuse
+- Design token usage
+- Pattern adherence
+
+**Phase 7: Content & Console**
+- Grammar and clarity
+- Console errors/warnings
+
+### Report Structure
+
+The agent provides categorized feedback:
+
+- **[Blocker]**: Critical failures requiring immediate fix
+- **[High-Priority]**: Significant issues to fix before merge
+- **[Medium-Priority]**: Improvements for follow-up
+- **[Nitpick]**: Minor aesthetic details
+
+All issues include screenshots for visual problems.
+
+---
+
+## Final Design Workflow Checklist
+
+When completing any UI/UX work:
+
+- [ ] Reviewed design system documentation in `/context/design/`
+- [ ] Used existing utility classes from `design-system.css`
+- [ ] Added client-specific styles only to `client.css`
+- [ ] Used CSS variables (no hardcoded values)
+- [ ] Tested manually in browser at all breakpoints
+- [ ] Ran quick visual verification steps
+- [ ] Used `design-review` agent for comprehensive validation
+- [ ] Addressed all blockers and high-priority issues
+- [ ] Verified keyboard accessibility
+- [ ] Checked color contrast ratios
+- [ ] Tested in multiple browsers
+- [ ] Ran full test suite (`npm run test:run`)
+- [ ] All tests passing
+- [ ] Committed with detailed message including design changes
+
+---
