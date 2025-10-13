@@ -1,41 +1,20 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { theme } from '../config/theme';
 import './Home.css';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Hero slideshow images
   const slideshowImages = [
-    '/images/homepage/slideshow/IMG_1719.JPG',
-    '/images/homepage/slideshow/IMG_1724.JPG',
-    '/images/homepage/slideshow/IMG_1727.JPG',
-    '/images/homepage/slideshow/IMG_1731.JPG',
-    '/images/homepage/slideshow/IMG_1751.JPG',
+    { id: 1, src: '/images/homepage/slideshow/IMG_1719.JPG', alt: 'Steampunk Dreams' },
+    { id: 2, src: '/images/homepage/slideshow/IMG_1724.JPG', alt: 'Industrial Elegance' },
+    { id: 3, src: '/images/homepage/slideshow/IMG_1727.JPG', alt: 'Victorian Automatons' },
+    { id: 4, src: '/images/homepage/slideshow/IMG_1731.JPG', alt: 'Artistic Machinery' },
+    { id: 5, src: '/images/homepage/slideshow/IMG_1751.JPG', alt: 'Creative Visions' },
   ];
 
-  const featuredArtwork = [
-    {
-      id: 1,
-      title: 'Featured Artwork 1',
-      image: '/images/homepage/featured/IMG_1712.PNG',
-      price: '$299',
-    },
-    {
-      id: 2,
-      title: 'Featured Artwork 2',
-      image: '/images/homepage/featured/IMG_1725.PNG',
-      price: '$349',
-    },
-    {
-      id: 3,
-      title: 'Featured Artwork 3',
-      image: '/images/homepage/featured/IMG_1742.PNG',
-      price: '$399',
-    },
-  ];
-
-  // Auto-advance slideshow
+  // Auto-advance slideshow every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
@@ -48,51 +27,116 @@ export default function Home() {
   };
 
   const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + slideshowImages.length) % slideshowImages.length
-    );
+    setCurrentSlide((prev) => (prev - 1 + slideshowImages.length) % slideshowImages.length);
   };
+
+  // Collections - 3 collections with 3x2 grids
+  const collections = [
+    {
+      name: 'Steampunk Art',
+      count: '24 pieces',
+      images: [
+        '/images/homepage/collections/grid-1/00tv_bowlingpin.JPG',
+        '/images/homepage/collections/grid-1/02AA6A1994-BAF2-48F8-A901-F77C84B379DC.png',
+        '/images/homepage/collections/grid-1/03shapes_1.png',
+        '/images/homepage/collections/grid-1/04shapes_2.png',
+        '/images/homepage/collections/grid-1/05shapes_3.png',
+        '/images/homepage/collections/grid-1/meditate.png',
+      ],
+    },
+    {
+      name: 'Brass & Copper',
+      count: '32 pieces',
+      images: [
+        '/images/homepage/collections/grid 2/airplane.JPG',
+        '/images/homepage/collections/grid 2/computer_man.JPG',
+        '/images/homepage/collections/grid 2/memory.PNG',
+        '/images/homepage/collections/grid 2/relic_1.PNG',
+        '/images/homepage/collections/grid 2/relic_3.jpeg',
+        '/images/homepage/collections/grid 2/robot.PNG',
+      ],
+    },
+    {
+      name: 'Victorian Dreams',
+      count: '15 pieces',
+      images: [
+        '/images/homepage/collections/ink/IMG_1165.JPG',
+        '/images/homepage/collections/ink/IMG_1166.JPG',
+        '/images/homepage/collections/ink/IMG_1167.JPG',
+        '/images/homepage/collections/ink/IMG_2202.JPG',
+        '/images/homepage/collections/ink/ink_1.JPG',
+        '/images/homepage/collections/ink/ink_2.png',
+      ],
+    },
+  ];
+
+  // Artwork grid - masonry layout
+  const artworkGrid = [
+    { image: '/images/homepage/artwork/IMG_1712.PNG', size: 'tall' },
+    { image: '/images/homepage/artwork/IMG_1714.JPG', size: 'tall' },
+    { image: '/images/homepage/artwork/IMG_1716.PNG', size: 'medium' },
+    { image: '/images/homepage/artwork/IMG_1720.PNG', size: 'small' },
+    { image: '/images/homepage/artwork/IMG_1722.PNG', size: 'small' },
+    { image: '/images/homepage/artwork/IMG_1725.PNG', size: 'medium' },
+    { image: '/images/homepage/artwork/IMG_1730.PNG', size: 'tall' },
+    { image: '/images/homepage/artwork/IMG_1732.JPG', size: 'medium' },
+    { image: '/images/homepage/artwork/IMG_1733.PNG', size: 'tall' },
+    { image: '/images/homepage/artwork/IMG_1735.PNG', size: 'medium' },
+    { image: '/images/homepage/artwork/IMG_1736.JPG', size: 'small' },
+    { image: '/images/homepage/artwork/IMG_1738.PNG', size: 'tall' },
+    { image: '/images/homepage/artwork/IMG_1740.PNG', size: 'small' },
+    { image: '/images/homepage/artwork/IMG_1742.PNG', size: 'medium' },
+    { image: '/images/homepage/artwork/IMG_1746.PNG', size: 'tall' },
+    { image: '/images/homepage/artwork/IMG_1748.JPG', size: 'medium' },
+    { image: '/images/homepage/artwork/IMG_1749.PNG', size: 'tall' },
+  ];
+
+  // Featured artwork products
+  const featuredArtwork = [
+    {
+      id: 0,
+      title: 'Clockwork Heart',
+      image: '/images/homepage/featured/IMG_1712.PNG',
+      price: '$165',
+    },
+    {
+      id: 1,
+      title: 'Brass Butterfly',
+      image: '/images/homepage/artwork/IMG_1714.JPG',
+      price: '$145',
+    },
+    {
+      id: 2,
+      title: 'Steam Engine Dreams',
+      image: '/images/homepage/artwork/IMG_1720.PNG',
+      price: '$185',
+    },
+    {
+      id: 3,
+      title: 'Mechanical Rose',
+      image: '/images/homepage/featured/IMG_1712.PNG',
+      price: '$155',
+    },
+  ];
 
   return (
     <div className="home-container">
       {/* Hero Slideshow */}
       <section className="hero-slideshow">
         <div className="slideshow-container">
-          {slideshowImages.map((image, index) => (
+          {slideshowImages.map((slide, index) => (
             <div
-              key={index}
+              key={slide.id}
               className={`slide ${index === currentSlide ? 'active' : ''}`}
-              style={{
-                backgroundImage: `url(${image})`,
-              }}
-            >
-              <div className="hero-overlay">
-                <div className="hero-content">
-                  <h1 className="hero-title">Original Artwork by Mark J Peterson</h1>
-                  <p className="hero-subtitle">
-                    Discover unique paintings and fine art prints
-                  </p>
-                  <Link to="/products" className="btn btn--primary hero-cta">
-                    Shop Now
-                  </Link>
-                </div>
-              </div>
-            </div>
+              style={{ backgroundImage: `url(${slide.src})` }}
+            />
           ))}
 
           {/* Slideshow Controls */}
-          <button
-            className="slideshow-control prev"
-            onClick={prevSlide}
-            aria-label="Previous slide"
-          >
+          <button className="slideshow-control prev" onClick={prevSlide} aria-label="Previous slide">
             <span className="material-symbols-outlined">chevron_left</span>
           </button>
-          <button
-            className="slideshow-control next"
-            onClick={nextSlide}
-            aria-label="Next slide"
-          >
+          <button className="slideshow-control next" onClick={nextSlide} aria-label="Next slide">
             <span className="material-symbols-outlined">chevron_right</span>
           </button>
 
@@ -101,9 +145,7 @@ export default function Home() {
             {slideshowImages.map((_, index) => (
               <button
                 key={index}
-                className={`dot-indicator ${
-                  index === currentSlide ? 'active' : ''
-                }`}
+                className={`dot-indicator ${index === currentSlide ? 'active' : ''}`}
                 onClick={() => setCurrentSlide(index)}
                 aria-label={`Go to slide ${index + 1}`}
               />
@@ -112,115 +154,84 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Artwork Section */}
-      <section className="featured-section container">
-        <div className="section-header">
-          <h4 className="section-label">Featured Works</h4>
-          <h2 className="section-title">Explore Our Collection</h2>
-          <p className="section-subtitle">
-            Handpicked original artwork and fine art prints
-          </p>
-        </div>
+      {/* Collections Section */}
+      <section className="collections-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>MJ Peterson Art Collections</h2>
+            <p>
+              Shop for artwork from Gallery Owners and Dealers from all over the world. Through my partnership with Curated Art Source, these limited edition prints are available direct to you.
+            </p>
+          </div>
 
-        <div className="featured-grid">
-          {featuredArtwork.map((artwork) => (
-            <Link
-              key={artwork.id}
-              to="/products"
-              className="featured-card card"
-            >
-              <div className="featured-image">
-                <img
-                  src={artwork.image}
-                  alt={artwork.title}
-                  loading="lazy"
-                />
+          <div className="collections-grid-container">
+            {collections.map((collection, index) => (
+              <div key={index} className="collection-card">
+                <div className="collection-images">
+                  {collection.images.map((image, idx) => (
+                    <img key={idx} src={image} alt={`${collection.name} ${idx + 1}`} />
+                  ))}
+                </div>
+                <div className="collection-info">
+                  <button className="collection-title">{collection.name}</button>
+                  <p className="collection-count">{collection.count}</p>
+                </div>
               </div>
-              <div className="featured-info">
-                <h3 className="featured-title">{artwork.title}</h3>
-                <p className="featured-price">{artwork.price}</p>
-              </div>
-            </Link>
-          ))}
+            ))}
+          </div>
         </div>
+      </section>
 
-        <div className="section-cta">
-          <Link to="/products" className="btn btn--outline">
-            View All Artwork
-          </Link>
+      {/* Artwork Grid Section */}
+      <section className="artwork-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>Artwork by MJ Peterson</h2>
+            <p>
+              Each image may be purchased as a canvas print, framed print, metal print, and more! Every purchase comes with a 30-day money-back guarantee.
+            </p>
+          </div>
+
+          <div className="masonry-grid">
+            {artworkGrid.map((item, index) => (
+              <div key={index} className={`masonry-item masonry-item--${item.size}`}>
+                <img src={item.image} alt={`Artwork ${index + 1}`} />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* About Section */}
       <section className="about-section">
-        <div className="container about-content">
-          <div className="about-text">
-            <h4 className="section-label">About the Artist</h4>
-            <h2 className="section-title">Mark J Peterson</h2>
-            <p className="about-description">
-              Mark J Peterson creates contemporary artwork that blends traditional
-              techniques with modern aesthetics. Each piece is crafted with
-              attention to detail and a passion for artistic expression.
-            </p>
-            <p className="about-description">
-              From original paintings to limited edition prints, explore a diverse
-              collection that brings art into your everyday life.
-            </p>
-            <Link to="/about" className="btn btn--secondary">
-              Learn More
-            </Link>
-          </div>
-          <div className="about-image">
-            <img
-              src="/images/homepage/artwork/IMG_1712.PNG"
-              alt="Mark J Peterson Artwork"
-              loading="lazy"
-            />
-          </div>
+        <div className="container">
+          <h2>About MJ Peterson</h2>
+          <p>
+            Capturing the intersection of Victorian elegance and industrial innovation, MJ Peterson's work explores the romance of machinery and the poetry of mechanical precision.
+          </p>
+          <p>
+            Each piece is hand-crafted with archival materials, celebrating the beauty of brass, copper, and the intricate dance of gears and springs.
+          </p>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="features-section container">
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">
-              <span className="material-symbols-outlined">palette</span>
-            </div>
-            <h3>Original Artwork</h3>
-            <p>One-of-a-kind pieces created by the artist</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">
-              <span className="material-symbols-outlined">print</span>
-            </div>
-            <h3>Fine Art Prints</h3>
-            <p>High-quality reproductions on premium paper</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">
-              <span className="material-symbols-outlined">local_shipping</span>
-            </div>
-            <h3>Secure Shipping</h3>
-            <p>Carefully packaged and insured delivery</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon">
-              <span className="material-symbols-outlined">verified</span>
-            </div>
-            <h3>Authenticity</h3>
-            <p>Certificate of authenticity with every purchase</p>
+      {/* Featured Artwork Section */}
+      <section className="featured-section">
+        <div className="container">
+          <h2>Featured Artwork</h2>
+
+          <div className="featured-grid">
+            {featuredArtwork.map((artwork) => (
+              <Link key={artwork.id} to={`#artwork-${artwork.id}`} className="featured-card">
+                <img src={artwork.image} alt={artwork.title} />
+                <div className="featured-info">
+                  <h3>{artwork.title}</h3>
+                  <p className="price">{artwork.price}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="cta-section container">
-        <h2>Ready to start your collection?</h2>
-        <p>Browse our gallery and find the perfect piece for your space</p>
-        <Link to="/products" className="btn btn--primary">
-          Shop All Artwork
-        </Link>
       </section>
     </div>
   );

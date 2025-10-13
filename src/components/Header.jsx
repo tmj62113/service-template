@@ -23,7 +23,7 @@ export default function Header() {
       <header className="header">
         <div className="header-content">
           <Link to="/" className="logo">
-            <img src={theme.logo} alt={theme.brandName} />
+            <h1>MJ PETERSON ART</h1>
           </Link>
 
           {/* Desktop Navigation */}

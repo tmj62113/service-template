@@ -11,13 +11,13 @@
    ===================================== */
 :root {
   /* Mark J Peterson Art Brand Colors */
-  --color-gunmetal: #122D38;
-  --color-charcoal: #0C3A4B;
+  --color-gunmetal: #122d38;
+  --color-charcoal: #0c3a4b;
   --color-seal-brown: #692413;
-  --color-rust: #B93A0C;
-  --color-lion: #B49A68;
-  --color-ecru: #C0A679;
-  --color-cream: #F7F6EF;
+  --color-rust: #b93a0c;
+  --color-lion: #b49a68;
+  --color-ecru: #c0a679;
+  --color-cream: #f7f6ef;
 
   /* Override design system colors with brand colors */
   --color-primary: var(--color-gunmetal);
@@ -30,8 +30,8 @@
   --color-border: rgba(180, 154, 104, 0.2);
 
   /* Typography */
-  --font-heading: 'Oswald', sans-serif;
-  --font-body: 'Cabin', sans-serif;
+  --font-heading: "Oswald", sans-serif;
+  --font-body: "Cabin", sans-serif;
 
   /* Layout */
   --max-width: 1050px;
@@ -64,9 +64,19 @@ body {
    ===================================== */
 
 /* Headings use Oswald */
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 .heading,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
   font-family: var(--font-heading);
   color: var(--color-gunmetal);
   font-weight: 600;
@@ -95,7 +105,11 @@ h4 {
 }
 
 /* Body text uses Cabin */
-body, p, li, span, div {
+body,
+p,
+li,
+span,
+div {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 24px;
@@ -197,6 +211,27 @@ nav {
   border-bottom: 1px solid var(--color-border);
 }
 
+/* Logo - Text-based logo for Mark J Peterson Art */
+.logo h1 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--color-gunmetal);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Navigation - Left-aligned next to logo */
+.nav {
+  justify-content: flex-start;
+}
+
+/* Navigation links - Rust hover effect */
+.nav a:hover {
+  color: var(--color-rust);
+}
+
 .nav-link {
   color: var(--color-gunmetal);
   font-family: var(--font-body);
@@ -206,7 +241,7 @@ nav {
 
 .nav-link:hover,
 .nav-link.active {
-  color: var(--color-ecru);
+  color: var(--color-rust);
 }
 
 /* =====================================
@@ -226,7 +261,7 @@ footer {
 }
 
 .footer a:hover {
-  color: var(--color-ecru);
+  color: var(--color-rust);
 }
 
 .footer h3,
@@ -320,7 +355,7 @@ a {
 }
 
 a:hover {
-  color: var(--color-ecru);
+  color: var(--color-rust);
 }
 
 /* =====================================
@@ -337,12 +372,19 @@ a:hover {
    ===================================== */
 
 /* Standard transitions for interactive elements */
-button, a, .btn, .card, input, textarea, select {
+button,
+a,
+.btn,
+.card,
+input,
+textarea,
+select {
   transition: all 0.2s ease;
 }
 
 /* Quick transitions for hover states */
-.btn-icon, .nav-link {
+.btn-icon,
+.nav-link {
   transition: all 0.15s ease;
 }
 
