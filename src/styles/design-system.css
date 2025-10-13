@@ -1,0 +1,571 @@
+/* =====================================================
+   DESIGN SYSTEM - DIGITAL STYLE GUIDE
+   ===================================================== */
+
+/*
+  ⚠️ IMPORTANT: HOW THIS FILE WORKS WITH theme.js
+
+  This file provides:
+  ✅ Static CSS variables (defaults/fallbacks)
+  ✅ BEM utility classes (.btn, .card, .heading, etc.)
+  ✅ Universal values (spacing, shadows, transitions)
+
+  theme.js provides:
+  ✅ Client-specific brand colors
+  ✅ Company information
+  ✅ Feature toggles
+  ✅ JavaScript access to theme values
+
+  HOW THEY WORK TOGETHER:
+  1. design-system.css defines:   --color-primary: #f8f8f8 (default)
+  2. theme.js overrides via App.jsx inline styles:  --color-primary: #E9E9E9 (client brand)
+  3. All utility classes use:     background: var(--color-primary) (gets #E9E9E9)
+
+  TO CUSTOMIZE BRAND COLORS:
+  ❌ DON'T edit this file's :root variables
+  ✅ DO edit /src/config/theme.js colors object
+
+  TO ADD NEW UTILITY CLASSES:
+  ✅ Add them to this file using BEM naming convention
+  ✅ Always reference CSS variables (var(--color-primary))
+  ✅ Never hardcode colors, spacing, or sizes
+
+  VISUAL TEST PAGE:
+  View all utilities and color swatches: http://localhost:5173/test-utilities
+*/
+
+/* =====================================================
+   CSS VARIABLES (Defaults/Fallbacks)
+   ===================================================== */
+
+:root {
+  /* Colors */
+  --color-primary: #f8f8f8;
+  --color-primary-dark: #e0e0e0;
+  --color-primary-light: #ffffff;
+
+  --color-dark: #1a1a1a;
+  --color-dark-secondary: #2d2d2d;
+  --color-gray-900: #111827;
+  --color-gray-800: #1f2937;
+  --color-gray-700: #374151;
+  --color-gray-600: #4b5563;
+  --color-gray-500: #6b7280;
+  --color-gray-400: #9ca3af;
+  --color-gray-300: #d1d5db;
+  --color-gray-200: #e5e7eb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-50: #f9fafb;
+
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-success-dark: #065f46;
+
+  --color-error: #ef4444;
+  --color-error-light: #fee2e2;
+  --color-error-dark: #991b1b;
+
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-warning-dark: #92400e;
+
+  --color-background: #f8f8f8;
+  --color-white: #ffffff;
+
+  /* Typography */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  --font-family-mono: 'Monaco', 'Courier New', monospace;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+}
+
+/* =====================================================
+   UTILITY CLASSES (BEM Naming Convention)
+   ===================================================== */
+
+/* Cards
+   ----------------------------------------------------- */
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.card--sm {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+}
+
+.card--lg {
+  padding: var(--spacing-xl);
+}
+
+.card--elevated {
+  box-shadow: var(--shadow-xl);
+}
+
+.card--bordered {
+  border: 1px solid var(--color-gray-200);
+  box-shadow: none;
+}
+
+/* Buttons
+   ----------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: var(--font-family);
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+
+.btn--primary:hover {
+  background: var(--color-dark-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--secondary {
+  background: var(--color-white);
+  color: var(--color-dark);
+  border: 1px solid var(--color-gray-200);
+}
+
+.btn--secondary:hover {
+  background: var(--color-gray-50);
+  border-color: var(--color-gray-300);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-dark);
+  border: 2px solid var(--color-dark);
+}
+
+.btn--outline:hover {
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+
+.btn--success {
+  background: var(--color-success);
+  color: var(--color-white);
+}
+
+.btn--success:hover {
+  background: var(--color-success-dark);
+}
+
+.btn--error {
+  background: var(--color-error);
+  color: var(--color-white);
+}
+
+.btn--error:hover {
+  background: var(--color-error-dark);
+}
+
+.btn--sm {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.btn--lg {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-gray-700);
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: var(--font-family);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  transition: all var(--transition-base);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-error {
+  color: var(--color-error);
+  font-size: 13px;
+  margin-top: var(--spacing-xs);
+}
+
+/* Badges
+   ----------------------------------------------------- */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+}
+
+.badge--success {
+  background: var(--color-success-light);
+  color: var(--color-success-dark);
+}
+
+.badge--error {
+  background: var(--color-error-light);
+  color: var(--color-error-dark);
+}
+
+.badge--warning {
+  background: var(--color-warning-light);
+  color: var(--color-warning-dark);
+}
+
+.badge--primary {
+  background: var(--color-primary);
+  color: var(--color-dark);
+}
+
+/* Container
+   ----------------------------------------------------- */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.container--sm {
+  max-width: 768px;
+}
+
+.container--lg {
+  max-width: 1440px;
+}
+
+/* Typography & Text
+   ----------------------------------------------------- */
+.heading {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-gray-900);
+}
+
+.heading--xl {
+  font-size: 48px;
+}
+
+.heading--lg {
+  font-size: 36px;
+}
+
+.heading--md {
+  font-size: 24px;
+}
+
+.heading--sm {
+  font-size: 18px;
+}
+
+.text {
+  line-height: 1.6;
+}
+
+.text--center {
+  text-align: center;
+}
+
+.text--muted {
+  color: var(--color-gray-500);
+}
+
+.text--bold {
+  font-weight: 600;
+}
+
+.text--uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.text--sm {
+  font-size: 14px;
+}
+
+.text--xs {
+  font-size: 13px;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--color-gray-500);
+}
+
+.error-message {
+  color: var(--color-error);
+  text-align: center;
+  padding: var(--spacing-lg);
+  background: var(--color-error-light);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-lg) 0;
+}
+
+/* =====================================================
+   DIGITAL STYLE GUIDE - QUICK REFERENCE
+   ===================================================== */
+
+/*
+  📚 BUTTONS
+  --------------------------------------------------
+  Base:       .btn
+  Variants:   .btn--primary, .btn--secondary, .btn--outline, .btn--success, .btn--error
+  Sizes:      .btn--sm, .btn--lg
+  State:      :disabled
+
+  Usage:
+  <button class="btn btn--primary">Primary Button</button>
+  <button class="btn btn--secondary btn--lg">Large Secondary</button>
+  <button class="btn btn--outline btn--sm">Small Outline</button>
+
+
+  🎴 CARDS
+  --------------------------------------------------
+  Base:       .card
+  Variants:   .card--sm, .card--lg, .card--elevated, .card--bordered
+
+  Usage:
+  <div class="card">Default card with standard padding</div>
+  <div class="card card--lg card--elevated">Large card with enhanced shadow</div>
+  <div class="card card--bordered">Card with border instead of shadow</div>
+
+
+  📝 TYPOGRAPHY
+  --------------------------------------------------
+  Headings:   .heading .heading--xl (48px)
+              .heading .heading--lg (36px)
+              .heading .heading--md (24px)
+              .heading .heading--sm (18px)
+
+  Text:       .text (default)
+              .text--muted (gray color)
+              .text--bold (600 weight)
+              .text--uppercase (ALL CAPS)
+              .text--center (centered)
+              .text--sm (14px)
+              .text--xs (13px)
+
+  Usage:
+  <h1 class="heading heading--xl">Page Title</h1>
+  <p class="text text--muted">Secondary information</p>
+  <p class="text text--bold text--uppercase">Important message</p>
+
+
+  🏷️ BADGES
+  --------------------------------------------------
+  Base:       .badge
+  Variants:   .badge--success, .badge--error, .badge--warning, .badge--primary
+
+  Usage:
+  <span class="badge badge--success">Active</span>
+  <span class="badge badge--error">Failed</span>
+  <span class="badge badge--warning">Pending</span>
+
+
+  📦 CONTAINERS
+  --------------------------------------------------
+  Base:       .container (1280px max-width)
+  Sizes:      .container--sm (768px max-width)
+              .container--lg (1440px max-width)
+
+  Usage:
+  <div class="container">Standard page width</div>
+  <div class="container container--sm">Narrow content</div>
+
+
+  📋 FORMS
+  --------------------------------------------------
+  Layout:     .form-group (wrapper with margin)
+  Label:      .form-label
+  Inputs:     .form-input, .form-textarea, .form-select
+  Error:      .form-error
+
+  Usage:
+  <div class="form-group">
+    <label class="form-label">Email Address</label>
+    <input type="email" class="form-input" />
+    <p class="form-error">This field is required</p>
+  </div>
+
+
+  🎨 CSS VARIABLES REFERENCE
+  --------------------------------------------------
+
+  COLORS:
+  --color-primary, --color-primary-dark, --color-primary-light
+  --color-dark, --color-dark-secondary
+  --color-gray-900 through --color-gray-50 (9 shades)
+  --color-success, --color-success-light, --color-success-dark
+  --color-error, --color-error-light, --color-error-dark
+  --color-warning, --color-warning-light, --color-warning-dark
+  --color-background, --color-white
+
+  SPACING:
+  --spacing-xs (4px)
+  --spacing-sm (8px)
+  --spacing-md (16px)
+  --spacing-lg (24px)
+  --spacing-xl (32px)
+  --spacing-2xl (48px)
+
+  BORDER RADIUS:
+  --radius-sm (6px)
+  --radius-md (8px)
+  --radius-lg (12px)
+  --radius-xl (16px)
+  --radius-full (9999px / fully rounded)
+
+  SHADOWS:
+  --shadow-sm (subtle)
+  --shadow-md (standard)
+  --shadow-lg (elevated)
+  --shadow-xl (prominent)
+
+  TRANSITIONS:
+  --transition-fast (0.15s)
+  --transition-base (0.2s)
+  --transition-slow (0.3s)
+
+  TYPOGRAPHY:
+  --font-family (system font stack)
+  --font-family-mono (monospace)
+
+
+  💡 USAGE TIPS
+  --------------------------------------------------
+
+  1. COMBINE CLASSES:
+     <button class="btn btn--primary btn--lg">Large Primary Button</button>
+
+  2. USE CSS VARIABLES IN CUSTOM STYLES:
+     .my-custom-element {
+       padding: var(--spacing-lg);
+       color: var(--color-primary);
+       border-radius: var(--radius-md);
+     }
+
+  3. OVERRIDE IN client.css:
+     .btn--primary {
+       background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
+       border-radius: var(--radius-full);
+     }
+
+  4. TEST YOUR CHANGES:
+     Visit http://localhost:5173/test-utilities to see all utilities
+
+
+  🚫 ANTI-PATTERNS (DON'T DO THIS)
+  --------------------------------------------------
+
+  ❌ Don't hardcode colors:
+     .my-button { background: #FF0000; }
+
+  ✅ Use CSS variables instead:
+     .my-button { background: var(--color-error); }
+
+  ❌ Don't create duplicate utility classes:
+     .primary-btn, .button-primary, .btn-primary-new
+
+  ✅ Extend existing utilities:
+     Use .btn--primary and override in client.css if needed
+
+  ❌ Don't modify this file for client customization:
+     Editing design-system.css for each client
+
+  ✅ Use theme.js for brand customization:
+     Edit /src/config/theme.js colors object
+
+
+  📖 FURTHER READING
+  --------------------------------------------------
+  - BEM Naming Convention: http://getbem.com/
+  - CSS Variables Guide: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties
+  - Whitelabel Setup Guide: /NEW_CLIENT.md
+  - CSS Customization Guide: /CSS_CUSTOMIZATION.md
+  - Theme Configuration: /src/config/theme.js
+  - Visual Test Page: http://localhost:5173/test-utilities
+*/

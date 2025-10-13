@@ -1,0 +1,44 @@
+/* =====================================================
+   MAIN STYLESHEET
+   =====================================================
+   Import order:
+   1. design-system.css - CSS variables and utilities
+   2. template.css - All component and page styles
+   3. client.css - Client-specific customizations
+   ===================================================== */
+
+@import './styles/design-system.css';
+@import './styles/template.css';
+@import './styles/client.css';
+
+/* Global Resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: var(--font-family);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--color-gray-900);
+  background: var(--color-white);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}

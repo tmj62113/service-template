@@ -1,0 +1,84 @@
+/* =====================================================
+   CLIENT CUSTOMIZATIONS
+   =====================================================
+   Add your client-specific CSS overrides here.
+   This file loads AFTER template.css, so styles here
+   will override template defaults.
+
+   TIP: Reference CSS variables from design-system.css
+   ===================================================== */
+
+/* =====================================
+   BUTTONS
+   ===================================== */
+/*
+.btn--primary {
+  background: var(--color-custom-primary);
+}
+*/
+
+
+/* =====================================
+   TYPOGRAPHY
+   ===================================== */
+/*
+.heading {
+  font-family: 'Your Custom Font', sans-serif;
+}
+*/
+
+
+/* =====================================
+   PRODUCT CARDS
+   ===================================== */
+/*
+.product-card {
+  border: 2px solid var(--color-custom-accent);
+}
+*/
+
+
+/* =====================================
+   HEADER & NAVIGATION
+   ===================================== */
+/*
+.header {
+  background: var(--color-custom-header-bg);
+}
+*/
+
+
+/* =====================================
+   FOOTER
+   ===================================== */
+/*
+.footer {
+  background: var(--color-custom-footer-bg);
+}
+*/
+
+
+/* =====================================
+   FORMS
+   ===================================== */
+/*
+.form-input:focus {
+  border-color: var(--color-custom-accent);
+}
+*/
+
+
+/* =====================================
+   CART & CHECKOUT
+   ===================================== */
+
+
+/* =====================================
+   ADMIN DASHBOARD
+   ===================================== */
+
+
+/* =====================================
+   CUSTOM STYLES
+   ===================================== */
+/* Add any additional custom styles below */
