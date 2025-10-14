@@ -166,7 +166,7 @@ export const theme = {
   // ===================================================
   features: {
     // Product features
-    showRatings: true,
+    showRatings: false,
     showReviews: true,
     showStock: true,
     showCategories: true,
