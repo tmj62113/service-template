@@ -16,8 +16,6 @@ export default function ProductEditModal({
     category: "",
     description: "",
     stock: "",
-    rating: "4.5",
-    reviews: "0",
     status: "Available",
   });
   const [saving, setSaving] = useState(false);
@@ -36,8 +34,6 @@ export default function ProductEditModal({
         category: product.category || "",
         description: product.description || "",
         stock: product.stock || "",
-        rating: product.rating || "4.5",
-        reviews: product.reviews || "0",
         status: product.status || "Available",
       });
       setImagePreview(product.image || null);
@@ -49,8 +45,6 @@ export default function ProductEditModal({
         category: "",
         description: "",
         stock: "",
-        rating: "4.5",
-        reviews: "0",
         status: "Available",
       });
       setImagePreview(null);
@@ -151,8 +145,6 @@ export default function ProductEditModal({
           image: imageUrl,
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock),
-          rating: parseFloat(formData.rating),
-          reviews: parseInt(formData.reviews),
         }),
       });
 
@@ -267,40 +259,6 @@ export default function ProductEditModal({
                 id="stock"
                 name="stock"
                 value={formData.stock}
-                onChange={handleChange}
-                min="0"
-                required
-                disabled={!isEditing}
-                style={{ backgroundColor: !isEditing ? "#f5f5f5" : "white" }}
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="rating">Rating (0-5) *</label>
-              <input
-                type="number"
-                id="rating"
-                name="rating"
-                value={formData.rating}
-                onChange={handleChange}
-                step="0.1"
-                min="0"
-                max="5"
-                required
-                disabled={!isEditing}
-                style={{ backgroundColor: !isEditing ? "#f5f5f5" : "white" }}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="reviews">Reviews Count *</label>
-              <input
-                type="number"
-                id="reviews"
-                name="reviews"
-                value={formData.reviews}
                 onChange={handleChange}
                 min="0"
                 required
