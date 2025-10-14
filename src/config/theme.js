@@ -93,8 +93,8 @@ export const theme = {
   // TYPOGRAPHY - Mark J Peterson Art Brand
   // ===================================================
   fonts: {
-    heading: "'Oswald', sans-serif", // All headings (h1-h6)
-    body: "'Cabin', sans-serif", // Body text, paragraphs, UI elements
+    heading: "'Anton', sans-serif", // All headings (h1-h6)
+    body: "'Barlow Semi Condensed', sans-serif", // Body text, paragraphs, UI elements
     mono: "'Courier New', monospace",
   },
 
