@@ -222,9 +222,11 @@ header {
   text-transform: uppercase;
 }
 
-/* Header content alignment */
+/* Header content alignment and padding */
 .header-content {
   align-items: baseline;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 /* Navigation - Left-aligned next to logo */

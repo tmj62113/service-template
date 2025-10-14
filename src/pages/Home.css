@@ -25,10 +25,10 @@
 .slideshow-container {
   position: relative;
   width: 100%;
-  max-width: 1050px;
+  max-width: var(--layout-max-width, 1050px);
   height: 100%;
   margin: 0 auto;
-  padding: 0 25px;
+  padding: 0 25px; /* Match container padding for flush vertical alignment */
 }
 
 .slide {
