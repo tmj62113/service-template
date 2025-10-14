@@ -122,7 +122,7 @@ div {
 }
 
 p {
-  color: rgb(12 58 75 / 0.7);
+  color: var(--color-text-secondary);
   margin-bottom: 16px;
 }
 
@@ -250,15 +250,23 @@ header {
   border-bottom: none;
 }
 
-/* Logo - Text-based logo for Mark J Peterson Art */
-.logo h1 {
-  font-family: var(--font-heading);
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--color-gunmetal);
-  margin: 0;
-  text-transform: uppercase;
+/* Logo - Image logo for Mark J Peterson Art */
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 60px;
+  width: auto;
+  border-radius: 0;
+}
+
+/* Responsive logo sizing */
+@media (max-width: 768px) {
+  .logo img {
+    height: 50px;
+  }
 }
 
 /* Header content alignment and padding */
@@ -350,6 +358,45 @@ footer {
 .footer h3,
 .footer h4 {
   color: var(--color-cream);
+}
+
+/* Footer logo styling */
+.footer-logo {
+  height: 80px;
+  width: auto;
+  margin-bottom: 16px;
+  border-radius: 0;
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 768px) {
+  .footer-logo {
+    height: 60px;
+  }
+}
+
+/* Social media links */
+.social-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.social-links a {
+  color: var(--color-cream);
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-links a:hover {
+  color: var(--color-ecru);
+}
+
+.social-links svg {
+  width: 24px;
+  height: 24px;
 }
 
 /* =====================================
