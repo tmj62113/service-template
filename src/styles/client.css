@@ -35,6 +35,7 @@
 
   /* Layout */
   --max-width: 1050px;
+  --layout-max-width: 1050px; /* Override template.css default of 1280px */
   --radius-card: 8px;
   --radius-button: 4px;
   --radius-full: 9999px;
