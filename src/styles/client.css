@@ -205,10 +205,9 @@ button[type="submit"]:hover {
    ===================================== */
 
 .header,
-header,
-nav {
+header {
   background-color: var(--color-cream);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: none;
 }
 
 /* Logo - Text-based logo for Mark J Peterson Art */
@@ -225,9 +224,20 @@ nav {
 /* Navigation - Left-aligned next to logo */
 .nav {
   justify-content: flex-start;
+  flex: 0 1 auto;
+  gap: 32px;
 }
 
-/* Navigation links - Rust hover effect */
+/* Navigation links - Match localhost:3000 styling */
+.nav a {
+  color: var(--color-gunmetal);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
 .nav a:hover {
   color: var(--color-rust);
 }
@@ -235,7 +245,8 @@ nav {
 .nav-link {
   color: var(--color-gunmetal);
   font-family: var(--font-body);
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   transition: color 0.15s ease;
 }
 
