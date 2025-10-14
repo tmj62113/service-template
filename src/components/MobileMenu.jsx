@@ -74,14 +74,11 @@ export default function MobileMenu() {
             to="/products"
             className={location.pathname === '/products' ? 'active' : ''}
           >
-            Products
+            Shop
           </Link>
-          <Link
-            to="/about"
-            className={location.pathname === '/about' ? 'active' : ''}
-          >
+          <a href="/#about" onClick={toggleMenu}>
             About
-          </Link>
+          </a>
           <Link
             to="/contact"
             className={location.pathname === '/contact' ? 'active' : ''}

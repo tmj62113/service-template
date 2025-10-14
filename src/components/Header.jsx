@@ -28,8 +28,8 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="nav desktop-nav">
-            <Link to="/products">Products</Link>
-            <Link to="/about">About</Link>
+            <Link to="/products">Shop</Link>
+            <a href="/#about">About</a>
             <Link to="/contact">Contact</Link>
             {user?.role === 'admin' && (
               <Link to="/admin" className="admin-nav-link">

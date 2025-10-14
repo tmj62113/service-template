@@ -202,7 +202,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section className="about-section">
+      <section id="about" className="about-section">
         <div className="container">
           <h2>About MJ Peterson</h2>
           <p>
