@@ -170,28 +170,6 @@
   text-align: center;
 }
 
-.collection-title {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--color-gunmetal);
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 4px;
-  transition: color 0.2s ease;
-}
-
-.collection-title:hover {
-  color: var(--color-ecru);
-}
-
-.collection-count {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--color-charcoal);
-}
-
 /* =====================================
    ARTWORK SECTION
    ===================================== */

@@ -173,8 +173,7 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="collection-info">
-                  <button className="collection-title">{collection.name}</button>
-                  <p className="collection-count">{collection.count}</p>
+                  <button className="btn btn--primary">{collection.name}</button>
                 </div>
               </div>
             ))}
