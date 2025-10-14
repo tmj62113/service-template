@@ -14,21 +14,18 @@
 .hero-slideshow {
   position: relative;
   width: 100%;
+  max-width: var(--layout-max-width, 1050px);
   height: 500px;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
+  margin: 48px auto 0;
   background-color: var(--color-cream);
-  margin-top: 48px;
+  padding: 0 16px;
 }
 
 .slideshow-container {
   position: relative;
   width: 100%;
-  max-width: var(--layout-max-width, 1050px);
   height: 100%;
-  margin: 0 auto;
-  padding: 0 16px; /* Match header padding for flush vertical alignment */
 }
 
 .slide {
