@@ -221,11 +221,17 @@ header {
   text-transform: uppercase;
 }
 
+/* Header content alignment */
+.header-content {
+  align-items: baseline;
+}
+
 /* Navigation - Left-aligned next to logo */
 .nav {
   justify-content: flex-start;
   flex: 0 1 auto;
   gap: 32px;
+  align-items: baseline;
 }
 
 /* Navigation links - Match localhost:3000 styling */
@@ -253,6 +259,23 @@ header {
 .nav-link:hover,
 .nav-link.active {
   color: var(--color-rust);
+}
+
+/* Cart button - Match localhost:3000 minimal styling */
+.cart-button {
+  background: transparent;
+  color: var(--color-gunmetal);
+  padding: 8px;
+  border-radius: var(--radius-full);
+  transition: background 0.2s ease;
+}
+
+.cart-button:hover {
+  background: rgba(180, 154, 104, 0.1);
+}
+
+.cart-badge {
+  background: var(--color-rust);
 }
 
 /* =====================================
