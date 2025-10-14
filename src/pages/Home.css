@@ -137,12 +137,6 @@
   margin-bottom: 12px;
 }
 
-.collections-section .section-header p {
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 24px;
-  color: rgb(12 58 75 / 0.7);
-}
 
 .collections-grid-container {
   display: flex;
@@ -223,12 +217,6 @@
   margin-bottom: 12px;
 }
 
-.artwork-section .section-header p {
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 24px;
-  color: rgb(12 58 75 / 0.7);
-}
 
 .masonry-grid {
   display: grid;
@@ -291,10 +279,6 @@
 }
 
 .about-section p {
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 24px;
-  color: rgb(12 58 75 / 0.7);
   margin-bottom: 16px;
 }
 
