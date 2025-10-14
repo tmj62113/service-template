@@ -164,9 +164,9 @@ button[type="submit"]:not(.btn--secondary):not(.btn--outline) {
 .btn--primary:hover,
 .btn-primary:hover,
 button[type="submit"]:hover {
-  background-color: var(--color-seal-brown);
-  color: var(--color-cream);
-  border-color: var(--color-seal-brown);
+  border-color: #a0522d;
+  color: #a0522d;
+  background-color: transparent;
 }
 
 /* Secondary buttons with Seal Brown border */
