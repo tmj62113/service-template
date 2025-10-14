@@ -50,6 +50,8 @@ body {
   background-color: var(--color-cream);
   font-family: var(--font-body);
   color: var(--color-gunmetal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* All surface elements use cream background */
@@ -80,26 +82,27 @@ h6,
 .h6 {
   font-family: var(--font-heading);
   color: var(--color-gunmetal);
-  font-weight: 600;
+  font-weight: 400;
 }
 
 h2 {
   font-size: 30px;
   line-height: 36px;
   margin-bottom: 12px;
+  font-weight: 400;
 }
 
 h3 {
   font-size: 20px;
   line-height: 28px;
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 4px;
 }
 
 h4 {
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 20px;
   color: var(--color-ecru);
   margin-bottom: 16px;
@@ -114,6 +117,7 @@ div {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 24px;
+  font-weight: 400;
 }
 
 /* =====================================
@@ -224,7 +228,6 @@ header {
 
 /* Header content alignment and padding */
 .header-content {
-  align-items: baseline;
   padding-left: 16px;
   padding-right: 16px;
 }
