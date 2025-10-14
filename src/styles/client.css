@@ -225,8 +225,8 @@ header {
 /* Header content alignment and padding */
 .header-content {
   align-items: baseline;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* Navigation - Left-aligned next to logo */
@@ -377,8 +377,8 @@ label {
 
 .container {
   max-width: var(--max-width);
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-left: 16px;
+  padding-right: 16px;
   margin: 0 auto;
 }
 

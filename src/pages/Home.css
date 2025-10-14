@@ -28,7 +28,7 @@
   max-width: var(--layout-max-width, 1050px);
   height: 100%;
   margin: 0 auto;
-  padding: 0 25px; /* Match container padding for flush vertical alignment */
+  padding: 0 16px; /* Match header padding for flush vertical alignment */
 }
 
 .slide {
