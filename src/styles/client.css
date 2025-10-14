@@ -122,6 +122,11 @@ div {
 
 p {
   color: rgb(12 58 75 / 0.7);
+  margin-bottom: 16px;
+}
+
+p:last-child {
+  margin-bottom: 0;
 }
 
 /* =====================================

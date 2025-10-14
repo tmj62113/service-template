@@ -278,13 +278,6 @@
   margin-bottom: 16px;
 }
 
-.about-section p {
-  margin-bottom: 16px;
-}
-
-.about-section p:last-child {
-  margin-bottom: 0;
-}
 
 /* =====================================
    FEATURED SECTION
