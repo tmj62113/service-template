@@ -140,30 +140,32 @@ p:last-child {
 .btn-primary,
 button[type="submit"]:not(.btn--secondary):not(.btn--outline) {
   display: inline-block;
-  padding: 12px 24px;
+  padding: 10px 32px;
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
   text-align: center;
   text-decoration: none;
   border-radius: var(--radius-button);
   cursor: pointer;
   transition: all 0.2s ease;
-  border: none;
+  border: 2px solid var(--color-seal-brown);
 }
 
-/* Primary buttons use Ecru color */
+/* Primary buttons - Seal Brown border with transparent background */
 .btn--primary,
 .btn-primary,
 button[type="submit"]:not(.btn--secondary):not(.btn--outline) {
-  background-color: var(--color-ecru);
-  color: #000000;
+  background-color: transparent;
+  color: var(--color-gunmetal);
+  border: 2px solid var(--color-seal-brown);
 }
 
 .btn--primary:hover,
 .btn-primary:hover,
 button[type="submit"]:hover {
-  background-color: var(--color-lion);
+  background-color: rgba(105, 36, 19, 0.05);
+  border-color: var(--color-seal-brown);
 }
 
 /* Secondary buttons with Seal Brown border */
