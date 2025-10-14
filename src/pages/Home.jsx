@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Home.css';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
 
   // Hero slideshow images
   const slideshowImages = [
@@ -173,7 +174,9 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="collection-info">
-                  <button className="btn btn--primary">{collection.name}</button>
+                  <button className="btn btn--primary" onClick={() => navigate('/products')}>
+                    {collection.name}
+                  </button>
                 </div>
               </div>
             ))}
