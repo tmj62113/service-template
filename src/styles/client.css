@@ -232,7 +232,6 @@ header {
 /* Navigation - Left-aligned next to logo */
 .nav {
   justify-content: flex-start;
-  flex: 0 1 auto;
   gap: 32px;
   align-items: baseline;
 }
@@ -279,6 +278,15 @@ header {
 
 .cart-badge {
   background: var(--color-rust);
+}
+
+/* Mobile menu navigation - Match desktop nav font weight */
+.mobile-menu-nav a {
+  font-weight: 400;
+}
+
+.mobile-menu-cart-info {
+  font-weight: 400;
 }
 
 /* =====================================
