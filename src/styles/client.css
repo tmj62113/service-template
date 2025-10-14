@@ -164,7 +164,8 @@ button[type="submit"]:not(.btn--secondary):not(.btn--outline) {
 .btn--primary:hover,
 .btn-primary:hover,
 button[type="submit"]:hover {
-  background-color: rgba(105, 36, 19, 0.05);
+  background-color: var(--color-seal-brown);
+  color: var(--color-cream);
   border-color: var(--color-seal-brown);
 }
 
