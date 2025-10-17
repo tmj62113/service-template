@@ -1,8 +1,8 @@
 {
-  "name": "mark-j-peterson-art",
-  "private": true,
+  "name": "ecommerce-template",
+  "private": false,
   "version": "1.0.0",
-  "description": "E-commerce store for Mark J Peterson Art",
+  "description": "Production-ready e-commerce template with React, Express, MongoDB, Stripe, and enterprise features",
   "type": "module",
   "scripts": {
     "dev": "vite",

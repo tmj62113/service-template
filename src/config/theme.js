@@ -9,27 +9,27 @@ export const theme = {
   // ===================================================
   // BRAND IDENTITY
   // ===================================================
-  brandName: "Mark J Peterson Art",
-  tagline: "Original Artwork & Fine Art Prints",
+  brandName: "Your Store",
+  tagline: "Quality Products, Great Prices",
 
   // Logo and images
-  logo: "/peterson_logo.png",
-  logoAlt: "Mark J Peterson Art Logo",
+  logo: "/logo.png",
+  logoAlt: "Your Store Logo",
   favicon: "/favicon.ico",
 
   // ===================================================
   // COMPANY INFORMATION
   // ===================================================
   company: {
-    name: "Mark J Peterson Art",
-    email: "hello@markjpetersonart.com",
-    supportEmail: "support@markjpetersonart.com",
-    phone: "+1 (555) 555-5555",
+    name: "Your Company LLC",
+    email: "hello@yourstore.com",
+    supportEmail: "support@yourstore.com",
+    phone: "+1 (555) 123-4567",
     address: {
-      street: "123 Art Street",
-      city: "Portland",
-      state: "OR",
-      zip: "97201",
+      street: "123 Main Street",
+      city: "Your City",
+      state: "ST",
+      zip: "12345",
       country: "USA",
     },
   },
@@ -38,63 +38,63 @@ export const theme = {
   // SOCIAL MEDIA LINKS
   // ===================================================
   social: {
-    facebook: "https://facebook.com/markjpetersonart",
-    instagram: "https://instagram.com/markjpetersonart",
-    twitter: "https://twitter.com/markjpetersonart",
-    pinterest: "https://pinterest.com/markjpetersonart",
+    facebook: "https://facebook.com/yourstore",
+    instagram: "https://instagram.com/yourstore",
+    twitter: "https://twitter.com/yourstore",
+    pinterest: "https://pinterest.com/yourstore",
     linkedin: "",
     youtube: "",
   },
 
   // ===================================================
-  // COLOR SCHEME - Mark J Peterson Art Brand
+  // COLOR SCHEME
   // ===================================================
   colors: {
-    // Primary brand colors - Dark blues for text and headings
-    primary: "#122D38", // Gunmetal - main text, headings, footer
-    primaryHover: "#0C3A4B", // Charcoal - darker shade on hover
-    primaryText: "#F7F6EF", // Cream text on dark backgrounds
+    // Primary brand colors
+    primary: "#2563EB", // Primary blue
+    primaryHover: "#1D4ED8", // Darker blue on hover
+    primaryText: "#FFFFFF", // White text on primary
 
-    // Secondary colors - Browns for accents
-    secondary: "#692413", // Seal brown - deep brown accent, borders
-    secondaryHover: "#B93A0C", // Rust - accent rust (minimal usage)
+    // Secondary colors
+    secondary: "#64748B", // Slate gray
+    secondaryHover: "#475569", // Darker gray on hover
 
-    // Accent colors - Golds for CTAs and highlights
-    accent: "#C0A679", // Ecru - primary buttons, CTAs, active states
-    accentHover: "#B49A68", // Lion - hover states, borders (often 20% opacity)
+    // Accent colors
+    accent: "#8B5CF6", // Purple accent
+    accentHover: "#7C3AED", // Darker purple on hover
 
-    // Neutral colors - Cream base
-    background: "#F7F6EF", // Cream - primary background (replaces white everywhere)
-    surface: "#F7F6EF", // Cream - card/surface background
-    surfaceHover: "#EFEEE5", // Slightly darker cream on hover
+    // Neutral colors
+    background: "#FFFFFF", // White background
+    surface: "#F8FAFC", // Light gray surface
+    surfaceHover: "#F1F5F9", // Slightly darker on hover
 
     // Text colors
-    text: "#122D38", // Gunmetal - primary text
-    textSecondary: "#0C3A4B", // Charcoal - secondary/muted text
-    textTertiary: "#B49A68", // Lion - tertiary/accent text
+    text: "#1E293B", // Dark text
+    textSecondary: "#64748B", // Gray text
+    textTertiary: "#94A3B8", // Light gray text
 
     // Border colors
-    border: "rgba(180, 154, 104, 0.2)", // Lion at 20% opacity - subtle borders
-    borderLight: "rgba(180, 154, 104, 0.1)", // Lion at 10% opacity - very subtle
-    borderDark: "#692413", // Seal brown - darker borders
+    border: "#E2E8F0", // Light border
+    borderLight: "#F1F5F9", // Very light border
+    borderDark: "#CBD5E1", // Darker border
 
     // Feedback colors
-    error: "#B93A0C", // Rust - error state
+    error: "#EF4444", // Red error
     errorLight: "#FEE2E2", // Error background
-    success: "#10B981", // Success state
+    success: "#10B981", // Green success
     successLight: "#D1FAE5", // Success background
-    warning: "#F59E0B", // Warning state
+    warning: "#F59E0B", // Orange warning
     warningLight: "#FEF3C7", // Warning background
-    info: "#0C3A4B", // Charcoal - info state
+    info: "#3B82F6", // Blue info
     infoLight: "#DBEAFE", // Info background
   },
 
   // ===================================================
-  // TYPOGRAPHY - Mark J Peterson Art Brand
+  // TYPOGRAPHY
   // ===================================================
   fonts: {
-    heading: "'Anton', sans-serif", // All headings (h1-h6)
-    body: "'Barlow Semi Condensed', sans-serif", // Body text, paragraphs, UI elements
+    heading: "'Inter', sans-serif", // All headings (h1-h6)
+    body: "'Inter', sans-serif", // Body text, paragraphs, UI elements
     mono: "'Courier New', monospace",
   },
 
@@ -121,7 +121,7 @@ export const theme = {
   // LAYOUT & SPACING
   // ===================================================
   layout: {
-    maxWidth: "1050px", // MJ Peterson Art design system max container width
+    maxWidth: "1200px", // Max container width
     maxWidthNarrow: "800px",
     borderRadius: "8px", // Cards and images
     borderRadiusLarge: "9999px", // Circular buttons/icons
@@ -191,23 +191,23 @@ export const theme = {
   // EMAIL BRANDING
   // ===================================================
   email: {
-    fromName: "Mark J Peterson Art",
-    fromEmail: "orders@markjpetersonart.com",
-    supportEmail: "support@markjpetersonart.com",
-    logoUrl: "https://markjpetersonart.com/logo.png",
-    accentColor: "#8E44AD",
-    footerText: "© 2025 Mark J Peterson Art. All rights reserved.",
+    fromName: "Your Store",
+    fromEmail: "orders@yourstore.com",
+    supportEmail: "support@yourstore.com",
+    logoUrl: "https://yourstore.com/logo.png",
+    accentColor: "#8B5CF6",
+    footerText: "© 2025 Your Store. All rights reserved.",
   },
 
   // ===================================================
   // SEO & META
   // ===================================================
   seo: {
-    title: "Mark J Peterson Art - Original Artwork & Fine Art Prints",
-    description: "Discover original artwork and fine art prints by Mark J Peterson. Explore stunning paintings, digital art, and limited edition prints.",
-    keywords: "art, artwork, paintings, fine art prints, original art, Mark J Peterson, artist, gallery",
+    title: "Your Store - Quality Products Online",
+    description: "Shop quality products at great prices. Fast shipping and excellent customer service.",
+    keywords: "ecommerce, online store, shop, products, quality",
     ogImage: "/og-image.jpg",
-    twitterHandle: "@markjpetersonart",
+    twitterHandle: "@yourstore",
   },
 
   // ===================================================
