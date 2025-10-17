@@ -356,8 +356,8 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
   res.status(200).json({ received: true });
 });
 
-// JSON body parser for other routes
-app.use(express.json());
+// JSON body parser for other routes (with 1MB size limit to prevent DoS attacks)
+app.use(express.json({ limit: '1mb' }));
 
 // Create Checkout Session endpoint
 app.post('/api/create-checkout-session', async (req, res) => {
