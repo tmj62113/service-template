@@ -150,7 +150,7 @@ button[type="submit"]:not(.btn--secondary):not(.btn--outline) {
   display: inline-block;
   padding: 10px 32px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   text-align: center;
   text-decoration: none;
@@ -286,7 +286,7 @@ header {
 .nav a {
   color: var(--color-gunmetal);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   text-decoration: none;
   transition: color 0.15s ease;
@@ -299,7 +299,7 @@ header {
 .nav-link {
   color: var(--color-gunmetal);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   transition: color 0.15s ease;
 }
@@ -411,7 +411,7 @@ footer {
   width: 100%;
   padding: 10px 12px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px;
   background-color: var(--color-cream);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-button);
@@ -426,7 +426,7 @@ footer {
 .newsletter-btn {
   padding: 10px 24px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   background-color: transparent;
   color: var(--color-cream);
