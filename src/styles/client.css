@@ -399,6 +399,60 @@ footer {
   height: 24px;
 }
 
+/* Newsletter form in footer */
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.newsletter-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  background-color: var(--color-cream);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-button);
+  color: var(--color-gunmetal);
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--color-ecru);
+}
+
+.newsletter-btn {
+  padding: 10px 24px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  background-color: transparent;
+  color: var(--color-cream);
+  border: 2px solid var(--color-ecru);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newsletter-btn:hover {
+  background-color: var(--color-ecru);
+  color: var(--color-gunmetal);
+}
+
+.newsletter-success {
+  color: var(--color-ecru);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.newsletter-error {
+  color: var(--color-rust);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
 /* =====================================
    FORMS
    ===================================== */
@@ -608,6 +662,59 @@ textarea:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--color-ecru);
   outline-offset: 2px;
+}
+
+/* =====================================
+   ADMIN SIDEBAR SUB-NAVIGATION
+   ===================================== */
+
+.nav-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-subitems {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.nav-subitem {
+  display: block;
+  padding: 8px 16px;
+  margin-left: 40px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+}
+
+.nav-subitem:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-left-color: var(--color-ecru);
+}
+
+.nav-subitem.active {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left-color: var(--color-ecru);
+  font-weight: 500;
+}
+
+/* =====================================
+   CLICKABLE TABLE ROWS
+   ===================================== */
+
+.messages-table tbody tr[style*="cursor: pointer"]:hover {
+  background-color: rgba(192, 166, 121, 0.08);
+  transition: background-color 0.15s ease;
+}
+
+.messages-table tbody tr[style*="cursor: pointer"]:active {
+  background-color: rgba(192, 166, 121, 0.15);
 }
 
 /* =====================================

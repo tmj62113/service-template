@@ -115,6 +115,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
+      // Submit contact form message
       const response = await fetch('http://localhost:3001/api/messages', {
         method: 'POST',
         headers: {
@@ -131,6 +132,29 @@ export default function Home() {
 
       if (!response.ok) {
         throw new Error('Failed to send message');
+      }
+
+      // If user opted in to mailing list, subscribe them to newsletter
+      if (formData.mailingList) {
+        try {
+          await fetch('http://localhost:3001/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              source: 'contact-form',
+              metadata: {
+                name: `${formData.firstName} ${formData.lastName}`,
+                submittedAt: new Date().toISOString(),
+              },
+            }),
+          });
+        } catch (newsletterError) {
+          console.error('Error subscribing to newsletter:', newsletterError);
+          // Don't fail the contact form submission if newsletter signup fails
+        }
       }
 
       setSubmitted(true);

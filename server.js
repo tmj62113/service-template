@@ -11,6 +11,8 @@ import { v2 as cloudinary } from 'cloudinary';
 import { Order } from './db/models/Order.js';
 import { User } from './db/models/User.js';
 import { Product } from './db/models/Product.js';
+import { Subscriber } from './db/models/Subscriber.js';
+import { Newsletter } from './db/models/Newsletter.js';
 import { generateOrderConfirmationEmail } from './utils/emailTemplates.js';
 import { authenticateToken, generateToken } from './middleware/auth.js';
 import { createShipment, getTrackingStatus } from './services/shippoService.js';
@@ -1375,6 +1377,562 @@ app.post('/api/webhooks/email-reply', express.raw({ type: 'application/json' }),
   } catch (error) {
     console.error('Error processing email webhook:', error);
     res.status(500).json({ error: 'Failed to process webhook' });
+  }
+});
+
+// ============================================
+// NEWSLETTER ENDPOINTS
+// ============================================
+
+// POST /api/newsletter/subscribe - Subscribe to newsletter (public)
+app.post('/api/newsletter/subscribe', async (req, res) => {
+  try {
+    const { email, source, metadata } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const subscriber = await Subscriber.create({
+      email,
+      source: source || 'unknown',
+      metadata: metadata || {},
+    });
+
+    // Send welcome email
+    try {
+      const { data, error } = await resend.emails.send({
+        from: 'Mark J Peterson Art <onboarding@resend.dev>',
+        to: email,
+        subject: 'Welcome to Mark J Peterson Art Newsletter',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
+            <div style="background-color: #ffffff; border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+              <h2 style="color: #1f2937; margin-top: 0; border-bottom: 2px solid #c0a679; padding-bottom: 16px;">Welcome to Our Newsletter!</h2>
+
+              <p style="color: #4b5563; line-height: 1.6; margin: 20px 0;">
+                Thank you for subscribing to Mark J Peterson Art newsletter. You'll receive updates about new artwork, exhibitions, and exclusive offers.
+              </p>
+
+              <p style="color: #4b5563; line-height: 1.6; margin: 20px 0;">
+                We're excited to share our passion for steampunk art with you!
+              </p>
+
+              <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+                <p style="color: #6b7280; font-size: 12px; margin: 0;">
+                  You can <a href="${process.env.CLIENT_URL || 'http://localhost:5173'}/unsubscribe?token=${subscriber.unsubscribeToken}" style="color: #c0a679; text-decoration: none;">unsubscribe</a> at any time.
+                </p>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 24px; color: #6b7280; font-size: 12px;">
+              <p style="margin: 0;">Mark J Peterson Art</p>
+            </div>
+          </div>
+        `
+      });
+
+      if (error) {
+        console.error('❌ Failed to send welcome email:', error);
+      } else {
+        console.log('📧 Welcome email sent:', data.id);
+      }
+    } catch (emailError) {
+      console.error('❌ Error sending welcome email:', emailError);
+    }
+
+    res.status(201).json({
+      message: 'Successfully subscribed to newsletter',
+      subscriber: {
+        email: subscriber.email,
+        subscribedAt: subscriber.subscribedAt,
+      },
+    });
+  } catch (error) {
+    console.error('Error subscribing to newsletter:', error);
+    res.status(500).json({ error: 'Failed to subscribe' });
+  }
+});
+
+// GET /api/newsletter/subscribers - Get all subscribers (admin only)
+app.get('/api/newsletter/subscribers', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { page = 1, limit = 100, status, source } = req.query;
+
+    const result = await Subscriber.findAll({
+      page: parseInt(page),
+      limit: parseInt(limit),
+      status,
+      source,
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching subscribers:', error);
+    res.status(500).json({ error: 'Failed to fetch subscribers' });
+  }
+});
+
+// GET /api/newsletter/stats - Get subscriber statistics (admin only)
+app.get('/api/newsletter/stats', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const stats = await Subscriber.getStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching subscriber stats:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
+  }
+});
+
+// POST /api/newsletter/unsubscribe/:token - Unsubscribe using token (public)
+app.post('/api/newsletter/unsubscribe/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const subscriber = await Subscriber.unsubscribe(token, true);
+
+    if (!subscriber) {
+      return res.status(404).json({ error: 'Invalid unsubscribe link' });
+    }
+
+    res.json({
+      message: 'Successfully unsubscribed from newsletter',
+      email: subscriber.email,
+    });
+  } catch (error) {
+    console.error('Error unsubscribing:', error);
+    res.status(500).json({ error: 'Failed to unsubscribe' });
+  }
+});
+
+// DELETE /api/newsletter/subscribers/:id - Delete subscriber (admin only)
+app.delete('/api/newsletter/subscribers/:id', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const success = await Subscriber.delete(req.params.id);
+
+    if (!success) {
+      return res.status(404).json({ error: 'Subscriber not found' });
+    }
+
+    res.json({ message: 'Subscriber deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting subscriber:', error);
+    res.status(500).json({ error: 'Failed to delete subscriber' });
+  }
+});
+
+// GET /api/newsletter/export - Export active subscriber emails (admin only)
+app.get('/api/newsletter/export', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const emails = await Subscriber.getActiveEmails();
+
+    res.json({
+      count: emails.length,
+      emails: emails,
+    });
+  } catch (error) {
+    console.error('Error exporting emails:', error);
+    res.status(500).json({ error: 'Failed to export emails' });
+  }
+});
+
+// POST /api/newsletter/send - Send newsletter to all active subscribers (admin only)
+app.post('/api/newsletter/send', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { subject, message } = req.body;
+
+    if (!subject || !message) {
+      return res.status(400).json({ error: 'Subject and message are required' });
+    }
+
+    // Get all active subscriber emails
+    const emails = await Subscriber.getActiveEmails();
+
+    if (emails.length === 0) {
+      return res.status(400).json({ error: 'No active subscribers to send to' });
+    }
+
+    console.log(`📧 Sending newsletter to ${emails.length} subscribers...`);
+
+    // Send emails (in production, you'd want to batch these)
+    let sent = 0;
+    let failed = 0;
+
+    for (const email of emails) {
+      try {
+        // Get subscriber for unsubscribe token
+        const subscriber = await Subscriber.findByEmail(email);
+
+        const { data, error } = await resend.emails.send({
+          from: 'Mark J Peterson Art <onboarding@resend.dev>',
+          to: email,
+          subject: subject,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
+              <div style="background-color: #ffffff; border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #1f2937; margin-top: 0; border-bottom: 2px solid #c0a679; padding-bottom: 16px;">${subject}</h2>
+
+                <div style="color: #4b5563; line-height: 1.6; margin: 20px 0; white-space: pre-wrap;">
+                  ${message.replace(/\n/g, '<br>')}
+                </div>
+
+                <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+                  <p style="color: #6b7280; font-size: 12px; margin: 0;">
+                    You received this email because you subscribed to Mark J Peterson Art newsletter.
+                  </p>
+                  <p style="color: #6b7280; font-size: 12px; margin: 8px 0 0 0;">
+                    <a href="${process.env.CLIENT_URL || 'http://localhost:5173'}/unsubscribe?token=${subscriber?.unsubscribeToken}" style="color: #c0a679; text-decoration: none;">Unsubscribe</a>
+                  </p>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-top: 24px; color: #6b7280; font-size: 12px;">
+                <p style="margin: 0;">Mark J Peterson Art</p>
+              </div>
+            </div>
+          `
+        });
+
+        if (error) {
+          console.error(`❌ Failed to send to ${email}:`, error);
+          failed++;
+        } else {
+          console.log(`✓ Sent to ${email}`);
+          sent++;
+        }
+      } catch (emailError) {
+        console.error(`❌ Error sending to ${email}:`, emailError);
+        failed++;
+      }
+    }
+
+    console.log(`📧 Newsletter sending complete: ${sent} sent, ${failed} failed`);
+
+    res.json({
+      message: 'Newsletter sent',
+      sent: sent,
+      failed: failed,
+      total: emails.length,
+    });
+  } catch (error) {
+    console.error('Error sending newsletter:', error);
+    res.status(500).json({ error: 'Failed to send newsletter' });
+  }
+});
+
+// POST /api/newsletter/drafts - Create a new newsletter draft (admin only)
+app.post('/api/newsletter/drafts', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { subject, message } = req.body;
+
+    if (!subject || !message) {
+      return res.status(400).json({ error: 'Subject and message are required' });
+    }
+
+    const draft = await Newsletter.create({
+      subject,
+      message,
+      status: 'draft',
+      createdBy: req.user._id,
+    });
+
+    res.status(201).json({
+      message: 'Draft saved successfully',
+      draft,
+    });
+  } catch (error) {
+    console.error('Error creating draft:', error);
+    res.status(500).json({ error: 'Failed to create draft' });
+  }
+});
+
+// GET /api/newsletter/drafts - Get all newsletter drafts (admin only)
+app.get('/api/newsletter/drafts', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { page = 1, limit = 20 } = req.query;
+
+    const result = await Newsletter.findDrafts({
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching drafts:', error);
+    res.status(500).json({ error: 'Failed to fetch drafts' });
+  }
+});
+
+// GET /api/newsletter/drafts/:id - Get single draft by ID (admin only)
+app.get('/api/newsletter/drafts/:id', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const draft = await Newsletter.findById(req.params.id);
+
+    if (!draft) {
+      return res.status(404).json({ error: 'Draft not found' });
+    }
+
+    if (draft.status !== 'draft') {
+      return res.status(400).json({ error: 'This newsletter has already been sent' });
+    }
+
+    res.json(draft);
+  } catch (error) {
+    console.error('Error fetching draft:', error);
+    res.status(500).json({ error: 'Failed to fetch draft' });
+  }
+});
+
+// PUT /api/newsletter/drafts/:id - Update a newsletter draft (admin only)
+app.put('/api/newsletter/drafts/:id', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { subject, message } = req.body;
+
+    if (!subject || !message) {
+      return res.status(400).json({ error: 'Subject and message are required' });
+    }
+
+    const draft = await Newsletter.update(req.params.id, {
+      subject,
+      message,
+    });
+
+    if (!draft) {
+      return res.status(404).json({ error: 'Draft not found' });
+    }
+
+    res.json({
+      message: 'Draft updated successfully',
+      draft,
+    });
+  } catch (error) {
+    console.error('Error updating draft:', error);
+    res.status(500).json({ error: 'Failed to update draft' });
+  }
+});
+
+// DELETE /api/newsletter/drafts/:id - Delete a newsletter draft (admin only)
+app.delete('/api/newsletter/drafts/:id', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const success = await Newsletter.delete(req.params.id);
+
+    if (!success) {
+      return res.status(404).json({ error: 'Draft not found' });
+    }
+
+    res.json({ message: 'Draft deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting draft:', error);
+    res.status(500).json({ error: 'Failed to delete draft' });
+  }
+});
+
+// POST /api/newsletter/drafts/:id/send - Send a draft newsletter (admin only)
+app.post('/api/newsletter/drafts/:id/send', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    // Get the draft
+    const draft = await Newsletter.findById(req.params.id);
+
+    if (!draft) {
+      return res.status(404).json({ error: 'Draft not found' });
+    }
+
+    if (draft.status !== 'draft') {
+      return res.status(400).json({ error: 'This newsletter has already been sent' });
+    }
+
+    // Get all active subscriber emails
+    const emails = await Subscriber.getActiveEmails();
+
+    if (emails.length === 0) {
+      return res.status(400).json({ error: 'No active subscribers to send to' });
+    }
+
+    console.log(`📧 Sending newsletter to ${emails.length} subscribers...`);
+
+    // Send emails
+    let sent = 0;
+    let failed = 0;
+
+    for (const email of emails) {
+      try {
+        const subscriber = await Subscriber.findByEmail(email);
+
+        const { data, error } = await resend.emails.send({
+          from: 'Mark J Peterson Art <onboarding@resend.dev>',
+          to: email,
+          subject: draft.subject,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
+              <div style="background-color: #ffffff; border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+                <h2 style="color: #1f2937; margin-top: 0; border-bottom: 2px solid #c0a679; padding-bottom: 16px;">${draft.subject}</h2>
+
+                <div style="color: #4b5563; line-height: 1.6; margin: 20px 0; white-space: pre-wrap;">
+                  ${draft.message.replace(/\n/g, '<br>')}
+                </div>
+
+                <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+                  <p style="color: #6b7280; font-size: 12px; margin: 0;">
+                    You received this email because you subscribed to Mark J Peterson Art newsletter.
+                  </p>
+                  <p style="color: #6b7280; font-size: 12px; margin: 8px 0 0 0;">
+                    <a href="${process.env.CLIENT_URL || 'http://localhost:5173'}/unsubscribe?token=${subscriber?.unsubscribeToken}" style="color: #c0a679; text-decoration: none;">Unsubscribe</a>
+                  </p>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-top: 24px; color: #6b7280; font-size: 12px;">
+                <p style="margin: 0;">Mark J Peterson Art</p>
+              </div>
+            </div>
+          `
+        });
+
+        if (error) {
+          console.error(`❌ Failed to send to ${email}:`, error);
+          failed++;
+        } else {
+          console.log(`✓ Sent to ${email}`);
+          sent++;
+        }
+      } catch (emailError) {
+        console.error(`❌ Error sending to ${email}:`, emailError);
+        failed++;
+      }
+    }
+
+    console.log(`📧 Newsletter sending complete: ${sent} sent, ${failed} failed`);
+
+    // Mark draft as sent
+    await Newsletter.markAsSent(req.params.id, sent);
+
+    res.json({
+      message: 'Newsletter sent successfully',
+      sent: sent,
+      failed: failed,
+      total: emails.length,
+    });
+  } catch (error) {
+    console.error('Error sending newsletter:', error);
+    res.status(500).json({ error: 'Failed to send newsletter' });
+  }
+});
+
+// GET /api/newsletter/sent - Get all sent newsletters (admin only)
+app.get('/api/newsletter/sent', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { page = 1, limit = 20 } = req.query;
+
+    const result = await Newsletter.findSent({
+      page: parseInt(page),
+      limit: parseInt(limit),
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching sent newsletters:', error);
+    res.status(500).json({ error: 'Failed to fetch sent newsletters' });
+  }
+});
+
+// GET /api/newsletter/sent/:id - Get single sent newsletter by ID (admin only)
+app.get('/api/newsletter/sent/:id', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const newsletter = await Newsletter.findById(req.params.id);
+
+    if (!newsletter) {
+      return res.status(404).json({ error: 'Newsletter not found' });
+    }
+
+    if (newsletter.status !== 'sent') {
+      return res.status(400).json({ error: 'This newsletter has not been sent yet' });
+    }
+
+    res.json(newsletter);
+  } catch (error) {
+    console.error('Error fetching sent newsletter:', error);
+    res.status(500).json({ error: 'Failed to fetch sent newsletter' });
+  }
+});
+
+// GET /api/newsletter/stats/summary - Get newsletter statistics (admin only)
+app.get('/api/newsletter/stats/summary', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const stats = await Newsletter.getStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching newsletter stats:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
   }
 });
 

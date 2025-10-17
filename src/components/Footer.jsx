@@ -1,8 +1,48 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { theme } from '../config/theme';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (!email) {
+      setError('Please enter your email');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          source: 'footer',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to subscribe');
+      }
+
+      setSubscribed(true);
+      setEmail('');
+      setTimeout(() => {
+        setSubscribed(false);
+      }, 5000);
+    } catch (err) {
+      console.error('Error subscribing to newsletter:', err);
+      setError('Failed to subscribe. Please try again.');
+    }
+  };
 
   return (
     <footer className="footer">
@@ -23,8 +63,30 @@ export default function Footer() {
         <div className="footer-section">
           <h4>Admin</h4>
           <nav className="footer-nav">
-            <Link to="/admin">Admin Dashboard</Link>
+            <Link to="/admin">Dashboard</Link>
           </nav>
+        </div>
+
+        <div className="footer-section">
+          <h4>Newsletter</h4>
+          {subscribed ? (
+            <p className="newsletter-success">Thank you for subscribing!</p>
+          ) : (
+            <form onSubmit={handleNewsletterSubmit} className="newsletter-form">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="newsletter-input"
+                required
+              />
+              <button type="submit" className="newsletter-btn">
+                Subscribe
+              </button>
+              {error && <p className="newsletter-error">{error}</p>}
+            </form>
+          )}
         </div>
 
         <div className="footer-section">

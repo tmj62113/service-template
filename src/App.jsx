@@ -18,6 +18,11 @@ import AdminOrders from './pages/AdminOrders';
 import AdminCustomers from './pages/AdminCustomers';
 import AdminSettings from './pages/AdminSettings';
 import AdminSearch from './pages/AdminSearch';
+import AdminNewsletter from './pages/AdminNewsletter';
+import AdminNewsletterCreate from './pages/AdminNewsletterCreate';
+import AdminNewsletterDrafts from './pages/AdminNewsletterDrafts';
+import AdminNewsletterSent from './pages/AdminNewsletterSent';
+import Unsubscribe from './pages/Unsubscribe';
 import OrderDetail from './pages/OrderDetail';
 import CustomerDetail from './pages/CustomerDetail';
 import TestUtilities from './pages/TestUtilities';
@@ -50,6 +55,7 @@ function App() {
                     <Route path="/success" element={<Success />} />
                     <Route path="/cancel" element={<Cancel />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/unsubscribe" element={<Unsubscribe />} />
                     <Route path="/test-utilities" element={<TestUtilities />} />
                     <Route path="/style-guide" element={<StyleGuide />} />
                   </Routes>
@@ -76,6 +82,10 @@ function App() {
             <Route path="orders/:id" element={<OrderDetail />} />
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="customers/:email/:name" element={<CustomerDetail />} />
+            <Route path="newsletter" element={<AdminNewsletter />} />
+            <Route path="newsletter/create" element={<AdminNewsletterCreate />} />
+            <Route path="newsletter/drafts" element={<AdminNewsletterDrafts />} />
+            <Route path="newsletter/sent" element={<AdminNewsletterSent />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="search" element={<AdminSearch />} />
           </Route>

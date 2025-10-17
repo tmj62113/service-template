@@ -219,6 +219,50 @@ export default function AdminLayout() {
               <span className="nav-badge">{unreadCount}</span>
             )}
           </Link>
+
+          <div className="nav-group">
+            <Link
+              to="/admin/newsletter"
+              className={`nav-item ${
+                isActive("/admin/newsletter") ? "active" : ""
+              }`}
+              onClick={closeMobileMenu}
+            >
+              <span className="material-symbols-outlined">mail</span>
+              <span>Newsletter</span>
+            </Link>
+            {isActive("/admin/newsletter") && (
+              <div className="nav-subitems">
+                <Link
+                  to="/admin/newsletter/create"
+                  className={`nav-subitem ${
+                    location.pathname === "/admin/newsletter/create" ? "active" : ""
+                  }`}
+                  onClick={closeMobileMenu}
+                >
+                  <span>Create Newsletter</span>
+                </Link>
+                <Link
+                  to="/admin/newsletter/drafts"
+                  className={`nav-subitem ${
+                    location.pathname === "/admin/newsletter/drafts" ? "active" : ""
+                  }`}
+                  onClick={closeMobileMenu}
+                >
+                  <span>Drafts</span>
+                </Link>
+                <Link
+                  to="/admin/newsletter/sent"
+                  className={`nav-subitem ${
+                    location.pathname === "/admin/newsletter/sent" ? "active" : ""
+                  }`}
+                  onClick={closeMobileMenu}
+                >
+                  <span>Sent Newsletters</span>
+                </Link>
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="sidebar-footer">
