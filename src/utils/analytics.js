@@ -1,6 +1,6 @@
 import ReactGA from 'react-ga4';
 import { hasConsentFor } from '../components/CookieConsent';
-import theme from '../config/theme';
+import { theme } from '../config/theme';
 
 let isInitialized = false;
 
