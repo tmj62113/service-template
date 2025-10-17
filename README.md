@@ -14,20 +14,33 @@ This application is designed to be easily duplicated and customized for multiple
 
 ## 📚 Documentation
 
-### **Getting Started Guides**
-- **[TEMPLATE_SETUP.md](./TEMPLATE_SETUP.md)** - 🎯 **START HERE** - Complete guide for setting up a new client project
+**All documentation is organized in the `/docs` folder for easy access.**
+
+### **🚀 Start Here**
+- **[docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)** - 🎯 **START HERE** - Complete setup guide with all features explained
+- **[docs/TEMPLATE_SETUP.md](./docs/TEMPLATE_SETUP.md)** - Setting up for a new client project
 - **[setup.sh](./setup.sh)** - Interactive setup script to automate configuration
 
-### **Configuration & Customization**
-- **[CSS_CUSTOMIZATION.md](./CSS_CUSTOMIZATION.md)** - CSS styling and customization guide
-- **[docs/STRIPE_SETUP.md](./docs/STRIPE_SETUP.md)** - Detailed Stripe payment integration guide
-- **[docs/WEBHOOKS.md](./docs/WEBHOOKS.md)** - Stripe webhooks implementation and troubleshooting
-- **[docs/EMAIL_SETUP.md](./docs/EMAIL_SETUP.md)** - Email service configuration (Resend)
+### **Core Documentation**
+- **[docs/API_DOCUMENTATION.md](./docs/API_DOCUMENTATION.md)** - Complete REST API reference
+- **[docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Production deployment instructions
+- **[docs/SECURITY_TESTING.md](./docs/SECURITY_TESTING.md)** - Security testing procedures
 
-### **Deployment & Development**
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Production deployment instructions
-- **[.claude/CLAUDE.md](./.claude/CLAUDE.md)** - Development guidelines and best practices
-- **[validate-template.sh](./validate-template.sh)** - Automated validation script (run before cloning for new clients)
+### **Feature Guides**
+- **[docs/WINSTON_LOGGING.md](./docs/WINSTON_LOGGING.md)** - Structured logging system
+- **[docs/SENTRY_SETUP.md](./docs/SENTRY_SETUP.md)** - Error tracking and monitoring
+- **[docs/DOCKER.md](./docs/DOCKER.md)** - Docker containerization
+- **[docs/CICD_SETUP.md](./docs/CICD_SETUP.md)** - CI/CD pipeline with GitHub Actions
+- **[docs/BACKUP_RECOVERY.md](./docs/BACKUP_RECOVERY.md)** - Database backup procedures
+
+### **Service Configuration**
+- **[docs/STRIPE_SETUP.md](./docs/STRIPE_SETUP.md)** - Payment processing setup
+- **[docs/WEBHOOKS.md](./docs/WEBHOOKS.md)** - Webhook implementation
+- **[docs/EMAIL_SETUP.md](./docs/EMAIL_SETUP.md)** - Email service (Resend)
+
+### **Customization**
+- **[docs/CSS_CUSTOMIZATION.md](./docs/CSS_CUSTOMIZATION.md)** - Styling and design
+- **[.claude/CLAUDE.md](./.claude/CLAUDE.md)** - Development guidelines
 
 ## 🚀 Quick Start (New Project)
 
@@ -75,7 +88,7 @@ The setup script will:
 4. Customize branding:
    - Edit `/src/config/theme.js` with your brand name, colors, logo, etc.
 
-**For detailed step-by-step instructions, see [TEMPLATE_SETUP.md](./TEMPLATE_SETUP.md)**
+**For detailed step-by-step instructions, see [docs/TEMPLATE_SETUP.md](./docs/TEMPLATE_SETUP.md)**
 
 ### Prerequisites
 
@@ -294,7 +307,7 @@ npm run test:coverage # Generate coverage report
 
 To access the admin dashboard, you'll need to create an admin user in MongoDB. The admin routes are protected and require authentication.
 
-See [TEMPLATE_SETUP.md](./TEMPLATE_SETUP.md) for instructions on creating an admin user.
+See [docs/TEMPLATE_SETUP.md](./docs/TEMPLATE_SETUP.md) for instructions on creating an admin user.
 
 ## 🎨 Customizing for Your Brand
 
@@ -379,7 +392,7 @@ To customize for a new client:
 
 ### Deploying Your Custom Store
 
-Once customized, deploy to production using the instructions in [DEPLOYMENT.md](./DEPLOYMENT.md).
+Once customized, deploy to production using the instructions in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
 Deployment covers:
 - Frontend deployment (Vercel/Netlify)

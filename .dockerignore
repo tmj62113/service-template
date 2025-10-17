@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Development
+.env
+.env.local
+.env.development
+.env.test
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+
+# Build artifacts (will be rebuilt in container)
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# Documentation
+README.md
+DEPLOYMENT.md
+SECURITY_TESTING.md
+SENTRY_SETUP.md
+API_DOCUMENTATION.md
+*.md
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Scripts
+scripts/
+
+# Context (design files)
+context/
+
+# Logs (will be created in container)
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+.cache/

@@ -32,6 +32,7 @@ import { getCollection, getDatabase } from './db/connection.js';
 import { ObjectId } from 'mongodb';
 import { validateContactForm, validateNewsletterSubscription, validateProductData, validateNewsletterContent, isHoneypotFilled } from './utils/security.js';
 import { doubleCsrf } from 'csrf-csrf';
+import logger, { requestLogger } from './utils/logger.js';
 
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -160,6 +161,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Request logging middleware (structured logging with Winston)
+app.use(requestLogger);
 
 // Cookie parser middleware
 app.use(cookieParser());
