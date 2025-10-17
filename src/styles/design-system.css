@@ -386,6 +386,87 @@
 }
 
 /* =====================================================
+   ACCESSIBILITY UTILITIES
+   ===================================================== */
+
+/* Screen Reader Only
+   Hides content visually but keeps it accessible to screen readers
+   ----------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to Content Link
+   Keyboard-accessible link that appears on focus
+   ----------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-dark);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 14px;
+  transition: top var(--transition-fast);
+}
+
+.skip-link:focus {
+  top: var(--spacing-md);
+}
+
+/* Focus Visible Styles
+   Clear focus indicators for keyboard navigation (WCAG 2.1 AA)
+   ----------------------------------------------------- */
+*:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  transition: outline var(--transition-fast);
+}
+
+/* Button focus styles */
+.btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn--primary:focus-visible {
+  outline-color: var(--color-dark);
+}
+
+/* Form focus styles - already have focus styles, enhance them */
+.form-input:focus-visible,
+.form-textarea:focus-visible,
+.form-select:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Link focus styles */
+a:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Remove default focus for mouse users (focus-visible handles keyboard) */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* =====================================================
    DIGITAL STYLE GUIDE - QUICK REFERENCE
    ===================================================== */
 

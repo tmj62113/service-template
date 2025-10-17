@@ -1570,9 +1570,17 @@ main {
   position: relative;
   width: 100%;
   padding-top: 100%;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
   overflow: hidden;
   background: var(--color-background);
   cursor: pointer;
+  /* Reset button styles */
+  border: none;
+  font: inherit;
+  text-align: left;
+  display: block;
 }
 
 .product-image {

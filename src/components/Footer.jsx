@@ -46,7 +46,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="footer">
+    <footer className="footer" role="contentinfo">
       <div className="footer-content">
         <div className="footer-section">
           <img src={theme.logo} alt={theme.logoAlt} className="footer-logo" />

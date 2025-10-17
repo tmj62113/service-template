@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../stores/cartStore';
 import { useToastStore } from '../../stores/toastStore';
@@ -7,9 +7,62 @@ import { theme } from '../../config/theme';
 export default function Cart({ isOpen, onClose }) {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const closeButtonRef = useRef(null);
+  const previousFocusRef = useRef(null);
   const { items, removeItem, updateQuantity, getTotal, clearCart } =
     useCartStore();
   const { addToast } = useToastStore();
+
+  // Focus management for modal
+  useEffect(() => {
+    if (isOpen) {
+      // Store the currently focused element
+      previousFocusRef.current = document.activeElement;
+
+      // Focus the close button when modal opens
+      setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+    } else {
+      // Return focus to previously focused element when modal closes
+      previousFocusRef.current?.focus();
+    }
+  }, [isOpen]);
+
+  // Trap focus within modal
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+
+      // Trap focus within modal
+      if (e.key === 'Tab') {
+        const cartModal = document.querySelector('.cart-sidebar');
+        if (!cartModal) return;
+
+        const focusableElements = cartModal.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   const formatPrice = (price) => {
     return `${theme.commerce.currencySymbol}${price.toFixed(2)}`;
@@ -53,12 +106,17 @@ export default function Cart({ isOpen, onClose }) {
 
   return (
     <>
-      <div className="cart-overlay" onClick={onClose}></div>
-      <div className="cart-sidebar">
+      <div className="cart-overlay" onClick={onClose} aria-hidden="true"></div>
+      <aside className="cart-sidebar" role="dialog" aria-label="Shopping cart" aria-modal="true">
         <div className="cart-header">
-          <h2>Shopping Cart</h2>
-          <button className="close-btn" onClick={onClose}>
-            <span className="material-symbols-outlined">close</span>
+          <h2 id="cart-title">Shopping Cart</h2>
+          <button
+            ref={closeButtonRef}
+            className="close-btn"
+            onClick={onClose}
+            aria-label="Close shopping cart"
+          >
+            <span className="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
         </div>
 
@@ -83,21 +141,23 @@ export default function Cart({ isOpen, onClose }) {
                         {formatPrice(item.price)}
                       </p>
 
-                      <div className="quantity-controls">
+                      <div className="quantity-controls" role="group" aria-label={`Quantity for ${item.name}`}>
                         <button
                           onClick={() =>
                             updateQuantity(item.id, item.quantity - 1)
                           }
+                          aria-label={`Decrease quantity of ${item.name}`}
                         >
-                          <span className="material-symbols-outlined">remove</span>
+                          <span className="material-symbols-outlined" aria-hidden="true">remove</span>
                         </button>
-                        <span>{item.quantity}</span>
+                        <span aria-label={`Quantity: ${item.quantity}`}>{item.quantity}</span>
                         <button
                           onClick={() =>
                             updateQuantity(item.id, item.quantity + 1)
                           }
+                          aria-label={`Increase quantity of ${item.name}`}
                         >
-                          <span className="material-symbols-outlined">add</span>
+                          <span className="material-symbols-outlined" aria-hidden="true">add</span>
                         </button>
                       </div>
                     </div>
@@ -105,8 +165,9 @@ export default function Cart({ isOpen, onClose }) {
                     <button
                       className="remove-btn"
                       onClick={() => removeItem(item.id)}
+                      aria-label={`Remove ${item.name} from cart`}
                     >
-                      <span className="material-symbols-outlined">delete</span>
+                      <span className="material-symbols-outlined" aria-hidden="true">delete</span>
                       Remove
                     </button>
                   </div>
@@ -125,17 +186,18 @@ export default function Cart({ isOpen, onClose }) {
                   className="checkout-btn"
                   onClick={handleCheckout}
                   disabled={isProcessing}
+                  aria-label="Proceed to checkout"
                 >
                   {isProcessing ? 'Processing...' : 'Proceed to Checkout'}
                 </button>
-                <button className="clear-cart-btn" onClick={clearCart}>
+                <button className="clear-cart-btn" onClick={clearCart} aria-label="Clear all items from cart">
                   Clear Cart
                 </button>
               </div>
             </>
           )}
         </div>
-      </div>
+      </aside>
     </>
   );
 }

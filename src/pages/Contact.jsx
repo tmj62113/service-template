@@ -117,12 +117,12 @@ export default function Contact() {
             <h2>Send Us a Message</h2>
 
             {submitted ? (
-              <div className="success-message">
+              <div className="success-message" role="status" aria-live="polite">
                 <h3>Thank you for your message!</h3>
                 <p>We'll get back to you as soon as possible.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="contact-form">
+              <form onSubmit={handleSubmit} className="contact-form" aria-label="Contact form">
                 <div className="form-group">
                   <label htmlFor="name">Name *</label>
                   <input

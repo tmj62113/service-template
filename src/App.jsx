@@ -36,6 +36,7 @@ import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import ToastContainer from './components/toast/ToastContainer';
 import CookieConsent from './components/CookieConsent';
+import SkipToContent from './components/SkipToContent';
 import { getCSSVariables } from './config/theme';
 import { initializeAnalytics, trackPageView } from './utils/analytics';
 
@@ -69,8 +70,9 @@ function App() {
             path="/*"
             element={
               <div style={themeStyles} className="app-container">
+                <SkipToContent />
                 <Header />
-                <main>
+                <main id="main-content" role="main">
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/products" element={<Products />} />

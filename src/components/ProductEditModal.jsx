@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function ProductEditModal({
   product,
@@ -24,6 +24,8 @@ export default function ProductEditModal({
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [isEditing, setIsEditing] = useState(!viewMode);
+  const closeButtonRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   useEffect(() => {
     if (product) {
@@ -52,6 +54,57 @@ export default function ProductEditModal({
     setImageFile(null);
     setIsEditing(!viewMode);
   }, [product, isOpen, viewMode]);
+
+  // Focus management for modal
+  useEffect(() => {
+    if (isOpen) {
+      // Store the currently focused element
+      previousFocusRef.current = document.activeElement;
+
+      // Focus the close button when modal opens
+      setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+    } else {
+      // Return focus to previously focused element when modal closes
+      previousFocusRef.current?.focus();
+    }
+  }, [isOpen]);
+
+  // Trap focus within modal and handle Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+
+      // Trap focus within modal
+      if (e.key === 'Tab') {
+        const modal = document.querySelector('.modal-content');
+        if (!modal) return;
+
+        const focusableElements = modal.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -213,13 +266,18 @@ export default function ProductEditModal({
               </button>
             )}
           </div>
-          <button className="modal-close" onClick={onClose}>
-            <span className="material-symbols-outlined">close</span>
+          <button
+            ref={closeButtonRef}
+            className="modal-close"
+            onClick={onClose}
+            aria-label="Close modal"
+          >
+            <span className="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="product-form">
-          {error && <div className="error-message">{error}</div>}
+        <form onSubmit={handleSubmit} className="product-form" aria-label={product ? "Edit product form" : "Add product form"}>
+          {error && <div className="error-message" role="alert" aria-live="assertive">{error}</div>}
 
           <div className="form-group">
             <label htmlFor="name">Product Name *</label>

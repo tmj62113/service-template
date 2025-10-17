@@ -20,20 +20,20 @@ export default function Header() {
 
   return (
     <>
-      <header className="header">
+      <header className="header" role="banner">
         <div className="header-content">
-          <Link to="/" className="logo">
+          <Link to="/" className="logo" aria-label="Home page">
             <img src={theme.logo} alt={theme.logoAlt} />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="nav desktop-nav">
+          <nav className="nav desktop-nav" role="navigation" aria-label="Main navigation">
             <Link to="/products">Shop</Link>
             <a href="/#about">About</a>
             <a href="/#contact">Contact</a>
             {user?.role === 'admin' && (
-              <Link to="/admin" className="admin-nav-link">
-                <span className="material-symbols-outlined">dashboard</span>
+              <Link to="/admin" className="admin-nav-link" aria-label="Admin dashboard">
+                <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>
                 Admin
               </Link>
             )}
@@ -44,7 +44,7 @@ export default function Header() {
             {isAuthenticated && (
               <div className="user-menu">
                 <span className="user-name">{user?.name}</span>
-                <button onClick={handleLogout} className="logout-button">
+                <button onClick={handleLogout} className="logout-button" aria-label="Logout">
                   Logout
                 </button>
               </div>
@@ -52,10 +52,11 @@ export default function Header() {
             <button
               className="cart-button"
               onClick={() => setIsCartOpen(true)}
+              aria-label={`Shopping cart with ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`}
             >
-              <span className="material-symbols-outlined">shopping_cart</span>
+              <span className="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
               {itemCount > 0 && (
-                <span className="cart-badge">{itemCount}</span>
+                <span className="cart-badge" aria-hidden="true">{itemCount}</span>
               )}
             </button>
 

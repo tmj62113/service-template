@@ -38,9 +38,10 @@ export default function MobileMenu() {
       <button
         className="mobile-menu-button"
         onClick={toggleMenu}
-        aria-label="Toggle menu"
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isOpen}
       >
-        <div className={`hamburger ${isOpen ? 'open' : ''}`}>
+        <div className={`hamburger ${isOpen ? 'open' : ''}`} aria-hidden="true">
           <span></span>
           <span></span>
           <span></span>
@@ -48,22 +49,27 @@ export default function MobileMenu() {
       </button>
 
       {/* Overlay */}
-      {isOpen && <div className="mobile-menu-overlay" onClick={toggleMenu} />}
+      {isOpen && <div className="mobile-menu-overlay" onClick={toggleMenu} aria-hidden="true" />}
 
       {/* Slide-in Menu */}
-      <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
+      <nav
+        className={`mobile-menu ${isOpen ? 'open' : ''}`}
+        role="navigation"
+        aria-label="Mobile navigation"
+        aria-hidden={!isOpen}
+      >
         <div className="mobile-menu-header">
           <h2>{theme.brandName}</h2>
           <button
             className="mobile-menu-close"
             onClick={toggleMenu}
-            aria-label="Close menu"
+            aria-label="Close navigation menu"
           >
-            <span className="material-symbols-outlined">close</span>
+            <span className="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
         </div>
 
-        <nav className="mobile-menu-nav">
+        <div className="mobile-menu-nav">
           <Link
             to="/"
             className={location.pathname === '/' ? 'active' : ''}
@@ -86,20 +92,21 @@ export default function MobileMenu() {
             <Link
               to="/admin"
               className={`admin-link ${location.pathname.startsWith('/admin') ? 'active' : ''}`}
+              aria-label="Admin dashboard"
             >
-              <span className="material-symbols-outlined">dashboard</span>
+              <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>
               Admin Dashboard
             </Link>
           )}
-        </nav>
+        </div>
 
         {itemCount > 0 && (
-          <div className="mobile-menu-cart-info">
-            <span className="material-symbols-outlined">shopping_cart</span>
+          <div className="mobile-menu-cart-info" aria-label={`${itemCount} ${itemCount === 1 ? 'item' : 'items'} in shopping cart`}>
+            <span className="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
             <span>{itemCount} {itemCount === 1 ? 'item' : 'items'} in cart</span>
           </div>
         )}
-      </div>
+      </nav>
     </>
   );
 }
