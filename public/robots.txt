@@ -1,7 +1,9 @@
-# robots.txt for Mark J Peterson Art
+# robots.txt - E-Commerce Template
 #
 # This file tells search engine crawlers which pages/files to crawl
 # and which to ignore.
+#
+# ⚠️ IMPORTANT: Update the Sitemap URL below with your actual domain!
 #
 # Learn more: https://developers.google.com/search/docs/crawling-indexing/robots/intro
 
@@ -24,4 +26,5 @@ Allow: /contact
 Allow: /
 
 # Sitemap location
-Sitemap: https://markjpetersonart.com/sitemap.xml
+# ⚠️ TODO: Replace yourdomain.com with your actual domain
+Sitemap: https://yourdomain.com/sitemap.xml
