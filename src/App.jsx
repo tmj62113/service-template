@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -36,13 +37,31 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ToastContainer from './components/toast/ToastContainer';
 import CookieConsent from './components/CookieConsent';
 import { getCSSVariables } from './config/theme';
+import { initializeAnalytics, trackPageView } from './utils/analytics';
+
+// Component to track page views on route changes
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location]);
+
+  return null;
+}
 
 function App() {
   // Apply theme CSS variables
   const themeStyles = getCSSVariables();
 
+  // Initialize analytics on mount
+  useEffect(() => {
+    initializeAnalytics();
+  }, []);
+
   return (
     <BrowserRouter>
+      <AnalyticsTracker />
       <AuthProvider>
         <Routes>
           {/* Public routes with main site layout */}

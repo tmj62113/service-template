@@ -209,6 +209,26 @@ export const theme = {
     ogImage: "/og-image.jpg",
     twitterHandle: "@markjpetersonart",
   },
+
+  // ===================================================
+  // ANALYTICS & TRACKING
+  // ===================================================
+  analytics: {
+    // Google Analytics 4 Measurement ID
+    // Get this from: https://analytics.google.com/ > Admin > Data Streams
+    // Format: G-XXXXXXXXXX
+    // Set to null to disable analytics
+    ga4MeasurementId: null, // Replace with your GA4 ID (e.g., "G-XXXXXXXXXX")
+
+    // Enable/disable specific tracking features
+    enablePageViews: true,
+    enableEvents: true,
+    enableEcommerce: true,
+
+    // Privacy settings
+    anonymizeIp: true, // GDPR compliance - anonymize IP addresses
+    respectDoNotTrack: true, // Respect browser's Do Not Track setting
+  },
 };
 
 // =====================================================

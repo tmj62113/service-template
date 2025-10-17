@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './CookieConsent.module.css';
+import { initializeAnalytics, disableAnalytics } from '../utils/analytics';
 
 const COOKIE_CONSENT_KEY = 'mjp_cookie_consent';
 const CONSENT_EXPIRY_DAYS = 365;
@@ -34,6 +35,14 @@ export default function CookieConsent() {
     };
 
     localStorage.setItem(COOKIE_CONSENT_KEY, JSON.stringify(consent));
+
+    // Initialize or disable analytics based on consent
+    if (consentData.analytics) {
+      initializeAnalytics();
+    } else {
+      disableAnalytics();
+    }
+
     setIsVisible(false);
   };
 
