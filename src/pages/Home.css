@@ -268,28 +268,83 @@
 
 .contact-section h2 {
   font-family: var(--font-heading);
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 36px;
+  font-size: 40px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
   color: var(--color-gunmetal);
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 }
 
-.contact-form {
-  max-width: 600px;
+.contact-intro {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 64px;
+}
+
+.contact-intro p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-gunmetal);
+  margin-bottom: 12px;
+}
+
+.contact-intro a {
+  color: var(--color-gunmetal);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.contact-intro a:hover {
+  color: var(--color-rust);
+}
+
+.contact-layout {
+  max-width: 800px;
   margin: 0 auto;
 }
 
+.contact-image {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+.contact-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contact-form {
+  width: 100%;
+  padding: 48px 64px;
+  background-color: transparent;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+}
+
+.form-row .form-group {
+  margin-bottom: 0;
 }
 
 .form-group label {
   display: block;
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--color-gunmetal);
   margin-bottom: 8px;
 }
@@ -297,21 +352,21 @@
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 12px;
   font-family: var(--font-body);
   font-size: 16px;
   color: var(--color-gunmetal);
-  background-color: var(--color-cream);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-button);
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #d0d0d0;
+  border-radius: 0;
   transition: border-color 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--color-ecru);
-  box-shadow: 0 0 0 3px rgba(192, 166, 121, 0.1);
+  border-color: var(--color-gunmetal);
 }
 
 .form-group textarea {
@@ -319,31 +374,51 @@
   min-height: 120px;
 }
 
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.form-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-gunmetal);
+}
+
+.form-checkbox label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-gunmetal);
+  cursor: pointer;
+  margin: 0;
+}
+
 .submit-btn {
   display: inline-block;
-  width: 100%;
-  padding: 12px 32px;
+  padding: 12px 48px;
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 400;
   text-align: center;
-  text-transform: uppercase;
-  background-color: transparent;
-  color: var(--color-gunmetal);
-  border: 2px solid var(--color-seal-brown);
-  border-radius: var(--radius-button);
+  background-color: var(--color-gunmetal);
+  color: #ffffff;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .submit-btn:hover {
-  border-color: var(--color-rust);
-  color: var(--color-rust);
+  background-color: var(--color-seal-brown);
 }
 
 .success-message {
-  max-width: 600px;
-  margin: 0 auto;
   padding: 48px 32px;
   text-align: center;
   background-color: rgba(192, 166, 121, 0.1);
@@ -411,6 +486,32 @@
   .masonry-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
+  }
+
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .contact-image {
+    min-height: 300px;
+  }
+
+  .contact-form {
+    padding: 0 16px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-row .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-row .form-group:last-child {
+    margin-bottom: 0;
   }
 
 }

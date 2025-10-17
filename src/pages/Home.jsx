@@ -94,19 +94,20 @@ export default function Home() {
 
   // Contact form state
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
-    subject: '',
     message: '',
+    mailingList: false,
   });
 
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -119,7 +120,13 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          subject: 'Contact Form Submission',
+          message: formData.message,
+          mailingList: formData.mailingList,
+        }),
       });
 
       if (!response.ok) {
@@ -129,7 +136,7 @@ export default function Home() {
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setFormData({ firstName: '', lastName: '', email: '', message: '', mailingList: false });
       }, 3000);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -237,68 +244,90 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact" className="contact-section">
         <div className="container">
-          <h2>Send Us a Message</h2>
+          <h2>CONTACT</h2>
 
-          {submitted ? (
-            <div className="success-message">
-              <h3>Thank you for your message!</h3>
-              <p>We'll get back to you as soon as possible.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="contact-form">
-              <div className="form-group">
-                <label htmlFor="name">Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
+          <div className="contact-intro">
+            <p>
+              Contact me directly at <a href="mailto:mark@mjpetersonart.com">mark@mjpetersonart.com</a> or leave a message below.
+            </p>
+          </div>
+
+          <div className="contact-layout">
+            {/* Contact Form */}
+            {submitted ? (
+              <div className="success-message">
+                <h3>Thank you for your message!</h3>
+                <p>We'll get back to you as soon as possible.</p>
               </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="contact-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="firstName">FIRST NAME</label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="email">Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="lastName">LAST NAME</label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="subject">Subject *</label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+                <div className="form-group">
+                  <label htmlFor="email">EMAIL *</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="message">Message *</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="6"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                ></textarea>
-              </div>
+                <div className="form-group">
+                  <label htmlFor="message">MESSAGE</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="5"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                  ></textarea>
+                </div>
 
-              <button type="submit" className="submit-btn">
-                Send Message
-              </button>
-            </form>
-          )}
+                <div className="form-checkbox">
+                  <input
+                    type="checkbox"
+                    id="mailingList"
+                    name="mailingList"
+                    checked={formData.mailingList}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="mailingList">SIGN UP FOR MY MAILING LIST</label>
+                </div>
+
+                <button type="submit" className="submit-btn">
+                  Send
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </section>
     </div>
