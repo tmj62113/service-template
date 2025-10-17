@@ -1,0 +1,27 @@
+# robots.txt for Mark J Peterson Art
+#
+# This file tells search engine crawlers which pages/files to crawl
+# and which to ignore.
+#
+# Learn more: https://developers.google.com/search/docs/crawling-indexing/robots/intro
+
+User-agent: *
+Allow: /
+
+# Disallow admin routes
+Disallow: /admin
+Disallow: /admin/
+Disallow: /login
+
+# Disallow test/utility pages
+Disallow: /test-utilities
+Disallow: /style-guide
+
+# Allow important pages
+Allow: /products
+Allow: /about
+Allow: /contact
+Allow: /
+
+# Sitemap location
+Sitemap: https://markjpetersonart.com/sitemap.xml
