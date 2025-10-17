@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../stores/cartStore';
 import { theme } from '../config/theme';
+import SEO, { generateProductStructuredData, generateBreadcrumbStructuredData } from '../components/SEO';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -63,8 +64,26 @@ export default function ProductDetail() {
     return `${theme.commerce.currencySymbol}${price.toFixed(2)}`;
   };
 
+  // Generate structured data for SEO
+  const breadcrumbs = [
+    { name: 'Home', url: `${window.location.origin}/` },
+    { name: 'Shop', url: `${window.location.origin}/products` },
+    { name: product.name, url: window.location.href }
+  ];
+
   return (
     <div className="product-detail-container">
+      <SEO
+        title={product.name}
+        description={product.description}
+        type="product"
+        image={product.image}
+        keywords={[product.category, product.name, 'art print', 'artwork']}
+        structuredData={[
+          generateProductStructuredData(product),
+          generateBreadcrumbStructuredData(breadcrumbs)
+        ]}
+      />
       <button onClick={() => navigate('/products')} className="btn-back-link">
         <span className="material-symbols-outlined">arrow_back</span> Back to Products
       </button>

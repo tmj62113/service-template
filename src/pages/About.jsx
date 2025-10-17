@@ -1,8 +1,14 @@
 import { theme } from '../config/theme';
+import SEO from '../components/SEO';
 
 export default function About() {
   return (
     <div className="about-container">
+      <SEO
+        title="About"
+        description="Learn about Mark J Peterson and his passion for steampunk and Victorian-inspired artwork. Discover the story behind the unique brass and copper art pieces."
+        keywords={['Mark J Peterson', 'artist bio', 'steampunk artist', 'Victorian art', 'art history', 'about artist']}
+      />
       <div className="about-hero">
         <h1>About {theme.brandName}</h1>
         <p className="about-lead">

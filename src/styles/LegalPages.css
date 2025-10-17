@@ -1,0 +1,355 @@
+/* =====================================================
+   LEGAL PAGES - SHARED STYLES
+   ===================================================== */
+
+.legal-page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding: var(--spacing-2xl) 0;
+}
+
+.legal-container {
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* =====================================================
+   HEADER SECTION
+   ===================================================== */
+
+.legal-header {
+  margin-bottom: var(--spacing-2xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 2px solid var(--color-border-dark);
+}
+
+.legal-header h1 {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legal-last-updated {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  margin: 0;
+}
+
+/* =====================================================
+   TABLE OF CONTENTS
+   ===================================================== */
+
+.legal-toc {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.legal-toc h2 {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legal-toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.legal-toc li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.legal-toc a {
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  display: inline-block;
+}
+
+.legal-toc a:hover {
+  color: var(--color-accent);
+  padding-left: var(--spacing-xs);
+}
+
+/* =====================================================
+   MAIN CONTENT
+   ===================================================== */
+
+.legal-content {
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.legal-content section {
+  margin-bottom: var(--spacing-2xl);
+  scroll-margin-top: var(--spacing-2xl);
+}
+
+.legal-content h2 {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legal-content h2:first-child {
+  margin-top: 0;
+}
+
+.legal-content h3 {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-secondary);
+  margin: var(--spacing-xl) 0 var(--spacing-md) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.legal-content p {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: var(--font-size-base);
+}
+
+.legal-content ul,
+.legal-content ol {
+  margin: 0 0 var(--spacing-lg) 0;
+  padding-left: var(--spacing-xl);
+}
+
+.legal-content li {
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-base);
+}
+
+.legal-content li:last-child {
+  margin-bottom: 0;
+}
+
+.legal-content strong {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.legal-content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.legal-content a:hover {
+  color: var(--color-accent-hover);
+}
+
+/* =====================================================
+   CONTACT INFO SECTION
+   ===================================================== */
+
+.legal-contact {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
+}
+
+.legal-contact p {
+  margin: var(--spacing-xs) 0;
+  font-size: var(--font-size-base);
+}
+
+.legal-contact strong {
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+}
+
+.legal-contact a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.legal-contact a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* =====================================================
+   TABLE STYLES
+   ===================================================== */
+
+.legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--spacing-lg) 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.legal-table thead {
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+}
+
+.legal-table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.legal-table td {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--font-size-base);
+}
+
+.legal-table tbody tr:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* =====================================================
+   FOOTER SECTION
+   ===================================================== */
+
+.legal-footer {
+  margin-top: var(--spacing-3xl);
+  padding-top: var(--spacing-xl);
+  border-top: 2px solid var(--color-border-dark);
+  text-align: center;
+}
+
+.legal-footer p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  font-style: italic;
+  margin: 0;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .legal-page {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .legal-container {
+    padding: 0 var(--spacing-md);
+  }
+
+  .legal-header h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .legal-toc {
+    padding: var(--spacing-md);
+  }
+
+  .legal-toc h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .legal-content h2 {
+    font-size: var(--font-size-xl);
+  }
+
+  .legal-content h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .legal-content ul,
+  .legal-content ol {
+    padding-left: var(--spacing-lg);
+  }
+
+  .legal-table {
+    font-size: var(--font-size-sm);
+  }
+
+  .legal-table th,
+  .legal-table td {
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .legal-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .legal-content h2 {
+    font-size: var(--font-size-lg);
+  }
+
+  .legal-content h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .legal-content,
+  .legal-content p,
+  .legal-content li {
+    font-size: var(--font-size-sm);
+  }
+
+  /* Make table scrollable on very small screens */
+  .legal-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* =====================================================
+   PRINT STYLES
+   ===================================================== */
+
+@media print {
+  .legal-page {
+    background-color: white;
+  }
+
+  .legal-toc {
+    display: none;
+  }
+
+  .legal-content a {
+    color: black;
+    text-decoration: none;
+  }
+
+  .legal-content a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: var(--font-size-xs);
+  }
+
+  .legal-content section {
+    page-break-inside: avoid;
+  }
+}

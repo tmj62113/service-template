@@ -453,6 +453,38 @@ footer {
   margin-top: 4px;
 }
 
+/* Footer legal links */
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 12px;
+}
+
+.footer-legal-links a,
+.footer-legal-links .cookie-settings-link {
+  color: var(--color-cream);
+  text-decoration: underline;
+  transition: color 0.15s ease;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.footer-legal-links a:hover,
+.footer-legal-links .cookie-settings-link:hover {
+  color: var(--color-ecru);
+}
+
+.footer-legal-links .separator {
+  color: rgba(247, 246, 239, 0.5);
+}
+
 /* =====================================
    FORMS
    ===================================== */

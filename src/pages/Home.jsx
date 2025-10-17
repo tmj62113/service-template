@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import SEO, { generateOrganizationStructuredData } from '../components/SEO';
 import './Home.css';
 
 export default function Home() {
@@ -170,6 +171,12 @@ export default function Home() {
 
   return (
     <div className="home-container">
+      <SEO
+        title="Home"
+        description="Discover original steampunk and Victorian-inspired artwork by Mark J Peterson. Explore unique brass and copper artwork, fine art prints, and limited edition pieces."
+        keywords={['steampunk art', 'Victorian art', 'brass artwork', 'copper artwork', 'fine art prints', 'original artwork', 'Mark J Peterson', 'industrial art']}
+        structuredData={generateOrganizationStructuredData()}
+      />
       {/* Hero Slideshow */}
       <section className="hero-slideshow">
         <div className="slideshow-container">

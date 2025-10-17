@@ -1,15 +1,24 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { HelmetProvider } from 'react-helmet-async';
 import About from './About';
+
+const renderAbout = () => {
+  return render(
+    <HelmetProvider>
+      <About />
+    </HelmetProvider>
+  );
+};
 
 describe('About', () => {
   it('renders page title', () => {
-    render(<About />);
+    renderAbout();
     expect(screen.getByText(/About Your Store/i)).toBeInTheDocument();
   });
 
   it('renders lead paragraph', () => {
-    render(<About />);
+    renderAbout();
     expect(
       screen.getByText(
         /We're passionate about bringing you the finest products with exceptional service/i
@@ -18,22 +27,22 @@ describe('About', () => {
   });
 
   it('renders Our Story section', () => {
-    render(<About />);
+    renderAbout();
     expect(screen.getByText('Our Story')).toBeInTheDocument();
   });
 
   it('renders Our Mission section', () => {
-    render(<About />);
+    renderAbout();
     expect(screen.getByText('Our Mission')).toBeInTheDocument();
   });
 
   it('renders Why Choose Us section', () => {
-    render(<About />);
+    renderAbout();
     expect(screen.getByText('Why Choose Us')).toBeInTheDocument();
   });
 
   it('renders all value items', () => {
-    render(<About />);
+    renderAbout();
     expect(screen.getByText('Quality First')).toBeInTheDocument();
     expect(screen.getByText('Customer Focused')).toBeInTheDocument();
     expect(screen.getByText('Fast Shipping')).toBeInTheDocument();
@@ -41,12 +50,12 @@ describe('About', () => {
   });
 
   it('renders Our Commitment section', () => {
-    render(<About />);
+    renderAbout();
     expect(screen.getByText('Our Commitment')).toBeInTheDocument();
   });
 
   it('mentions sustainability', () => {
-    render(<About />);
+    renderAbout();
     expect(screen.getByText(/sustainability/i)).toBeInTheDocument();
   });
 });

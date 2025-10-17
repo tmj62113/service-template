@@ -418,6 +418,74 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
+// Sitemap endpoint - dynamically generate sitemap.xml
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const baseUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+
+    // Get all active products
+    const { products } = await Product.findAll({
+      isActive: true,
+      limit: 1000,
+    });
+
+    // Build sitemap XML
+    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
+  <url>
+    <loc>${baseUrl}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Shop page -->
+  <url>
+    <loc>${baseUrl}/products</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- About page -->
+  <url>
+    <loc>${baseUrl}/about</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Legal pages -->
+  <url>
+    <loc>${baseUrl}/privacy-policy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Product pages -->
+`;
+
+    // Add each product
+    for (const product of products) {
+      const lastmod = product.updatedAt || product.createdAt;
+      sitemap += `  <url>
+    <loc>${baseUrl}/products/${product._id}</loc>
+    <lastmod>${new Date(lastmod).toISOString().split('T')[0]}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+`;
+    }
+
+    sitemap += `</urlset>`;
+
+    // Set headers and send
+    res.header('Content-Type', 'application/xml');
+    res.send(sitemap);
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.status(500).send('Error generating sitemap');
+  }
+});
+
 // ========================================
 // Authentication Endpoints
 // ========================================

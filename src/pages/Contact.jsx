@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { theme } from '../config/theme';
+import SEO from '../components/SEO';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -51,6 +52,11 @@ export default function Contact() {
 
   return (
     <div className="contact-container">
+      <SEO
+        title="Contact"
+        description="Get in touch with Mark J Peterson Art. Have questions about artwork, prints, commissions, or exhibitions? We'd love to hear from you."
+        keywords={['contact', 'contact artist', 'art inquiries', 'commission art', 'art questions', 'get in touch']}
+      />
       <div className="contact-hero">
         <h1>Get in Touch</h1>
         <p className="contact-lead">

@@ -30,8 +30,11 @@ import OrderDetail from './pages/OrderDetail';
 import CustomerDetail from './pages/CustomerDetail';
 import TestUtilities from './pages/TestUtilities';
 import StyleGuide from './pages/StyleGuide';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import ToastContainer from './components/toast/ToastContainer';
+import CookieConsent from './components/CookieConsent';
 import { getCSSVariables } from './config/theme';
 
 function App() {
@@ -61,10 +64,14 @@ function App() {
                     <Route path="/unsubscribe" element={<Unsubscribe />} />
                     <Route path="/test-utilities" element={<TestUtilities />} />
                     <Route path="/style-guide" element={<StyleGuide />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    {/* Catch-all route for 404 - must be last */}
+                    <Route path="*" element={<NotFound />} />
                   </Routes>
                 </main>
                 <Footer />
                 <ToastContainer />
+                <CookieConsent />
               </div>
             }
           />

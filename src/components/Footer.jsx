@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { theme } from '../config/theme';
+import { resetCookieConsent } from './CookieConsent';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -126,6 +127,13 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <p>&copy; {currentYear} {theme.brandName}. All rights reserved.</p>
+        <div className="footer-legal-links">
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <span className="separator">|</span>
+          <button onClick={resetCookieConsent} className="cookie-settings-link">
+            Change Cookie Settings
+          </button>
+        </div>
       </div>
     </footer>
   );

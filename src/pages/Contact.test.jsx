@@ -1,16 +1,25 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { HelmetProvider } from 'react-helmet-async';
 import userEvent from '@testing-library/user-event';
 import Contact from './Contact';
 
+const renderContact = () => {
+  return render(
+    <HelmetProvider>
+      <Contact />
+    </HelmetProvider>
+  );
+};
+
 describe('Contact', () => {
   it('renders page title', () => {
-    render(<Contact />);
+    renderContact();
     expect(screen.getByText('Get in Touch')).toBeInTheDocument();
   });
 
   it('renders contact information', () => {
-    render(<Contact />);
+    renderContact();
     expect(screen.getByText('Email')).toBeInTheDocument();
     expect(screen.getByText('Phone')).toBeInTheDocument();
     expect(screen.getByText('Address')).toBeInTheDocument();
@@ -18,7 +27,7 @@ describe('Contact', () => {
   });
 
   it('renders contact form', () => {
-    render(<Contact />);
+    renderContact();
     expect(screen.getByLabelText(/Name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Subject/i)).toBeInTheDocument();
@@ -26,7 +35,7 @@ describe('Contact', () => {
   });
 
   it('renders submit button', () => {
-    render(<Contact />);
+    renderContact();
     expect(screen.getByText('Send Message')).toBeInTheDocument();
   });
 
@@ -39,7 +48,7 @@ describe('Contact', () => {
       })
     );
 
-    render(<Contact />);
+    renderContact();
 
     await user.type(screen.getByLabelText(/Name/i), 'John Doe');
     await user.type(screen.getByLabelText(/Email/i), 'john@example.com');
@@ -76,7 +85,7 @@ describe('Contact', () => {
       })
     );
 
-    render(<Contact />);
+    renderContact();
 
     await user.type(screen.getByLabelText(/Name/i), 'John Doe');
     await user.type(screen.getByLabelText(/Email/i), 'john@example.com');
@@ -93,17 +102,17 @@ describe('Contact', () => {
   });
 
   it('displays email address', () => {
-    render(<Contact />);
+    renderContact();
     expect(screen.getByText(/support@yourstore.com/i)).toBeInTheDocument();
   });
 
   it('displays phone number', () => {
-    render(<Contact />);
+    renderContact();
     expect(screen.getByText(/\+1 \(555\) 123-4567/)).toBeInTheDocument();
   });
 
   it('displays business address', () => {
-    render(<Contact />);
+    renderContact();
     expect(screen.getByText(/123 Commerce Street/)).toBeInTheDocument();
     expect(screen.getByText(/San Francisco, CA 94102/)).toBeInTheDocument();
   });

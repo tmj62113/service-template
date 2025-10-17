@@ -1,13 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Home from './Home';
 
 const renderHome = () => {
   return render(
-    <BrowserRouter>
-      <Home />
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <Home />
+      </BrowserRouter>
+    </HelmetProvider>
   );
 };
 
