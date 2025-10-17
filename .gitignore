@@ -33,3 +33,16 @@ screenshots/
 
 # References folder
 references/
+
+# Security documentation (contains sensitive implementation details)
+SECURITY.md
+
+# Admin creation scripts (contain default credentials)
+scripts/createDefaultAdmin.js
+scripts/createAdminQuick.js
+
+# Playwright screenshots and test artifacts
+.playwright-mcp/
+
+# Context folder with design files (may contain client-specific info)
+context/
