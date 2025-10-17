@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import CookieConsent, { hasConsentFor, resetCookieConsent } from './CookieConsent';
@@ -36,14 +36,16 @@ describe('CookieConsent', () => {
       renderCookieConsent();
 
       // Fast-forward time
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
     });
 
-    it('does not display when consent is already saved', () => {
+    it('does not display when consent is already saved', async () => {
       localStorage.setItem(
         COOKIE_CONSENT_KEY,
         JSON.stringify({
@@ -56,7 +58,9 @@ describe('CookieConsent', () => {
       );
 
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
@@ -65,7 +69,9 @@ describe('CookieConsent', () => {
   describe('Content and Accessibility', () => {
     beforeEach(async () => {
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
@@ -111,7 +117,9 @@ describe('CookieConsent', () => {
     it('saves all consents when "Accept All" is clicked', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -131,7 +139,9 @@ describe('CookieConsent', () => {
     it('hides the banner after accepting all', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -150,7 +160,9 @@ describe('CookieConsent', () => {
     it('saves only essential consent when "Reject Non-Essential" is clicked', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -168,7 +180,9 @@ describe('CookieConsent', () => {
     it('hides the banner after rejecting non-essential', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -187,7 +201,9 @@ describe('CookieConsent', () => {
     it('shows customization view when "Customize" is clicked', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -204,7 +220,9 @@ describe('CookieConsent', () => {
     it('displays essential cookies as always enabled', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -224,7 +242,9 @@ describe('CookieConsent', () => {
     it('allows toggling analytics cookies', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -246,7 +266,9 @@ describe('CookieConsent', () => {
     it('allows toggling marketing cookies', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -268,7 +290,9 @@ describe('CookieConsent', () => {
     it('saves custom preferences when "Save Preferences" is clicked', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -293,7 +317,9 @@ describe('CookieConsent', () => {
     it('returns to simple view when "Back" is clicked', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -316,7 +342,9 @@ describe('CookieConsent', () => {
     it('displays descriptions for all cookie types', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -341,7 +369,9 @@ describe('CookieConsent', () => {
     it('supports keyboard navigation through buttons', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -364,7 +394,9 @@ describe('CookieConsent', () => {
     it('can activate buttons with keyboard', async () => {
       const user = userEvent.setup({ delay: null });
       renderCookieConsent();
-      vi.advanceTimersByTime(1000);
+      await act(async () => {
+        vi.advanceTimersByTime(1000);
+      });
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();

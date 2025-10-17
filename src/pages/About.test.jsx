@@ -14,7 +14,7 @@ const renderAbout = () => {
 describe('About', () => {
   it('renders page title', () => {
     renderAbout();
-    expect(screen.getByText(/About Your Store/i)).toBeInTheDocument();
+    expect(screen.getByText(/About Mark J Peterson Art/i)).toBeInTheDocument();
   });
 
   it('renders lead paragraph', () => {

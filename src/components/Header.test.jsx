@@ -39,14 +39,14 @@ describe('Header', () => {
 
   it('renders the brand name', () => {
     renderHeader();
-    // Brand name appears in both desktop header (h1) and mobile menu (h2)
-    expect(screen.getAllByText(/Your Store/i).length).toBeGreaterThan(0);
+    // Brand name appears in mobile menu (h2) - logo is an image in header
+    expect(screen.getByText('Mark J Peterson Art')).toBeInTheDocument();
   });
 
   it('renders navigation links', () => {
     renderHeader();
     // Links appear in both desktop nav and mobile menu
-    expect(screen.getAllByText('Products').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Shop').length).toBeGreaterThan(0);
     expect(screen.getAllByText('About').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Contact').length).toBeGreaterThan(0);
   });

@@ -1,8 +1,12 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import userEvent from '@testing-library/user-event';
 import Home from './Home';
+
+// Mock fetch for contact form submissions
+global.fetch = vi.fn();
 
 const renderHome = () => {
   return render(
@@ -15,51 +19,75 @@ const renderHome = () => {
 };
 
 describe('Home', () => {
-  it('renders hero section with title', () => {
-    renderHome();
-    expect(screen.getByText(/Welcome to Your Store/i)).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
+    global.fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({}),
+    });
   });
 
-  it('renders hero subtitle', () => {
+  it('renders hero slideshow', () => {
     renderHome();
-    expect(
-      screen.getByText(/Discover our curated collection of premium products/i)
-    ).toBeInTheDocument();
+    // Check for slideshow controls
+    expect(screen.getByLabelText('Previous slide')).toBeInTheDocument();
+    expect(screen.getByLabelText('Next slide')).toBeInTheDocument();
   });
 
-  it('renders Shop Now CTA button', () => {
+  it('renders collections section header', () => {
     renderHome();
-    const shopNowButtons = screen.getAllByText('Shop Now');
-    expect(shopNowButtons.length).toBeGreaterThan(0);
+    expect(screen.getByText('MJ Peterson Art Collections')).toBeInTheDocument();
   });
 
-  it('renders all feature cards', () => {
+  it('renders all three collection buttons', () => {
     renderHome();
-    expect(screen.getByText('Free Shipping')).toBeInTheDocument();
-    expect(screen.getByText('Secure Payment')).toBeInTheDocument();
-    expect(screen.getByText('Easy Returns')).toBeInTheDocument();
-    expect(screen.getByText('24/7 Support')).toBeInTheDocument();
+    expect(screen.getByText('Steampunk Art')).toBeInTheDocument();
+    expect(screen.getByText('Brass & Copper')).toBeInTheDocument();
+    expect(screen.getByText('Victorian Dreams')).toBeInTheDocument();
   });
 
-  it('renders feature descriptions', () => {
+  it('renders artwork section header', () => {
     renderHome();
-    expect(screen.getByText('On orders over $100')).toBeInTheDocument();
-    expect(screen.getByText('100% secure transactions')).toBeInTheDocument();
-    expect(screen.getByText('30-day return policy')).toBeInTheDocument();
-    expect(screen.getByText('Dedicated customer service')).toBeInTheDocument();
+    expect(screen.getByText('Artwork by MJ Peterson')).toBeInTheDocument();
   });
 
-  it('renders CTA section', () => {
+  it('renders about section', () => {
     renderHome();
-    expect(screen.getByText(/Ready to get started/i)).toBeInTheDocument();
-    expect(screen.getByText('View All Products')).toBeInTheDocument();
+    expect(screen.getByText('About MJ Peterson')).toBeInTheDocument();
+    expect(screen.getByText(/Victorian elegance and industrial innovation/i)).toBeInTheDocument();
   });
 
-  it('has correct link to products page', () => {
+  it('renders contact section', () => {
     renderHome();
-    const productLinks = screen.getAllByRole('link', { name: /shop now|view all products/i });
-    productLinks.forEach((link) => {
-      expect(link).toHaveAttribute('href', '/products');
+    expect(screen.getByText('CONTACT')).toBeInTheDocument();
+    expect(screen.getByText(/mark@mjpetersonart.com/i)).toBeInTheDocument();
+  });
+
+  it('renders contact form fields', () => {
+    renderHome();
+    expect(screen.getByLabelText('FIRST NAME')).toBeInTheDocument();
+    expect(screen.getByLabelText('LAST NAME')).toBeInTheDocument();
+    expect(screen.getByLabelText('EMAIL *')).toBeInTheDocument();
+    expect(screen.getByLabelText('MESSAGE')).toBeInTheDocument();
+    expect(screen.getByLabelText('SIGN UP FOR MY MAILING LIST')).toBeInTheDocument();
+  });
+
+  it('submits contact form successfully', async () => {
+    const user = userEvent.setup();
+    renderHome();
+
+    // Fill out form
+    await user.type(screen.getByLabelText('FIRST NAME'), 'John');
+    await user.type(screen.getByLabelText('LAST NAME'), 'Doe');
+    await user.type(screen.getByLabelText('EMAIL *'), 'john@example.com');
+    await user.type(screen.getByLabelText('MESSAGE'), 'Test message');
+
+    // Submit form
+    await user.click(screen.getByText('Send'));
+
+    // Wait for success message
+    await waitFor(() => {
+      expect(screen.getByText('Thank you for your message!')).toBeInTheDocument();
     });
   });
 });

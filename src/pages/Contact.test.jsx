@@ -69,6 +69,8 @@ describe('Contact', () => {
           email: 'john@example.com',
           subject: 'Test Subject',
           message: 'Test message content',
+          website: '',
+          phone: '',
         }),
       })
     );
@@ -103,7 +105,7 @@ describe('Contact', () => {
 
   it('displays email address', () => {
     renderContact();
-    expect(screen.getByText(/support@yourstore.com/i)).toBeInTheDocument();
+    expect(screen.getByText(/support@markjpetersonart.com/i)).toBeInTheDocument();
   });
 
   it('displays phone number', () => {
