@@ -112,9 +112,135 @@ export class User {
       {
         $set: {
           lastLoginAt: new Date(),
+          updatedAt: new Date(),
+          failedLoginAttempts: 0 // Reset failed attempts on successful login
+        }
+      }
+    );
+  }
+
+  /**
+   * Check if user account is locked
+   * @param {string} email - User email
+   * @returns {Promise<{isLocked: boolean, lockoutUntil: Date|null}>}
+   */
+  static async isAccountLocked(email) {
+    const user = await this.findByEmail(email);
+    if (!user) {
+      return { isLocked: false, lockoutUntil: null };
+    }
+
+    // Check if lockoutUntil exists and is in the future
+    if (user.lockoutUntil && user.lockoutUntil > new Date()) {
+      return { isLocked: true, lockoutUntil: user.lockoutUntil };
+    }
+
+    // If lockout period has passed, unlock the account
+    if (user.lockoutUntil && user.lockoutUntil <= new Date()) {
+      await this.unlockAccount(email);
+      return { isLocked: false, lockoutUntil: null };
+    }
+
+    return { isLocked: false, lockoutUntil: null };
+  }
+
+  /**
+   * Increment failed login attempts and lock account if threshold reached
+   * @param {string} email - User email
+   * @returns {Promise<{shouldLock: boolean, attempts: number}>}
+   */
+  static async incrementFailedAttempts(email) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const MAX_ATTEMPTS = 5;
+    const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
+
+    const user = await this.findByEmail(email);
+    if (!user) {
+      return { shouldLock: false, attempts: 0 };
+    }
+
+    const attempts = (user.failedLoginAttempts || 0) + 1;
+
+    if (attempts >= MAX_ATTEMPTS) {
+      // Lock the account
+      const lockoutUntil = new Date(Date.now() + LOCKOUT_DURATION_MS);
+
+      await collection.updateOne(
+        { email },
+        {
+          $set: {
+            failedLoginAttempts: attempts,
+            lockoutUntil,
+            updatedAt: new Date()
+          }
+        }
+      );
+
+      return { shouldLock: true, attempts, lockoutUntil };
+    } else {
+      // Just increment attempts
+      await collection.updateOne(
+        { email },
+        {
+          $set: {
+            failedLoginAttempts: attempts,
+            updatedAt: new Date()
+          }
+        }
+      );
+
+      return { shouldLock: false, attempts };
+    }
+  }
+
+  /**
+   * Unlock a user account
+   * @param {string} email - User email
+   * @returns {Promise<void>}
+   */
+  static async unlockAccount(email) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    await collection.updateOne(
+      { email },
+      {
+        $set: {
+          failedLoginAttempts: 0,
+          lockoutUntil: null,
           updatedAt: new Date()
         }
       }
     );
+  }
+
+  /**
+   * Get account lockout info
+   * @param {string} email - User email
+   * @returns {Promise<Object>} Lockout information
+   */
+  static async getLockoutInfo(email) {
+    const user = await this.findByEmail(email);
+    if (!user) {
+      return {
+        failedAttempts: 0,
+        isLocked: false,
+        lockoutUntil: null,
+        remainingAttempts: 5
+      };
+    }
+
+    const { isLocked, lockoutUntil } = await this.isAccountLocked(email);
+    const failedAttempts = user.failedLoginAttempts || 0;
+    const remainingAttempts = Math.max(0, 5 - failedAttempts);
+
+    return {
+      failedAttempts,
+      isLocked,
+      lockoutUntil,
+      remainingAttempts
+    };
   }
 }

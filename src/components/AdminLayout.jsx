@@ -220,6 +220,17 @@ export default function AdminLayout() {
             )}
           </Link>
 
+          <Link
+            to="/admin/security"
+            className={`nav-item ${
+              isActive("/admin/security") ? "active" : ""
+            }`}
+            onClick={closeMobileMenu}
+          >
+            <span className="material-symbols-outlined">shield</span>
+            <span>Security</span>
+          </Link>
+
           <div className="nav-group">
             <Link
               to="/admin/newsletter"

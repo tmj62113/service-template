@@ -13,6 +13,7 @@ import { User } from './db/models/User.js';
 import { Product } from './db/models/Product.js';
 import { Subscriber } from './db/models/Subscriber.js';
 import { Newsletter } from './db/models/Newsletter.js';
+import { AuditLog } from './db/models/AuditLog.js';
 import { generateOrderConfirmationEmail } from './utils/emailTemplates.js';
 import { authenticateToken, generateToken } from './middleware/auth.js';
 import { createShipment, getTrackingStatus } from './services/shippoService.js';
@@ -304,19 +305,108 @@ app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Get request metadata for audit log
+    const ipAddress = req.headers['x-forwarded-for']?.split(',')[0].trim() ||
+                      req.connection?.remoteAddress ||
+                      req.socket?.remoteAddress ||
+                      'unknown';
+    const userAgent = req.headers['user-agent'] || 'unknown';
+
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    // Check if account is locked
+    const lockStatus = await User.isAccountLocked(email);
+    if (lockStatus.isLocked) {
+      const minutesRemaining = Math.ceil((lockStatus.lockoutUntil - new Date()) / 1000 / 60);
+
+      // Log account locked attempt
+      await AuditLog.create({
+        eventType: 'account_locked',
+        userId: null,
+        ipAddress,
+        userAgent,
+        metadata: {
+          email,
+          reason: 'Account temporarily locked due to too many failed login attempts',
+          lockoutUntil: lockStatus.lockoutUntil,
+          minutesRemaining
+        }
+      });
+
+      return res.status(403).json({
+        error: 'Account temporarily locked',
+        message: `Too many failed login attempts. Account is locked for ${minutesRemaining} minutes.`,
+        lockoutUntil: lockStatus.lockoutUntil
+      });
     }
 
     // Verify user credentials
     const user = await User.verifyPassword(email, password);
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid email or password' });
+      // Increment failed attempts
+      const { shouldLock, attempts, lockoutUntil } = await User.incrementFailedAttempts(email);
+
+      // Log failed login attempt
+      await AuditLog.create({
+        eventType: 'login_failed',
+        userId: null,
+        ipAddress,
+        userAgent,
+        metadata: {
+          email,
+          reason: 'Invalid credentials',
+          failedAttempts: attempts,
+          remainingAttempts: Math.max(0, 5 - attempts)
+        }
+      });
+
+      if (shouldLock) {
+        // Log account lockout
+        await AuditLog.create({
+          eventType: 'account_locked',
+          userId: null,
+          ipAddress,
+          userAgent,
+          metadata: {
+            email,
+            reason: 'Account locked due to 5 failed login attempts',
+            lockoutUntil,
+            failedAttempts: attempts
+          }
+        });
+
+        return res.status(403).json({
+          error: 'Account locked',
+          message: 'Too many failed login attempts. Your account has been locked for 15 minutes.',
+          lockoutUntil
+        });
+      }
+
+      const remainingAttempts = 5 - attempts;
+      return res.status(401).json({
+        error: 'Invalid email or password',
+        remainingAttempts,
+        message: remainingAttempts > 0 ? `${remainingAttempts} attempts remaining before lockout.` : ''
+      });
     }
 
-    // Update last login
+    // Update last login (this also resets failed attempts to 0)
     await User.updateLastLogin(user._id.toString());
+
+    // Log successful login
+    await AuditLog.create({
+      eventType: 'login_success',
+      userId: user._id.toString(),
+      ipAddress,
+      userAgent,
+      metadata: {
+        email: user.email,
+        role: user.role
+      }
+    });
 
     // Generate JWT token
     const token = generateToken(user._id.toString());
@@ -1933,6 +2023,83 @@ app.get('/api/newsletter/stats/summary', authenticateToken, async (req, res) => 
   } catch (error) {
     console.error('Error fetching newsletter stats:', error);
     res.status(500).json({ error: 'Failed to fetch statistics' });
+  }
+});
+
+// ============================================
+// AUDIT LOG / SECURITY ENDPOINTS
+// ============================================
+
+// GET /api/audit-logs/stats - Get audit log statistics (admin only)
+app.get('/api/audit-logs/stats', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { startDate, endDate } = req.query;
+
+    const options = {};
+    if (startDate) options.startDate = new Date(startDate);
+    if (endDate) options.endDate = new Date(endDate);
+
+    const stats = await AuditLog.getStats(options);
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching audit log stats:', error);
+    res.status(500).json({ error: 'Failed to fetch audit log statistics' });
+  }
+});
+
+// GET /api/audit-logs - Get audit logs with filtering (admin only)
+app.get('/api/audit-logs', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { eventType, ipAddress, userId, limit = 100, startDate, endDate } = req.query;
+
+    const options = {
+      limit: parseInt(limit)
+    };
+    if (eventType) options.eventType = eventType;
+    if (ipAddress) options.ipAddress = ipAddress;
+    if (userId) options.userId = userId;
+    if (startDate) options.startDate = new Date(startDate);
+    if (endDate) options.endDate = new Date(endDate);
+
+    const logs = await AuditLog.find(options);
+    res.json({ logs });
+  } catch (error) {
+    console.error('Error fetching audit logs:', error);
+    res.status(500).json({ error: 'Failed to fetch audit logs' });
+  }
+});
+
+// GET /api/audit-logs/security-events - Get recent security events (admin only)
+app.get('/api/audit-logs/security-events', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { limit = 15, startDate, endDate } = req.query;
+
+    const options = {
+      limit: parseInt(limit)
+    };
+    if (startDate) options.startDate = new Date(startDate);
+    if (endDate) options.endDate = new Date(endDate);
+
+    const events = await AuditLog.getRecentSecurityEvents(options);
+    res.json({ events });
+  } catch (error) {
+    console.error('Error fetching security events:', error);
+    res.status(500).json({ error: 'Failed to fetch security events' });
   }
 });
 

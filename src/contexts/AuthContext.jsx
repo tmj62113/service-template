@@ -42,7 +42,9 @@ export function AuthProvider({ children }) {
 
     if (!response.ok) {
       const data = await response.json();
-      throw new Error(data.error || 'Login failed');
+      // Use the detailed message if available, otherwise fallback to error
+      const errorMessage = data.message || data.error || 'Login failed';
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
