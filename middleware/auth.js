@@ -1,10 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../db/models/User.js';
 
-// Ensure JWT_SECRET is set - fail fast if missing
-if (!process.env.JWT_SECRET) {
-  throw new Error('FATAL: JWT_SECRET environment variable is required but not set');
-}
+// JWT_SECRET is validated in server.js by validateEnv.js before this module is loaded
 const JWT_SECRET = process.env.JWT_SECRET;
 
 /**

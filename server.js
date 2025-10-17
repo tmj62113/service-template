@@ -1,6 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Validate environment variables before starting server
+import { validateRequiredEnv, validateOptionalEnv } from './utils/validateEnv.js';
+if (process.env.NODE_ENV === 'production') {
+  validateRequiredEnv();
+}
+validateOptionalEnv();
+
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -24,10 +31,31 @@ import { createShipment, getTrackingStatus } from './services/shippoService.js';
 import { getCollection, getDatabase } from './db/connection.js';
 import { ObjectId } from 'mongodb';
 import { validateContactForm, validateNewsletterSubscription, validateProductData, validateNewsletterContent, isHoneypotFilled } from './utils/security.js';
+import { doubleCsrf } from 'csrf-csrf';
 
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// ============================================
+// HTTPS ENFORCEMENT & TRUST PROXY
+// ============================================
+
+// Trust proxy - required for correct IP address detection behind reverse proxy
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
+// HTTPS enforcement middleware (redirect HTTP to HTTPS in production)
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`);
+    } else {
+      next();
+    }
+  });
+}
 
 // Configure Cloudinary
 cloudinary.config({
@@ -43,7 +71,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 // SECURITY MIDDLEWARE
 // ============================================
 
-// Helmet for security headers
+// Helmet for security headers with HSTS
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -57,6 +85,16 @@ app.use(helmet({
     },
   },
   crossOriginEmbedderPolicy: false,
+  // HSTS - HTTP Strict Transport Security (forces HTTPS for 1 year)
+  hsts: {
+    maxAge: 31536000, // 1 year in seconds
+    includeSubDomains: true,
+    preload: true,
+  },
+  // Additional security headers
+  frameguard: { action: 'deny' }, // Prevent clickjacking
+  noSniff: true, // Prevent MIME type sniffing
+  xssFilter: true, // Enable XSS filter
 }));
 
 // Rate limiting configuration
@@ -96,14 +134,85 @@ const newsletterLimiter = createRateLimiter(
   'Too many subscription attempts, please try again later'
 );
 
-// CORS configuration
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+// CORS configuration - hardened for production
+const corsOptions = {
+  origin: (origin, callback) => {
+    const allowedOrigins = process.env.NODE_ENV === 'production'
+      ? [process.env.CLIENT_URL].filter(Boolean) // Only allow configured client URL in production
+      : [process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:3000'].filter(Boolean); // Allow localhost in development
+
+    // Allow requests with no origin (mobile apps, Postman, etc.) only in development
+    if (!origin && process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`🚫 Blocked CORS request from origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-}));
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Explicitly allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allowed headers
+  maxAge: 86400, // Cache preflight requests for 24 hours
+};
+
+app.use(cors(corsOptions));
 
 // Cookie parser middleware
 app.use(cookieParser());
+
+// ============================================
+// CSRF PROTECTION
+// ============================================
+
+// Configure CSRF protection
+const {
+  generateToken: csrfGenerateToken,
+  doubleCsrfProtection,
+} = doubleCsrf({
+  getSecret: () => process.env.JWT_SECRET, // Use existing JWT secret for CSRF
+  cookieName: '__Host-mjp.csrf',
+  cookieOptions: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+  },
+  size: 64,
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS'], // Don't require CSRF for these methods
+});
+
+// Apply CSRF to routes that modify data (POST, PUT, DELETE, PATCH)
+// Excluded routes: Stripe webhook (needs raw body), public endpoints
+const csrfProtection = (req, res, next) => {
+  // Skip CSRF for Stripe webhooks and specific public endpoints
+  const publicEndpoints = [
+    '/api/webhook',
+    '/api/shippo-webhook',
+    '/api/webhooks/email-reply',
+    '/api/products', // GET only (read operations are safe)
+    '/api/health',
+    '/api/sitemap.xml',
+  ];
+
+  const isPublicEndpoint = publicEndpoints.some(endpoint => req.path.startsWith(endpoint));
+  const isReadOperation = ['GET', 'HEAD', 'OPTIONS'].includes(req.method);
+
+  if (isPublicEndpoint || isReadOperation) {
+    return next();
+  }
+
+  return doubleCsrfProtection(req, res, next);
+};
+
+// CSRF token endpoint (GET /api/csrf-token)
+app.get('/api/csrf-token', (req, res) => {
+  const csrfToken = csrfGenerateToken(req, res);
+  res.json({ csrfToken });
+});
 
 // Apply general rate limiting to all API routes
 app.use('/api/', generalLimiter);
@@ -2429,10 +2538,73 @@ app.get('/api/blocked-ips/stats', authenticateToken, async (req, res) => {
 });
 
 // ============================================
+// ERROR SANITIZATION MIDDLEWARE
+// ============================================
+
+// Global error handler - sanitizes errors in production
+app.use((err, req, res, next) => {
+  // Log full error details server-side for debugging
+  console.error('❌ Server Error:', {
+    message: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Determine if this is a development or production environment
+  const isDevelopment = process.env.NODE_ENV !== 'production';
+
+  // In production, sanitize error messages to prevent information leakage
+  if (!isDevelopment) {
+    // Generic error response for production
+    const sanitizedError = {
+      error: 'An error occurred while processing your request',
+      message: 'Please try again later or contact support if the problem persists',
+      timestamp: new Date().toISOString(),
+    };
+
+    // For known error types, provide more specific (but still safe) messages
+    if (err.name === 'ValidationError') {
+      sanitizedError.error = 'Validation failed';
+      sanitizedError.message = 'Please check your input and try again';
+    } else if (err.name === 'UnauthorizedError' || err.status === 401) {
+      sanitizedError.error = 'Authentication failed';
+      sanitizedError.message = 'Please log in and try again';
+    } else if (err.name === 'ForbiddenError' || err.status === 403) {
+      sanitizedError.error = 'Access denied';
+      sanitizedError.message = 'You do not have permission to perform this action';
+    } else if (err.status === 404) {
+      sanitizedError.error = 'Not found';
+      sanitizedError.message = 'The requested resource was not found';
+    } else if (err.name === 'CsrfError') {
+      sanitizedError.error = 'Invalid request';
+      sanitizedError.message = 'Security validation failed. Please refresh the page and try again';
+    }
+
+    return res.status(err.status || 500).json(sanitizedError);
+  }
+
+  // In development, return detailed error information
+  res.status(err.status || 500).json({
+    error: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// ============================================
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
   console.log(`💳 Stripe integration active`);
   console.log(`🌐 Accepting requests from: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+  if (process.env.NODE_ENV === 'production') {
+    console.log('🔒 Production security features enabled: HTTPS, HSTS, CSRF, CORS');
+  } else {
+    console.log('🔓 Development mode: Enhanced error messages enabled');
+  }
 });
