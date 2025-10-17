@@ -30,7 +30,7 @@ export default function Header() {
           <nav className="nav desktop-nav">
             <Link to="/products">Shop</Link>
             <a href="/#about">About</a>
-            <Link to="/contact">Contact</Link>
+            <a href="/#contact">Contact</a>
             {user?.role === 'admin' && (
               <Link to="/admin" className="admin-nav-link">
                 <span className="material-symbols-outlined">dashboard</span>

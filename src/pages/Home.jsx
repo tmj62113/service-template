@@ -92,33 +92,50 @@ export default function Home() {
     { image: '/images/homepage/artwork/IMG_1749.PNG', size: 'tall' },
   ];
 
-  // Featured artwork products
-  const featuredArtwork = [
-    {
-      id: 0,
-      title: 'Clockwork Heart',
-      image: '/images/homepage/featured/IMG_1712.PNG',
-      price: '$165',
-    },
-    {
-      id: 1,
-      title: 'Brass Butterfly',
-      image: '/images/homepage/artwork/IMG_1714.JPG',
-      price: '$145',
-    },
-    {
-      id: 2,
-      title: 'Steam Engine Dreams',
-      image: '/images/homepage/artwork/IMG_1720.PNG',
-      price: '$185',
-    },
-    {
-      id: 3,
-      title: 'Mechanical Rose',
-      image: '/images/homepage/featured/IMG_1712.PNG',
-      price: '$155',
-    },
-  ];
+  // Contact form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:3001/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      }, 3000);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
+    }
+  };
 
   return (
     <div className="home-container">
@@ -217,22 +234,71 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Artwork Section */}
-      <section className="featured-section">
+      {/* Contact Section */}
+      <section id="contact" className="contact-section">
         <div className="container">
-          <h2>Featured Artwork</h2>
+          <h2>Send Us a Message</h2>
 
-          <div className="featured-grid">
-            {featuredArtwork.map((artwork) => (
-              <Link key={artwork.id} to={`#artwork-${artwork.id}`} className="featured-card">
-                <img src={artwork.image} alt={artwork.title} />
-                <div className="featured-info">
-                  <h3>{artwork.title}</h3>
-                  <p className="price">{artwork.price}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {submitted ? (
+            <div className="success-message">
+              <h3>Thank you for your message!</h3>
+              <p>We'll get back to you as soon as possible.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="contact-form">
+              <div className="form-group">
+                <label htmlFor="name">Name *</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="subject">Subject *</label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="message">Message *</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="6"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" className="submit-btn">
+                Send Message
+              </button>
+            </form>
+          )}
         </div>
       </section>
     </div>
