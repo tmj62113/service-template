@@ -2,11 +2,11 @@
 
 This guide covers deploying your whitelabel e-commerce store to production environments.
 
-## =Ë Pre-Deployment Checklist
+## =ï¿½ Pre-Deployment Checklist
 
 Before deploying to production, ensure you have:
 
-- [ ] Completed local setup and testing (see [SETUP.md](./SETUP.md))
+- [ ] Completed local setup and testing (see [TEMPLATE_SETUP.md](./TEMPLATE_SETUP.md))
 - [ ] All tests passing (`npm run test:run`)
 - [ ] Customized branding in `/src/config/theme.js`
 - [ ] Admin user created in database
@@ -30,19 +30,19 @@ You'll need production accounts for:
 
 ---
 
-## =€ Deployment Architecture
+## =ï¿½ Deployment Architecture
 
 ### Recommended Setup:
 ```
-Frontend (React + Vite) ’ Vercel or Netlify
-Backend (Express API) ’ Railway, Render, or Heroku
-Database ’ MongoDB Atlas
-Webhooks ’ Stripe Production Webhooks (no CLI needed)
+Frontend (React + Vite) ï¿½ Vercel or Netlify
+Backend (Express API) ï¿½ Railway, Render, or Heroku
+Database ï¿½ MongoDB Atlas
+Webhooks ï¿½ Stripe Production Webhooks (no CLI needed)
 ```
 
 ---
 
-## =æ Part 1: Backend Deployment
+## =ï¿½ Part 1: Backend Deployment
 
 ### Option A: Deploy to Railway (Recommended)
 
@@ -112,7 +112,7 @@ railway domain
 - Sign up with GitHub
 
 #### 2. Create New Web Service
-- Click "New +" ’ "Web Service"
+- Click "New +" ï¿½ "Web Service"
 - Connect your GitHub repository
 - Configure:
   - **Name:** `your-store-backend`
@@ -156,7 +156,7 @@ heroku info
 
 ---
 
-## <¨ Part 2: Frontend Deployment
+## <ï¿½ Part 2: Frontend Deployment
 
 ### Option A: Deploy to Vercel (Recommended)
 
@@ -208,7 +208,7 @@ vercel --prod
 ```
 
 #### 5. Set Environment Variables in Vercel Dashboard
-- Go to Vercel dashboard ’ Project ’ Settings ’ Environment Variables
+- Go to Vercel dashboard ï¿½ Project ï¿½ Settings ï¿½ Environment Variables
 - Add: `VITE_API_URL` = `https://your-backend.up.railway.app/api`
 - Redeploy
 
@@ -247,7 +247,7 @@ netlify deploy --prod
 ```
 
 #### 4. Set Environment Variables
-- Netlify dashboard ’ Site settings ’ Environment variables
+- Netlify dashboard ï¿½ Site settings ï¿½ Environment variables
 - Add: `VITE_API_URL` = `https://your-backend.up.railway.app/api`
 - Trigger redeploy
 
@@ -284,7 +284,7 @@ netlify deploy --prod
 ### 3. Test Production Webhook
 
 1. Make a test purchase on your live site
-2. Check Stripe Dashboard ’ Webhooks ’ Your endpoint
+2. Check Stripe Dashboard ï¿½ Webhooks ï¿½ Your endpoint
 3. You should see successful webhook deliveries
 4. Verify:
    - Order created in MongoDB
@@ -293,7 +293,7 @@ netlify deploy --prod
 
 ---
 
-## =Ä Part 4: MongoDB Atlas Production Configuration
+## =ï¿½ Part 4: MongoDB Atlas Production Configuration
 
 ### 1. Create Production Database
 
@@ -303,14 +303,14 @@ MONGODB_DB_NAME=your_store_production
 ```
 
 **Option B:** Create dedicated production cluster (recommended)
-- MongoDB Atlas ’ Create new cluster
+- MongoDB Atlas ï¿½ Create new cluster
 - Name it `production-cluster`
 - Use same connection string format
 - Update `MONGODB_URI` in production env vars
 
 ### 2. Configure Network Access
 
-1. MongoDB Atlas ’ Network Access
+1. MongoDB Atlas ï¿½ Network Access
 2. **Production Option A (Recommended):** Add specific IPs
    - Add your backend hosting provider's IP addresses
    - Railway: Contact support for IP ranges
@@ -390,7 +390,7 @@ app.use(cors({
 1. **Purchase Domain** (Namecheap, Google Domains, etc.)
 
 2. **Add Domain in Vercel**
-   - Vercel dashboard ’ Project ’ Settings ’ Domains
+   - Vercel dashboard ï¿½ Project ï¿½ Settings ï¿½ Domains
    - Add your domain: `www.yourstore.com`
    - Vercel provides DNS records
 
@@ -413,7 +413,7 @@ app.use(cors({
 You can use a subdomain for your backend:
 
 1. **Add subdomain in Railway/Render**
-   - Railway: Settings ’ Add custom domain
+   - Railway: Settings ï¿½ Add custom domain
    - Enter: `api.yourstore.com`
 
 2. **Configure DNS**
@@ -490,7 +490,7 @@ You can use a subdomain for your backend:
 **Causes & Fixes:**
 
 1. **Webhook not configured**
-   - Check Stripe Dashboard ’ Webhooks
+   - Check Stripe Dashboard ï¿½ Webhooks
    - Ensure endpoint URL is correct
    - Verify `checkout.session.completed` event is selected
 
@@ -500,7 +500,7 @@ You can use a subdomain for your backend:
    - Redeploy backend
 
 3. **Webhook failing**
-   - Check Stripe Dashboard ’ Webhooks ’ Your endpoint ’ Logs
+   - Check Stripe Dashboard ï¿½ Webhooks ï¿½ Your endpoint ï¿½ Logs
    - Look for error responses (5xx, 4xx)
    - Check backend logs for errors
 
@@ -516,7 +516,7 @@ You can use a subdomain for your backend:
 
 2. **Domain not verified**
    - Resend requires verified domains for production
-   - Go to Resend ’ Domains ’ Verify your domain
+   - Go to Resend ï¿½ Domains ï¿½ Verify your domain
 
 3. **Email content issues**
    - Check backend logs for email errors
@@ -548,7 +548,7 @@ You can use a subdomain for your backend:
 
 ---
 
-## =Ê Monitoring & Maintenance
+## =ï¿½ Monitoring & Maintenance
 
 ### Recommended Monitoring Tools
 
@@ -626,13 +626,13 @@ Run carefully in production!
 
 ---
 
-## =° Cost Estimates
+## =ï¿½ Cost Estimates
 
 ### Free Tier (Recommended for starting)
 - **Vercel**: Free (Hobby plan)
 - **Railway**: $5/month credit (covers small backend)
 - **MongoDB Atlas**: Free (M0 cluster, 512MB storage)
-- **Stripe**: No monthly fee (2.9% + 30¢ per transaction)
+- **Stripe**: No monthly fee (2.9% + 30ï¿½ per transaction)
 - **Resend**: Free (100 emails/day)
 - **Cloudinary**: Free (25 credits/month)
 
@@ -650,7 +650,7 @@ Run carefully in production!
 
 ---
 
-## <‰ Deployment Complete!
+## <ï¿½ Deployment Complete!
 
 Your whitelabel e-commerce store is now live in production!
 
@@ -669,7 +669,7 @@ Your whitelabel e-commerce store is now live in production!
 
 ---
 
-## <˜ Need Help?
+## <ï¿½ Need Help?
 
 If you encounter deployment issues:
 1. Check troubleshooting section above
@@ -685,4 +685,4 @@ If you encounter deployment issues:
 
 ---
 
-**Happy selling! =Í**
+**Happy selling! =ï¿½**

@@ -15,8 +15,7 @@ This application is designed to be easily duplicated and customized for multiple
 ## 📚 Documentation
 
 ### **Getting Started Guides**
-- **[NEW_CLIENT.md](./NEW_CLIENT.md)** - 🎯 **START HERE** - Quick guide for setting up for a new client
-- **[SETUP.md](./SETUP.md)** - Complete step-by-step setup guide for new instances
+- **[TEMPLATE_SETUP.md](./TEMPLATE_SETUP.md)** - 🎯 **START HERE** - Complete guide for setting up a new client project
 - **[setup.sh](./setup.sh)** - Interactive setup script to automate configuration
 
 ### **Configuration & Customization**
@@ -76,7 +75,7 @@ The setup script will:
 4. Customize branding:
    - Edit `/src/config/theme.js` with your brand name, colors, logo, etc.
 
-**For detailed step-by-step instructions, see [SETUP.md](./SETUP.md)**
+**For detailed step-by-step instructions, see [TEMPLATE_SETUP.md](./TEMPLATE_SETUP.md)**
 
 ### Prerequisites
 
@@ -295,7 +294,7 @@ npm run test:coverage # Generate coverage report
 
 To access the admin dashboard, you'll need to create an admin user in MongoDB. The admin routes are protected and require authentication.
 
-See [SETUP.md](./SETUP.md) for instructions on creating an admin user.
+See [TEMPLATE_SETUP.md](./TEMPLATE_SETUP.md) for instructions on creating an admin user.
 
 ## 🎨 Customizing for Your Brand
 
