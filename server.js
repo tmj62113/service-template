@@ -990,7 +990,7 @@ app.put('/api/customers/:email/:name', authenticateToken, async (req, res) => {
 // POST /api/messages - Submit a contact form message (public)
 app.post('/api/messages', async (req, res) => {
   try {
-    const { name, email, subject, message, orderId } = req.body;
+    const { name, email, subject, message, orderId, mailingList } = req.body;
 
     // Validation
     if (!name || !email || !subject || !message) {
@@ -1007,10 +1007,61 @@ app.post('/api/messages', async (req, res) => {
       message,
       status: 'unread',
       orderId: orderId || null,
+      mailingList: mailingList || false,
       createdAt: new Date(),
     };
 
     const result = await messagesCollection.insertOne(newMessage);
+
+    // Send notification email to site owner
+    try {
+      const { data, error } = await resend.emails.send({
+        from: 'Contact Form <onboarding@resend.dev>',
+        to: 'mark@mjpetersonart.com',
+        replyTo: email,
+        subject: `New Contact Form: ${subject}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9fafb;">
+            <div style="background-color: #ffffff; border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+              <h2 style="color: #1f2937; margin-top: 0; border-bottom: 2px solid #c0a679; padding-bottom: 16px;">New Contact Form Submission</h2>
+
+              <div style="margin: 24px 0;">
+                <p style="margin: 8px 0;"><strong style="color: #4b5563;">From:</strong> <span style="color: #1f2937;">${name}</span></p>
+                <p style="margin: 8px 0;"><strong style="color: #4b5563;">Email:</strong> <a href="mailto:${email}" style="color: #c0a679; text-decoration: none;">${email}</a></p>
+                <p style="margin: 8px 0;"><strong style="color: #4b5563;">Subject:</strong> <span style="color: #1f2937;">${subject}</span></p>
+              </div>
+
+              <div style="background-color: #f9fafb; border-left: 4px solid #c0a679; padding: 16px; margin: 24px 0; border-radius: 4px;">
+                <p style="margin: 0 0 8px 0;"><strong style="color: #4b5563;">Message:</strong></p>
+                <p style="margin: 0; white-space: pre-wrap; color: #1f2937; line-height: 1.6;">${message}</p>
+              </div>
+
+              ${mailingList ? '<div style="background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 12px; margin: 24px 0; border-radius: 4px;"><p style="margin: 0; color: #065f46;"><strong>✓ Customer signed up for mailing list</strong></p></div>' : ''}
+
+              <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+                <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                  You can reply directly to this email to respond to ${name}.
+                </p>
+              </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 24px; color: #6b7280; font-size: 12px;">
+              <p style="margin: 0;">Mark J Peterson Art - Contact Form Notification</p>
+            </div>
+          </div>
+        `
+      });
+
+      if (error) {
+        console.error('❌ Failed to send notification email:', error);
+        // Don't fail the request if email fails
+      } else {
+        console.log('📧 Contact form notification email sent:', data.id);
+      }
+    } catch (emailError) {
+      console.error('❌ Error sending notification email:', emailError);
+      // Don't fail the request if email fails
+    }
 
     res.status(201).json({
       message: 'Message sent successfully',
