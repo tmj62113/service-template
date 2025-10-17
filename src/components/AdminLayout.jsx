@@ -220,16 +220,49 @@ export default function AdminLayout() {
             )}
           </Link>
 
-          <Link
-            to="/admin/security"
-            className={`nav-item ${
-              isActive("/admin/security") ? "active" : ""
-            }`}
-            onClick={closeMobileMenu}
-          >
-            <span className="material-symbols-outlined">shield</span>
-            <span>Security</span>
-          </Link>
+          <div className="nav-group">
+            <Link
+              to="/admin/security"
+              className={`nav-item ${
+                isActive("/admin/security") ? "active" : ""
+              }`}
+              onClick={closeMobileMenu}
+            >
+              <span className="material-symbols-outlined">shield</span>
+              <span>Security</span>
+            </Link>
+            {isActive("/admin/security") && (
+              <div className="nav-subitems">
+                <Link
+                  to="/admin/security"
+                  className={`nav-subitem ${
+                    location.pathname === "/admin/security" ? "active" : ""
+                  }`}
+                  onClick={closeMobileMenu}
+                >
+                  <span>Dashboard</span>
+                </Link>
+                <Link
+                  to="/admin/security/ip-blocking"
+                  className={`nav-subitem ${
+                    location.pathname === "/admin/security/ip-blocking" ? "active" : ""
+                  }`}
+                  onClick={closeMobileMenu}
+                >
+                  <span>IP Blocking</span>
+                </Link>
+                <Link
+                  to="/admin/security/audit-logs"
+                  className={`nav-subitem ${
+                    location.pathname === "/admin/security/audit-logs" ? "active" : ""
+                  }`}
+                  onClick={closeMobileMenu}
+                >
+                  <span>Audit Logs</span>
+                </Link>
+              </div>
+            )}
+          </div>
 
           <div className="nav-group">
             <Link

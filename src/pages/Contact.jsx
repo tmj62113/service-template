@@ -7,6 +7,9 @@ export default function Contact() {
     email: '',
     subject: '',
     message: '',
+    // Honeypot fields (hidden from users, bots will fill them)
+    website: '',
+    phone: '',
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -161,6 +164,28 @@ export default function Contact() {
                     required
                   ></textarea>
                 </div>
+
+                {/* Honeypot fields - hidden from users, bots will fill them */}
+                <input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  style={{ display: 'none' }}
+                  tabIndex="-1"
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  style={{ display: 'none' }}
+                  tabIndex="-1"
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
 
                 <button type="submit" className="submit-btn">
                   Send Message

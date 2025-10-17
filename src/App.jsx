@@ -23,6 +23,8 @@ import AdminNewsletterCreate from './pages/AdminNewsletterCreate';
 import AdminNewsletterDrafts from './pages/AdminNewsletterDrafts';
 import AdminNewsletterSent from './pages/AdminNewsletterSent';
 import AdminSecurity from './pages/AdminSecurity';
+import AdminIPBlocking from './pages/AdminIPBlocking';
+import AdminAuditLogs from './pages/AdminAuditLogs';
 import Unsubscribe from './pages/Unsubscribe';
 import OrderDetail from './pages/OrderDetail';
 import CustomerDetail from './pages/CustomerDetail';
@@ -88,6 +90,8 @@ function App() {
             <Route path="newsletter/drafts" element={<AdminNewsletterDrafts />} />
             <Route path="newsletter/sent" element={<AdminNewsletterSent />} />
             <Route path="security" element={<AdminSecurity />} />
+            <Route path="security/ip-blocking" element={<AdminIPBlocking />} />
+            <Route path="security/audit-logs" element={<AdminAuditLogs />} />
             <Route path="settings" element={<AdminSettings />} />
             <Route path="search" element={<AdminSearch />} />
           </Route>

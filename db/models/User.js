@@ -6,6 +6,56 @@ const COLLECTION_NAME = 'users';
 
 export class User {
   /**
+   * Validate password strength
+   * @param {string} password - Plain text password to validate
+   * @returns {{valid: boolean, errors: string[]}}
+   */
+  static validatePasswordStrength(password) {
+    const errors = [];
+
+    // Minimum length
+    if (password.length < 8) {
+      errors.push('Password must be at least 8 characters long');
+    }
+
+    // Maximum length (to prevent DoS via bcrypt)
+    if (password.length > 72) {
+      errors.push('Password must be no more than 72 characters long');
+    }
+
+    // Must contain uppercase letter
+    if (!/[A-Z]/.test(password)) {
+      errors.push('Password must contain at least one uppercase letter');
+    }
+
+    // Must contain lowercase letter
+    if (!/[a-z]/.test(password)) {
+      errors.push('Password must contain at least one lowercase letter');
+    }
+
+    // Must contain number
+    if (!/[0-9]/.test(password)) {
+      errors.push('Password must contain at least one number');
+    }
+
+    // Must contain special character
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      errors.push('Password must contain at least one special character (!@#$%^&*()_+-=[]{};\':"|,.<>/?)');
+    }
+
+    // Check for common passwords (basic check)
+    const commonPasswords = ['password', 'password123', 'admin123', '12345678', 'qwerty123'];
+    if (commonPasswords.some(common => password.toLowerCase().includes(common))) {
+      errors.push('Password is too common. Please choose a stronger password');
+    }
+
+    return {
+      valid: errors.length === 0,
+      errors
+    };
+  }
+
+  /**
    * Create a new admin user
    * @param {Object} userData - User data
    * @param {string} userData.email - User email
@@ -21,6 +71,14 @@ export class User {
     const existingUser = await collection.findOne({ email: userData.email });
     if (existingUser) {
       throw new Error('User with this email already exists');
+    }
+
+    // Validate password strength
+    const passwordValidation = this.validatePasswordStrength(userData.password);
+    if (!passwordValidation.valid) {
+      const error = new Error('Password does not meet strength requirements');
+      error.validationErrors = passwordValidation.errors;
+      throw error;
     }
 
     // Hash password

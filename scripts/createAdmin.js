@@ -42,6 +42,13 @@ async function createAdmin() {
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Error creating admin user:', error.message);
+
+    // Show validation errors if they exist
+    if (error.validationErrors && error.validationErrors.length > 0) {
+      console.error('\nPassword requirements:');
+      error.validationErrors.forEach(err => console.error(`  - ${err}`));
+    }
+
     rl.close();
     process.exit(1);
   }

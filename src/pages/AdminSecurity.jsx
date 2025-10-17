@@ -179,37 +179,43 @@ export default function AdminSecurity() {
 
         {/* Statistics Cards */}
         <div className="security-stats-grid">
-          <div className="stat-card">
+          <div className="stat-card" title="Total number of security-related events (logins, password changes, 2FA actions, etc.) logged in the selected time range">
             <div className="stat-icon">📊</div>
             <div className="stat-content">
               <h3>Total Events</h3>
               <p className="stat-value">{stats?.totalLogs || 0}</p>
+              <p className="stat-description">All security events logged</p>
             </div>
           </div>
 
-          <div className="stat-card">
+          <div className="stat-card" title={`Percentage of successful security events vs failures. ${stats?.successRate >= 90 ? '90%+ is excellent - very few security failures' : stats?.successRate >= 70 ? '70-89% is good - some failures but under control' : 'Below 70% indicates high failure rate - possible attack'}`}>
             <div className="stat-icon">
               {stats?.successRate >= 90 ? '✅' : stats?.successRate >= 70 ? '⚠️' : '❌'}
             </div>
             <div className="stat-content">
               <h3>Success Rate</h3>
               <p className="stat-value">{stats?.successRate?.toFixed(1) || 0}%</p>
+              <p className="stat-description">
+                {stats?.successRate >= 90 ? 'Excellent security health' : stats?.successRate >= 70 ? 'Good - monitor failures' : 'High failure rate - investigate'}
+              </p>
             </div>
           </div>
 
-          <div className="stat-card">
+          <div className="stat-card" title="Number of failed login attempts in the selected time range. Multiple failures from the same IP may indicate a brute force attack">
             <div className="stat-icon">❌</div>
             <div className="stat-content">
               <h3>Failed Logins</h3>
               <p className="stat-value">{failedLogins.length}</p>
+              <p className="stat-description">Login attempts denied</p>
             </div>
           </div>
 
-          <div className="stat-card">
+          <div className="stat-card" title="IP addresses with 5+ failed login attempts in the selected time range. These IPs should be investigated and potentially blocked">
             <div className="stat-icon">⚠️</div>
             <div className="stat-content">
               <h3>Suspicious IPs</h3>
               <p className="stat-value">{suspiciousIPs.length}</p>
+              <p className="stat-description">IPs with 5+ failed attempts</p>
             </div>
           </div>
         </div>

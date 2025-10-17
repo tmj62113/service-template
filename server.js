@@ -4,6 +4,9 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import cron from 'node-cron';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
 import multer from 'multer';
@@ -14,11 +17,13 @@ import { Product } from './db/models/Product.js';
 import { Subscriber } from './db/models/Subscriber.js';
 import { Newsletter } from './db/models/Newsletter.js';
 import { AuditLog } from './db/models/AuditLog.js';
+import { BlockedIP } from './db/models/BlockedIP.js';
 import { generateOrderConfirmationEmail } from './utils/emailTemplates.js';
 import { authenticateToken, generateToken } from './middleware/auth.js';
 import { createShipment, getTrackingStatus } from './services/shippoService.js';
 import { getCollection, getDatabase } from './db/connection.js';
 import { ObjectId } from 'mongodb';
+import { validateContactForm, validateNewsletterSubscription, validateProductData, validateNewsletterContent, isHoneypotFilled } from './utils/security.js';
 
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -34,6 +39,63 @@ cloudinary.config({
 // Configure Multer for memory storage (files stored in memory, not disk)
 const upload = multer({ storage: multer.memoryStorage() });
 
+// ============================================
+// SECURITY MIDDLEWARE
+// ============================================
+
+// Helmet for security headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://js.stripe.com'],
+      imgSrc: ["'self'", 'data:', 'https:', 'blob:'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      connectSrc: ["'self'", 'https://api.stripe.com'],
+      frameSrc: ["'self'", 'https://js.stripe.com', 'https://hooks.stripe.com'],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
+
+// Rate limiting configuration
+const createRateLimiter = (windowMs, max, message) => rateLimit({
+  windowMs,
+  max,
+  message: { error: message },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// General API rate limiting
+const generalLimiter = createRateLimiter(
+  15 * 60 * 1000, // 15 minutes
+  100, // 100 requests per window
+  'Too many requests, please try again later'
+);
+
+// Strict rate limiting for authentication endpoints
+const authLimiter = createRateLimiter(
+  15 * 60 * 1000, // 15 minutes
+  10, // 10 attempts per window
+  'Too many authentication attempts, please try again later'
+);
+
+// Contact form rate limiting
+const contactLimiter = createRateLimiter(
+  60 * 60 * 1000, // 1 hour
+  3, // 3 submissions per hour
+  'Too many contact form submissions, please try again later'
+);
+
+// Newsletter subscription rate limiting
+const newsletterLimiter = createRateLimiter(
+  60 * 60 * 1000, // 1 hour
+  5, // 5 subscriptions per hour
+  'Too many subscription attempts, please try again later'
+);
+
 // CORS configuration
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:5173',
@@ -42,6 +104,66 @@ app.use(cors({
 
 // Cookie parser middleware
 app.use(cookieParser());
+
+// Apply general rate limiting to all API routes
+app.use('/api/', generalLimiter);
+
+// IP Blocking middleware
+app.use(async (req, res, next) => {
+  try {
+    const ipAddress = req.headers['x-forwarded-for']?.split(',')[0].trim() ||
+                      req.connection?.remoteAddress ||
+                      req.socket?.remoteAddress ||
+                      'unknown';
+
+    if (ipAddress !== 'unknown') {
+      const isBlocked = await BlockedIP.isBlocked(ipAddress);
+      if (isBlocked) {
+        console.warn(`🚫 Blocked IP attempted access: ${ipAddress}`);
+        return res.status(403).json({
+          error: 'Access denied',
+          message: 'Your IP address has been blocked due to suspicious activity'
+        });
+      }
+    }
+
+    next();
+  } catch (error) {
+    console.error('Error checking IP block status:', error);
+    // Don't block on error - allow request to proceed
+    next();
+  }
+});
+
+// ============================================
+// SCHEDULED TASKS
+// ============================================
+
+// Clean up old audit logs daily at 2 AM
+cron.schedule('0 2 * * *', async () => {
+  try {
+    console.log('🧹 Running audit log cleanup...');
+    const deletedCount = await AuditLog.cleanupOldLogs(90); // Keep last 90 days
+    console.log(`✅ Cleaned up ${deletedCount} old audit logs`);
+  } catch (error) {
+    console.error('❌ Error cleaning up audit logs:', error);
+  }
+});
+
+console.log('⏰ Scheduled task: Daily audit log cleanup at 2 AM');
+
+// Clean up expired IP blocks daily at 3 AM
+cron.schedule('0 3 * * *', async () => {
+  try {
+    console.log('🧹 Running IP block cleanup...');
+    const deletedCount = await BlockedIP.cleanupExpired();
+    console.log(`✅ Cleaned up ${deletedCount} expired IP blocks`);
+  } catch (error) {
+    console.error('❌ Error cleaning up IP blocks:', error);
+  }
+});
+
+console.log('⏰ Scheduled task: Daily IP block cleanup at 3 AM');
 
 /**
  * Send order confirmation email
@@ -327,6 +449,7 @@ app.post('/api/auth/login', async (req, res) => {
         userId: null,
         ipAddress,
         userAgent,
+        success: false,
         metadata: {
           email,
           reason: 'Account temporarily locked due to too many failed login attempts',
@@ -355,6 +478,7 @@ app.post('/api/auth/login', async (req, res) => {
         userId: null,
         ipAddress,
         userAgent,
+        success: false,
         metadata: {
           email,
           reason: 'Invalid credentials',
@@ -370,6 +494,7 @@ app.post('/api/auth/login', async (req, res) => {
           userId: null,
           ipAddress,
           userAgent,
+          success: false,
           metadata: {
             email,
             reason: 'Account locked due to 5 failed login attempts',
@@ -402,6 +527,7 @@ app.post('/api/auth/login', async (req, res) => {
       userId: user._id.toString(),
       ipAddress,
       userAgent,
+      success: true,
       metadata: {
         email: user.email,
         role: user.role
@@ -793,7 +919,13 @@ app.post('/api/products', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
 
-    const product = await Product.create(req.body);
+    // Validate and sanitize product data
+    const validation = validateProductData(req.body);
+    if (!validation.valid) {
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
+    }
+
+    const product = await Product.create(validation.sanitized);
     res.status(201).json(product);
   } catch (error) {
     console.error('Error creating product:', error);
@@ -809,12 +941,18 @@ app.put('/api/products/:id', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
 
-    // If stock is being updated to 0 or less, automatically set status to "Sold Out"
-    if (req.body.stock !== undefined && req.body.stock <= 0) {
-      req.body.status = 'Sold Out';
+    // Validate and sanitize product data
+    const validation = validateProductData(req.body);
+    if (!validation.valid) {
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
     }
 
-    const product = await Product.update(req.params.id, req.body);
+    // If stock is being updated to 0 or less, automatically set status to "Sold Out"
+    if (validation.sanitized.stock !== undefined && validation.sanitized.stock <= 0) {
+      validation.sanitized.status = 'Sold Out';
+    }
+
+    const product = await Product.update(req.params.id, validation.sanitized);
 
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
@@ -1080,14 +1218,22 @@ app.put('/api/customers/:email/:name', authenticateToken, async (req, res) => {
 // ============================================
 
 // POST /api/messages - Submit a contact form message (public)
-app.post('/api/messages', async (req, res) => {
+app.post('/api/messages', contactLimiter, async (req, res) => {
   try {
-    const { name, email, subject, message, orderId, mailingList } = req.body;
-
-    // Validation
-    if (!name || !email || !subject || !message) {
-      return res.status(400).json({ error: 'All fields are required' });
+    // Check for honeypot (bot detection)
+    if (isHoneypotFilled(req.body)) {
+      console.warn('🤖 Bot detected via honeypot');
+      return res.status(400).json({ error: 'Invalid submission' });
     }
+
+    // Validate and sanitize input
+    const validation = validateContactForm(req.body);
+    if (!validation.valid) {
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
+    }
+
+    const { name, email, subject, message, mailingList } = validation.sanitized;
+    const { orderId } = req.body; // orderId is not user-provided, safe to use directly
 
     const messagesCollection = await getCollection('messages');
 
@@ -1475,13 +1621,21 @@ app.post('/api/webhooks/email-reply', express.raw({ type: 'application/json' }),
 // ============================================
 
 // POST /api/newsletter/subscribe - Subscribe to newsletter (public)
-app.post('/api/newsletter/subscribe', async (req, res) => {
+app.post('/api/newsletter/subscribe', newsletterLimiter, async (req, res) => {
   try {
-    const { email, source, metadata } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
+    // Check for honeypot (bot detection)
+    if (isHoneypotFilled(req.body)) {
+      console.warn('🤖 Bot detected via honeypot in newsletter subscription');
+      return res.status(400).json({ error: 'Invalid submission' });
     }
+
+    // Validate and sanitize input
+    const validation = validateNewsletterSubscription(req.body);
+    if (!validation.valid) {
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
+    }
+
+    const { email, source, metadata } = validation.sanitized;
 
     const subscriber = await Subscriber.create({
       email,
@@ -1654,11 +1808,13 @@ app.post('/api/newsletter/send', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
 
-    const { subject, message } = req.body;
-
-    if (!subject || !message) {
-      return res.status(400).json({ error: 'Subject and message are required' });
+    // Validate and sanitize newsletter content
+    const validation = validateNewsletterContent(req.body);
+    if (!validation.valid) {
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
     }
+
+    const { subject, message } = validation.sanitized;
 
     // Get all active subscriber emails
     const emails = await Subscriber.getActiveEmails();
@@ -1743,11 +1899,13 @@ app.post('/api/newsletter/drafts', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
 
-    const { subject, message } = req.body;
-
-    if (!subject || !message) {
-      return res.status(400).json({ error: 'Subject and message are required' });
+    // Validate and sanitize newsletter content
+    const validation = validateNewsletterContent(req.body);
+    if (!validation.valid) {
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
     }
+
+    const { subject, message } = validation.sanitized;
 
     const draft = await Newsletter.create({
       subject,
@@ -1821,11 +1979,13 @@ app.put('/api/newsletter/drafts/:id', authenticateToken, async (req, res) => {
       return res.status(403).json({ error: 'Forbidden: Admin access required' });
     }
 
-    const { subject, message } = req.body;
-
-    if (!subject || !message) {
-      return res.status(400).json({ error: 'Subject and message are required' });
+    // Validate and sanitize newsletter content
+    const validation = validateNewsletterContent(req.body);
+    if (!validation.valid) {
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
     }
+
+    const { subject, message } = validation.sanitized;
 
     const draft = await Newsletter.update(req.params.id, {
       subject,
@@ -2100,6 +2260,103 @@ app.get('/api/audit-logs/security-events', authenticateToken, async (req, res) =
   } catch (error) {
     console.error('Error fetching security events:', error);
     res.status(500).json({ error: 'Failed to fetch security events' });
+  }
+});
+
+// ============================================
+// IP BLOCKING ENDPOINTS
+// ============================================
+
+// GET /api/blocked-ips - Get all blocked IPs (admin only)
+app.get('/api/blocked-ips', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { limit = 100, includeExpired = false } = req.query;
+
+    const blocks = await BlockedIP.getAll({
+      limit: parseInt(limit),
+      includeExpired: includeExpired === 'true'
+    });
+
+    res.json({ blocks });
+  } catch (error) {
+    console.error('Error fetching blocked IPs:', error);
+    res.status(500).json({ error: 'Failed to fetch blocked IPs' });
+  }
+});
+
+// POST /api/blocked-ips - Block an IP address (admin only)
+app.post('/api/blocked-ips', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const { ipAddress, reason, expiresAt } = req.body;
+
+    if (!ipAddress) {
+      return res.status(400).json({ error: 'IP address is required' });
+    }
+
+    const block = await BlockedIP.create({
+      ipAddress,
+      reason: reason || 'Blocked by admin',
+      blockedBy: req.user._id,
+      expiresAt: expiresAt ? new Date(expiresAt) : null
+    });
+
+    res.status(201).json({
+      message: 'IP address blocked successfully',
+      block
+    });
+  } catch (error) {
+    if (error.message === 'IP address is already blocked') {
+      return res.status(400).json({ error: error.message });
+    }
+    console.error('Error blocking IP:', error);
+    res.status(500).json({ error: 'Failed to block IP address' });
+  }
+});
+
+// DELETE /api/blocked-ips/:id - Unblock an IP address (admin only)
+app.delete('/api/blocked-ips/:id', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const success = await BlockedIP.unblock(req.params.id);
+
+    if (!success) {
+      return res.status(404).json({ error: 'Blocked IP not found' });
+    }
+
+    res.json({ message: 'IP address unblocked successfully' });
+  } catch (error) {
+    console.error('Error unblocking IP:', error);
+    res.status(500).json({ error: 'Failed to unblock IP address' });
+  }
+});
+
+// GET /api/blocked-ips/stats - Get blocking statistics (admin only)
+app.get('/api/blocked-ips/stats', authenticateToken, async (req, res) => {
+  try {
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const stats = await BlockedIP.getStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching IP blocking stats:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
   }
 });
 
