@@ -64,6 +64,7 @@ describe('ParadeOfHearts', () => {
     expect(screen.getByLabelText('Next image')).toBeInTheDocument();
     expect(screen.getByLabelText('Go to image 1')).toBeInTheDocument();
     expect(screen.getByLabelText('Go to image 2')).toBeInTheDocument();
+    expect(screen.getByLabelText('Go to image 3')).toBeInTheDocument();
   });
 
   it('displays first slide initially', () => {
@@ -128,11 +129,11 @@ describe('ParadeOfHearts', () => {
     const user = userEvent.setup();
     renderParadeOfHearts();
 
-    // Go to last slide (slide 2)
-    await user.click(screen.getByLabelText('Go to image 2'));
+    // Go to last slide (slide 3)
+    await user.click(screen.getByLabelText('Go to image 3'));
 
     await waitFor(() => {
-      expect(screen.getByAltText('Cutting and preparing acrylic tiles')).toBeInTheDocument();
+      expect(screen.getByAltText('Completed heart sculpture #my5footheart')).toBeInTheDocument();
     });
 
     // Click next (should wrap to slide 1)
@@ -150,9 +151,9 @@ describe('ParadeOfHearts', () => {
     // On first slide, click previous
     await user.click(screen.getByLabelText('Previous image'));
 
-    // Should show last slide (slide 2)
+    // Should show last slide (slide 3)
     await waitFor(() => {
-      expect(screen.getByAltText('Cutting and preparing acrylic tiles')).toBeInTheDocument();
+      expect(screen.getByAltText('Completed heart sculpture #my5footheart')).toBeInTheDocument();
     });
   });
 
@@ -187,7 +188,13 @@ describe('ParadeOfHearts', () => {
     });
     expect(screen.getByAltText('Cutting and preparing acrylic tiles')).toBeInTheDocument();
 
-    // Advance back to slide 1 (after another 5 seconds)
+    // Advance to slide 3 (after another 5 seconds)
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+    expect(screen.getByAltText('Completed heart sculpture #my5footheart')).toBeInTheDocument();
+
+    // Advance back to slide 1 (after another 5 seconds - wraps around)
     act(() => {
       vi.advanceTimersByTime(5000);
     });

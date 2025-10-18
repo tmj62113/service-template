@@ -16,6 +16,11 @@ export default function ParadeOfHearts() {
       image: "/images/poh 2023/poh_process_2023.jpg",
       alt: "Cutting and preparing acrylic tiles",
       caption: "Underway: Cutting, sanding, priming 2\" x 2\" acrylic tiles for the outer rim of #my5footheart. New bedtime activity for Miles the next 3 weeks."
+    },
+    {
+      image: "/images/poh 2023/poh_2023.jpg",
+      alt: "Completed heart sculpture #my5footheart",
+      caption: "#my5footheart is finished and was dropped off last week. 3 months of dedicated work. Miles was a great help!"
     }
   ];
 
