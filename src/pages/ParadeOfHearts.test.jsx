@@ -26,18 +26,28 @@ describe('ParadeOfHearts', () => {
 
   it('renders page title', () => {
     renderParadeOfHearts();
-    expect(screen.getByRole('heading', { name: 'Parade of Hearts', level: 1 })).toBeInTheDocument();
-  });
-
-  it('renders hero introduction text', () => {
-    renderParadeOfHearts();
-    expect(screen.getByText(/A journey of creativity, connection, and community/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Selected for Parade of Hearts 2026', level: 1 })).toBeInTheDocument();
   });
 
   it('renders 2026 artist selection announcement', () => {
     renderParadeOfHearts();
-    expect(screen.getByText('2026 Artist Selection')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Selected for Parade of Hearts 2026', level: 2 })).toBeInTheDocument();
+    expect(screen.getByText(/I'm honored to be selected/i)).toBeInTheDocument();
+  });
+
+  it('renders about parade of hearts section', () => {
+    renderParadeOfHearts();
+    expect(screen.getByRole('heading', { name: 'About Parade of Hearts', level: 2 })).toBeInTheDocument();
+    expect(screen.getByText(/Kansas City region-wide celebration/i)).toBeInTheDocument();
+    expect(screen.getByText(/6 feet tall and is transformed by talented local artists/i)).toBeInTheDocument();
+  });
+
+  it('renders Learn More button', () => {
+    renderParadeOfHearts();
+    const learnMoreLink = screen.getByRole('link', { name: 'Learn More' });
+    expect(learnMoreLink).toBeInTheDocument();
+    expect(learnMoreLink).toHaveAttribute('href', 'https://theparadeofhearts.com/');
+    expect(learnMoreLink).toHaveAttribute('target', '_blank');
+    expect(learnMoreLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('renders 2023 journey section', () => {
@@ -217,18 +227,6 @@ describe('ParadeOfHearts', () => {
 
     clearIntervalSpy.mockRestore();
     vi.useRealTimers();
-  });
-
-  it('renders 2026 creation process section', () => {
-    renderParadeOfHearts();
-    expect(screen.getByRole('heading', { name: '2026 Creation Process', level: 2 })).toBeInTheDocument();
-    expect(screen.getByText(/Watch this space as I document the journey/i)).toBeInTheDocument();
-  });
-
-  it('renders about parade of hearts section', () => {
-    renderParadeOfHearts();
-    expect(screen.getByRole('heading', { name: 'About Parade of Hearts', level: 2 })).toBeInTheDocument();
-    expect(screen.getByText(/Kansas City region-wide celebration/i)).toBeInTheDocument();
   });
 
   it('has correct SEO title', () => {

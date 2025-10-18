@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import ProductCard from './ProductCard';
+import { useState, useEffect } from "react";
+import ProductCard from "./ProductCard";
 
 export default function ProductGallery() {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -12,20 +12,20 @@ export default function ProductGallery() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/products');
+      const response = await fetch("http://localhost:3001/api/products");
       const data = await response.json();
       setProducts(data.products);
     } catch (error) {
-      console.error('Failed to load products:', error);
+      console.error("Failed to load products:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const categories = ['All', ...new Set(products.map((p) => p.category))];
+  const categories = ["All", ...new Set(products.map((p) => p.category))];
 
   const filteredProducts =
-    selectedCategory === 'All'
+    selectedCategory === "All"
       ? products
       : products.filter((p) => p.category === selectedCategory);
 
@@ -40,13 +40,13 @@ export default function ProductGallery() {
   return (
     <div className="product-gallery-container">
       <div className="gallery-header">
-        <h1>Our Products</h1>
+        <h1>Shop</h1>
         <div className="category-filters">
           {categories.map((category) => (
             <button
               key={category}
               className={`category-btn ${
-                selectedCategory === category ? 'active' : ''
+                selectedCategory === category ? "active" : ""
               }`}
               onClick={() => setSelectedCategory(category)}
             >

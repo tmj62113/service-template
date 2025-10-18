@@ -39,7 +39,7 @@ export const theme = {
   // ===================================================
   social: {
     facebook: "https://facebook.com/markjpetersonart",
-    instagram: "https://instagram.com/markjpetersonart",
+    instagram: "https://www.instagram.com/markpetersonart/",
     youtube: "https://youtube.com/@markjpetersonart",
   },
 

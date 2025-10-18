@@ -8,60 +8,22 @@
 }
 
 /* =====================================
-   HERO SECTION
-   ===================================== */
-
-.parade-hero {
-  padding: 80px 0 60px;
-  background-color: var(--color-cream);
-  text-align: center;
-}
-
-.parade-hero h1 {
-  font-family: var(--font-heading);
-  font-size: 42px;
-  font-weight: 600;
-  color: var(--color-gunmetal);
-  margin-bottom: 24px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.parade-hero .hero-lead {
-  font-family: var(--font-body);
-  font-size: 18px;
-  line-height: 1.6;
-  color: var(--color-gunmetal);
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-/* =====================================
    ANNOUNCEMENT SECTION (2026)
    ===================================== */
 
 .announcement-section {
   padding: 60px 0;
-  background-color: rgba(192, 166, 121, 0.1);
-  border-top: 2px solid var(--color-ecru);
-  border-bottom: 2px solid var(--color-ecru);
+  background-color: var(--color-cream);
 }
 
-.announcement-badge {
-  display: inline-block;
-  padding: 8px 24px;
-  background-color: var(--color-rust);
-  color: var(--color-cream);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border-radius: 4px;
-  margin-bottom: 24px;
+.announcement-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
 }
 
-.announcement-section h2 {
+.announcement-text h1 {
   font-family: var(--font-heading);
   font-size: 36px;
   font-weight: 600;
@@ -69,12 +31,24 @@
   margin-bottom: 24px;
 }
 
-.announcement-section p {
+.announcement-text p {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.8;
   color: var(--color-gunmetal);
   margin-bottom: 16px;
+}
+
+.announcement-image {
+  width: 100%;
+  height: 100%;
+}
+
+.announcement-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-card);
 }
 
 .announcement-section .journey-note {
@@ -156,41 +130,64 @@
    ===================================== */
 
 .gallery-section {
-  padding: 80px 0;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
   background-color: var(--color-cream);
-}
-
-.gallery-section h2 {
-  font-family: var(--font-heading);
-  font-size: 32px;
-  font-weight: 600;
-  color: var(--color-gunmetal);
-  margin-bottom: 16px;
-  text-align: center;
+  padding: 0 0 80px 0;
 }
 
 .gallery-slideshow {
   position: relative;
-  margin-top: 48px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: var(--layout-max-width, 1050px);
+  height: 60vh;
+  margin: 0 auto;
+  padding: 0 16px;
+  overflow: visible;
 }
 
 .gallery-slide {
-  display: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   gap: 0;
   align-items: stretch;
-  height: 600px;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
   background-color: var(--color-gunmetal);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gallery-slide.prev {
+  left: 0;
+  transform: translateX(-100%) scale(0.95);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1;
 }
 
 .gallery-slide.active {
-  display: grid;
+  left: 0;
+  transform: translateX(0) scale(1);
   opacity: 1;
+  visibility: visible;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.gallery-slide.next {
+  left: 0;
+  transform: translateX(100%) scale(0.95);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1;
 }
 
 .slide-image {
@@ -222,59 +219,75 @@
   font-size: 18px;
   line-height: 1.8;
   color: var(--color-cream);
+  max-width: 600px;
 }
 
-.gallery-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  margin-top: 32px;
-}
-
+/* Navigation Controls */
 .gallery-control {
-  width: 40px;
-  height: 40px;
-  background: var(--color-cream);
-  border: 1px solid var(--color-ecru);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
   border-radius: 50%;
   cursor: pointer;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   color: var(--color-gunmetal);
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  z-index: 10;
 }
 
 .gallery-control:hover {
-  background-color: var(--color-ecru);
-  border-color: var(--color-gunmetal);
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.gallery-control.prev {
+  left: 32px;
+}
+
+.gallery-control.next {
+  right: 32px;
 }
 
 .gallery-control .material-symbols-outlined {
-  font-size: 24px;
+  font-size: 28px;
 }
 
+/* Dots Navigation */
 .gallery-dots {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 12px;
+  z-index: 10;
 }
 
 .gallery-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: var(--color-ecru);
+  background: rgba(255, 255, 255, 0.5);
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
 }
 
+.gallery-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
 .gallery-dot.active {
-  width: 32px;
-  border-radius: 5px;
-  background-color: var(--color-gunmetal);
+  width: 40px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 1);
 }
 
 /* =====================================
@@ -326,7 +339,7 @@
   background-color: var(--color-cream);
 }
 
-.about-parade h2 {
+.about-parade h1 {
   font-family: var(--font-heading);
   font-size: 32px;
   font-weight: 600;
@@ -335,17 +348,41 @@
   text-align: center;
 }
 
+.about-parade h2 {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--color-gunmetal);
+  margin-bottom: 48px;
+  text-align: left;
+}
+
+.about-parade-content {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  gap: 48px;
+  align-items: start;
+  text-align: left;
+}
+
 .about-parade p {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.8;
   color: var(--color-gunmetal);
-  max-width: 800px;
-  margin: 0 auto 16px;
+  margin: 0 0 16px 0;
+  text-align: left;
 }
 
-.about-parade p:last-child {
-  margin-bottom: 0;
+.about-parade p:last-of-type {
+  margin-bottom: 24px;
+}
+
+.about-parade .btn {
+  display: inline-block;
+  margin: 0;
+  width: fit-content;
+  text-align: left;
 }
 
 /* =====================================
@@ -365,6 +402,15 @@
     font-size: 16px;
   }
 
+  .announcement-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .announcement-text h1 {
+    font-size: 28px;
+  }
+
   .announcement-section h2,
   .experience-section h2,
   .gallery-section h2,
@@ -373,14 +419,49 @@
     font-size: 28px;
   }
 
+  .about-parade-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .gallery-slideshow {
+    height: 800px;
+  }
+
   .gallery-slide {
     grid-template-columns: 1fr;
+    grid-template-rows: 60% 40%;
     gap: 0;
-    height: 800px;
+    width: 85%;
+  }
+
+  .gallery-slide.prev {
+    transform: translateX(-30%);
+  }
+
+  .gallery-slide.next {
+    transform: translateX(30%);
   }
 
   .slide-caption {
     padding: 32px;
+  }
+
+  .gallery-control.prev {
+    left: 16px;
+  }
+
+  .gallery-control.next {
+    right: 16px;
+  }
+
+  .gallery-control {
+    width: 40px;
+    height: 40px;
+  }
+
+  .gallery-control .material-symbols-outlined {
+    font-size: 24px;
   }
 
   .gallery-placeholder,
@@ -406,6 +487,10 @@
     padding: 60px 0;
   }
 
+  .announcement-text h1 {
+    font-size: 24px;
+  }
+
   .announcement-section h2,
   .experience-section h2,
   .gallery-section h2,
@@ -419,8 +504,21 @@
     padding: 6px 18px;
   }
 
-  .gallery-slide {
+  .gallery-slideshow {
     height: 700px;
+  }
+
+  .gallery-slide {
+    width: 90%;
+    grid-template-rows: 60% 40%;
+  }
+
+  .gallery-slide.prev {
+    transform: translateX(-40%);
+  }
+
+  .gallery-slide.next {
+    transform: translateX(40%);
   }
 
   .slide-caption {
@@ -429,6 +527,37 @@
 
   .slide-caption p {
     font-size: 16px;
+  }
+
+  .gallery-control.prev {
+    left: 8px;
+  }
+
+  .gallery-control.next {
+    right: 8px;
+  }
+
+  .gallery-control {
+    width: 36px;
+    height: 36px;
+  }
+
+  .gallery-control .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  .gallery-dots {
+    bottom: 16px;
+    gap: 8px;
+  }
+
+  .gallery-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .gallery-dot.active {
+    width: 32px;
   }
 
   .gallery-placeholder,
