@@ -426,21 +426,24 @@
 
   .gallery-slideshow {
     height: 800px;
+    padding: 0;
+    max-width: 100%;
   }
 
   .gallery-slide {
     grid-template-columns: 1fr;
     grid-template-rows: 60% 40%;
     gap: 0;
-    width: 85%;
+    width: 100%;
+    left: 0;
   }
 
   .gallery-slide.prev {
-    transform: translateX(-30%);
+    transform: translateX(-100%) scale(0.95);
   }
 
   .gallery-slide.next {
-    transform: translateX(30%);
+    transform: translateX(100%) scale(0.95);
   }
 
   .slide-caption {
@@ -506,19 +509,22 @@
 
   .gallery-slideshow {
     height: 700px;
+    padding: 0;
+    max-width: 100%;
   }
 
   .gallery-slide {
-    width: 90%;
+    width: 100%;
+    left: 0;
     grid-template-rows: 60% 40%;
   }
 
   .gallery-slide.prev {
-    transform: translateX(-40%);
+    transform: translateX(-100%) scale(0.95);
   }
 
   .gallery-slide.next {
-    transform: translateX(40%);
+    transform: translateX(100%) scale(0.95);
   }
 
   .slide-caption {
