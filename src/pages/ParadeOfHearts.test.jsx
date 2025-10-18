@@ -40,15 +40,6 @@ describe('ParadeOfHearts', () => {
     expect(screen.getByRole('heading', { name: 'Selected for Parade of Hearts 2026', level: 2 })).toBeInTheDocument();
   });
 
-  it('renders CTA button linking to 2026 artists page', () => {
-    renderParadeOfHearts();
-    const ctaLink = screen.getByRole('link', { name: 'View All 2026 Artists' });
-    expect(ctaLink).toBeInTheDocument();
-    expect(ctaLink).toHaveAttribute('href', 'https://theparadeofhearts.com/2026-artists/');
-    expect(ctaLink).toHaveAttribute('target', '_blank');
-    expect(ctaLink).toHaveAttribute('rel', 'noopener noreferrer');
-  });
-
   it('renders 2023 journey section', () => {
     renderParadeOfHearts();
     expect(screen.getByRole('heading', { name: /My 2023 Journey as a "Heartist"/i, level: 2 })).toBeInTheDocument();
