@@ -1,0 +1,31 @@
+# Ignore frontend build artifacts and dev files
+dist/
+node_modules/
+.vite/
+.vercel/
+.git/
+
+# Ignore frontend source (only need backend)
+src/
+public/
+index.html
+vite.config.js
+
+# Ignore test files
+*.test.js
+*.test.jsx
+**/__tests__/
+
+# Ignore docs and config
+.claude/
+context/
+docs/
+README.md
+.eslintrc.cjs
+
+# Keep these important files:
+# - server.js
+# - db/
+# - api/
+# - package.json
+# - .env (Railway will use env vars instead)
