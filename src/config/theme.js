@@ -40,10 +40,7 @@ export const theme = {
   social: {
     facebook: "https://facebook.com/markjpetersonart",
     instagram: "https://instagram.com/markjpetersonart",
-    twitter: "https://twitter.com/markjpetersonart",
-    pinterest: "https://pinterest.com/markjpetersonart",
-    linkedin: "",
-    youtube: "",
+    youtube: "https://youtube.com/@markjpetersonart",
   },
 
   // ===================================================

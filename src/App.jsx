@@ -5,6 +5,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import AdminLayout from './components/AdminLayout';
 import Home from './pages/Home';
+import Gallery from './pages/Gallery';
+import ParadeOfHearts from './pages/ParadeOfHearts';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import About from './pages/About';
@@ -75,6 +77,8 @@ function App() {
                 <main id="main-content" role="main">
                   <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/gallery" element={<Gallery />} />
+                    <Route path="/parade-of-hearts" element={<ParadeOfHearts />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/:id" element={<ProductDetail />} />
                     <Route path="/about" element={<About />} />

@@ -137,7 +137,6 @@
   margin-bottom: 12px;
 }
 
-
 .collections-grid-container {
   display: flex;
   justify-content: space-between;
@@ -195,7 +194,6 @@
   margin-bottom: 12px;
 }
 
-
 .masonry-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -234,30 +232,6 @@
 }
 
 /* =====================================
-   ABOUT SECTION
-   ===================================== */
-
-.about-section {
-  padding: 80px 0;
-  background-color: var(--color-cream);
-}
-
-.about-section .container {
-  max-width: 800px;
-  text-align: center;
-}
-
-.about-section h2 {
-  font-family: var(--font-heading);
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 36px;
-  color: var(--color-gunmetal);
-  margin-bottom: 16px;
-}
-
-
-/* =====================================
    CONTACT SECTION
    ===================================== */
 
@@ -268,12 +242,13 @@
 
 .contact-section h2 {
   font-family: var(--font-heading);
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--color-gunmetal);
   text-align: center;
   margin-bottom: 16px;
+  text-transform: uppercase;
 }
 
 .contact-intro {
@@ -339,26 +314,17 @@
 }
 
 .form-group label {
-  display: block;
   font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   color: var(--color-gunmetal);
-  margin-bottom: 8px;
 }
 
 .form-group input,
 .form-group textarea {
-  width: 100%;
-  padding: 10px 12px;
   font-family: var(--font-body);
-  font-size: 16px;
   color: var(--color-gunmetal);
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid #d0d0d0;
+  border-bottom: 1px solid #122d38;
   border-radius: 0;
   transition: border-color 0.2s ease;
 }
@@ -371,7 +337,6 @@
 
 .form-group textarea {
   resize: vertical;
-  min-height: 120px;
 }
 
 .form-checkbox {
@@ -454,7 +419,6 @@
   .collection-card {
     max-width: 100%;
   }
-
 }
 
 @media (max-width: 768px) {
@@ -477,7 +441,6 @@
 
   .collections-section h2,
   .artwork-section h2,
-  .about-section h2,
   .contact-section h2 {
     font-size: 24px;
     line-height: 30px;
@@ -513,7 +476,6 @@
   .form-row .form-group:last-child {
     margin-bottom: 0;
   }
-
 }
 
 @media (max-width: 480px) {
@@ -523,7 +485,6 @@
 
   .collections-section,
   .artwork-section,
-  .about-section,
   .contact-section {
     padding: 60px 0;
   }
@@ -536,5 +497,4 @@
   .masonry-grid {
     grid-template-columns: 1fr;
   }
-
 }

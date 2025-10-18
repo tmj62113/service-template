@@ -77,14 +77,29 @@ export default function MobileMenu() {
             Home
           </Link>
           <Link
+            to="/parade-of-hearts"
+            className={location.pathname === '/parade-of-hearts' ? 'active' : ''}
+          >
+            Parade of Hearts
+          </Link>
+          <Link
+            to="/gallery"
+            className={location.pathname === '/gallery' ? 'active' : ''}
+          >
+            Gallery
+          </Link>
+          <Link
             to="/products"
             className={location.pathname === '/products' ? 'active' : ''}
           >
             Shop
           </Link>
-          <a href="/#about" onClick={toggleMenu}>
+          <Link
+            to="/about"
+            className={location.pathname === '/about' ? 'active' : ''}
+          >
             About
-          </a>
+          </Link>
           <a href="/#contact" onClick={toggleMenu}>
             Contact
           </a>

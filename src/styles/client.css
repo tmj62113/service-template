@@ -66,7 +66,7 @@ body {
    TYPOGRAPHY
    ===================================== */
 
-/* Headings use Anton */
+/* Headings use Anton - All same size and weight */
 h1,
 h2,
 h3,
@@ -82,31 +82,11 @@ h6,
 .h6 {
   font-family: var(--font-heading);
   color: var(--color-gunmetal);
-  font-weight: 400;
-}
-
-h2 {
   font-size: 30px;
   line-height: 36px;
+  font-weight: 400;
   margin-bottom: 12px;
-  font-weight: 400;
   text-transform: uppercase;
-}
-
-h3 {
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 400;
-  margin-bottom: 4px;
-}
-
-h4 {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-  color: var(--color-ecru);
-  margin-bottom: 16px;
 }
 
 /* Body text uses Barlow Semi Condensed */
@@ -116,7 +96,7 @@ li,
 span,
 div {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   font-weight: 400;
 }
@@ -145,33 +125,24 @@ img {
 /* Base button styles */
 .btn,
 .btn--primary,
-.btn-primary,
-button[type="submit"]:not(.btn--secondary):not(.btn--outline) {
+.btn-primary {
   display: inline-block;
   padding: 10px 32px;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   text-align: center;
   text-decoration: none;
   border-radius: var(--radius-button);
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 2px solid var(--color-seal-brown);
-}
-
-/* Primary buttons - Seal Brown border with transparent background */
-.btn--primary,
-.btn-primary,
-button[type="submit"]:not(.btn--secondary):not(.btn--outline) {
   background-color: transparent;
   color: var(--color-gunmetal);
-  border: 2px solid var(--color-seal-brown);
+  border: 2px solid var(--color-gunmetal);
 }
 
 .btn--primary:hover,
-.btn-primary:hover,
-button[type="submit"]:hover {
+.btn-primary:hover {
   border-color: #a0522d;
   color: #a0522d;
   background-color: transparent;
@@ -257,7 +228,7 @@ header {
 }
 
 .logo img {
-  height: 60px;
+  height: 40px;
   width: auto;
   border-radius: 0;
 }
@@ -265,7 +236,7 @@ header {
 /* Responsive logo sizing */
 @media (max-width: 768px) {
   .logo img {
-    height: 50px;
+    height: 40px;
   }
 }
 
@@ -273,6 +244,7 @@ header {
 .header-content {
   padding-left: 16px;
   padding-right: 16px;
+  align-items: flex-start;
 }
 
 /* Navigation - Left-aligned next to logo */
@@ -286,27 +258,57 @@ header {
 .nav a {
   color: var(--color-gunmetal);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   text-decoration: none;
   transition: color 0.15s ease;
 }
 
 .nav a:hover {
-  color: var(--color-rust);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 .nav-link {
   color: var(--color-gunmetal);
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 400;
   transition: color 0.15s ease;
 }
 
 .nav-link:hover,
 .nav-link.active {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Header social links */
+.header-social {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.header-social a {
+  color: var(--color-gunmetal);
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.header-social a:hover {
   color: var(--color-rust);
+}
+
+.desktop-only {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
 }
 
 /* Cart button - Match localhost:3000 minimal styling */
@@ -352,7 +354,8 @@ footer {
 }
 
 .footer a:hover {
-  color: var(--color-rust);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 .footer h3,
@@ -362,16 +365,21 @@ footer {
 
 /* Footer logo styling */
 .footer-logo {
-  height: 80px;
+  height: 40px;
   width: auto;
   margin-bottom: 16px;
   border-radius: 0;
   filter: brightness(0) invert(1);
 }
 
+/* Footer navigation links */
+.footer-nav a {
+  font-size: 1rem;
+}
+
 @media (max-width: 768px) {
   .footer-logo {
-    height: 60px;
+    height: 40px;
   }
 }
 
@@ -407,6 +415,12 @@ footer {
   margin-top: 8px;
 }
 
+/* Social links positioned under newsletter */
+.footer-section .social-links {
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
 .newsletter-input {
   width: 100%;
   padding: 10px 12px;
@@ -430,20 +444,19 @@ footer {
   font-weight: 400;
   background-color: transparent;
   color: var(--color-cream);
-  border: 2px solid var(--color-ecru);
+  border: 2px solid var(--color-cream);
   border-radius: var(--radius-button);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .newsletter-btn:hover {
-  background-color: var(--color-ecru);
-  color: var(--color-gunmetal);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 .newsletter-success {
-  color: var(--color-ecru);
-  font-size: 14px;
+  font-size: 1rem;
   margin-top: 8px;
 }
 
@@ -478,7 +491,8 @@ footer {
 
 .footer-legal-links a:hover,
 .footer-legal-links .cookie-settings-link:hover {
-  color: var(--color-ecru);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 .footer-legal-links .separator {
@@ -571,7 +585,8 @@ a {
 }
 
 a:hover {
-  color: var(--color-rust);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 /* =====================================
@@ -904,7 +919,7 @@ select:focus-visible {
 }
 
 .ip-header strong {
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 16px;
   color: var(--color-gunmetal);
 }
@@ -1027,7 +1042,7 @@ select:focus-visible {
   background: rgba(0, 0, 0, 0.05);
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 12px;
   color: var(--color-gunmetal);
 }
