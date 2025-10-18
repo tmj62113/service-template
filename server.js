@@ -142,8 +142,8 @@ const corsOptions = {
       ? [process.env.CLIENT_URL].filter(Boolean) // Only allow configured client URL in production
       : [process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:3000'].filter(Boolean); // Allow localhost in development
 
-    // Allow requests with no origin (mobile apps, Postman, etc.) only in development
-    if (!origin && process.env.NODE_ENV !== 'production') {
+    // Allow requests with no origin (health checks, webhooks, server-to-server, Postman, etc.)
+    if (!origin) {
       return callback(null, true);
     }
 
