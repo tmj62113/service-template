@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { getApiUrl } from '../config/api';
 
 export default function AdminNewsletter() {
   const { isAuthenticated } = useAuth();
@@ -25,7 +26,7 @@ export default function AdminNewsletter() {
       if (statusFilter !== 'all') params.append('status', statusFilter);
       if (sourceFilter !== 'all') params.append('source', sourceFilter);
 
-      const response = await fetch(`http://localhost:3001/api/newsletter/subscribers?${params}`, {
+      const response = await fetch(getApiUrl(`/api/newsletter/subscribers?${params}`), {
         credentials: 'include',
       });
 
@@ -45,7 +46,7 @@ export default function AdminNewsletter() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/newsletter/stats', {
+      const response = await fetch(getApiUrl('/api/newsletter/stats'), {
         credentials: 'include',
       });
 
@@ -64,7 +65,7 @@ export default function AdminNewsletter() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/newsletter/subscribers/${id}`, {
+      const response = await fetch(getApiUrl(`/api/newsletter/subscribers/${id}`), {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -84,7 +85,7 @@ export default function AdminNewsletter() {
 
   const handleExportEmails = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/newsletter/export', {
+      const response = await fetch(getApiUrl('/api/newsletter/export'), {
         credentials: 'include',
       });
 

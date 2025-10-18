@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { getApiUrl } from '../config/api';
 
 export default function AdminNewsletterDrafts() {
   const { isAuthenticated } = useAuth();
@@ -18,7 +19,7 @@ export default function AdminNewsletterDrafts() {
 
   const fetchDrafts = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/newsletter/drafts?page=${currentPage}&limit=${itemsPerPage}`, {
+      const response = await fetch(getApiUrl(`/api/newsletter/drafts?page=${currentPage}&limit=${itemsPerPage}`), {
         credentials: 'include',
       });
 
@@ -46,7 +47,7 @@ export default function AdminNewsletterDrafts() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/newsletter/drafts/${id}`, {
+      const response = await fetch(getApiUrl(`/api/newsletter/drafts/${id}`), {
         method: 'DELETE',
         credentials: 'include',
       });

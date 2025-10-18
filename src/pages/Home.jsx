@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SEO, { generateOrganizationStructuredData } from "../components/SEO";
+import { getApiUrl } from "../config/api";
 import "./Home.css";
 
 export default function Home() {
@@ -139,7 +140,7 @@ export default function Home() {
 
     try {
       // Submit contact form message
-      const response = await fetch("http://localhost:3001/api/messages", {
+      const response = await fetch(getApiUrl("/api/messages"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -160,7 +161,7 @@ export default function Home() {
       // If user opted in to mailing list, subscribe them to newsletter
       if (formData.mailingList) {
         try {
-          await fetch("http://localhost:3001/api/newsletter/subscribe", {
+          await fetch(getApiUrl("/api/newsletter/subscribe"), {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

@@ -1,4 +1,5 @@
 // Google reCAPTCHA v3 utility functions
+import { getApiUrl } from '../config/api';
 
 const RECAPTCHA_SITE_KEY = '6Lcpnu0rAAAAAKEMGepI2nOEyn5h7A8xxFlJMkZk';
 
@@ -33,7 +34,7 @@ export const getReCaptchaToken = async (action) => {
  */
 export const verifyReCaptcha = async (token, action) => {
   try {
-    const response = await fetch('http://localhost:3001/api/verify-recaptcha', {
+    const response = await fetch(getApiUrl('/api/verify-recaptcha'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

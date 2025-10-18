@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCartStore } from '../stores/cartStore';
+import { getApiUrl } from '../config/api';
 
 function Success() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function Success() {
         try {
           // Fetch order by session ID to get the order _id
           const response = await fetch(
-            `http://localhost:3001/api/orders/session/${sessionId}`,
+            getApiUrl(`/api/orders/session/${sessionId}`),
             {
               credentials: 'include',
             }

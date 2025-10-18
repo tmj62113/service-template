@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../config/api';
 
 export default function OrderDetail() {
   const { id } = useParams();
@@ -17,7 +18,7 @@ export default function OrderDetail() {
   async function fetchOrder() {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:3001/api/orders/${id}`, {
+      const response = await fetch(getApiUrl(`/api/orders/${id}`), {
         credentials: 'include',
       });
       if (!response.ok) {
@@ -98,7 +99,7 @@ export default function OrderDetail() {
 
     setCreatingShipment(true);
     try {
-      const response = await fetch(`http://localhost:3001/api/orders/${id}/create-shipment`, {
+      const response = await fetch(getApiUrl(`/api/orders/${id}/create-shipment`), {
         method: 'POST',
         credentials: 'include',
       });

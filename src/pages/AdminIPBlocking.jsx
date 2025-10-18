@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 export default function AdminIPBlocking() {
   const [blockedIPs, setBlockedIPs] = useState([]);
@@ -20,7 +21,7 @@ export default function AdminIPBlocking() {
   const fetchBlockedIPs = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3001/api/blocked-ips', {
+      const response = await fetch(getApiUrl('/api/blocked-ips'), {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -44,7 +45,7 @@ export default function AdminIPBlocking() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3001/api/blocked-ips/stats', {
+      const response = await fetch(getApiUrl('/api/blocked-ips/stats'), {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -95,7 +96,7 @@ export default function AdminIPBlocking() {
         payload.expiresAt = blockForm.expiresAt;
       }
 
-      const response = await fetch('http://localhost:3001/api/blocked-ips', {
+      const response = await fetch(getApiUrl('/api/blocked-ips'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -134,7 +135,7 @@ export default function AdminIPBlocking() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3001/api/blocked-ips/${blockId}`, {
+      const response = await fetch(getApiUrl(`/api/blocked-ips/${blockId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

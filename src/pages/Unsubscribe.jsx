@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { getApiUrl } from '../config/api';
 
 export default function Unsubscribe() {
   const [searchParams] = useSearchParams();
@@ -19,7 +20,7 @@ export default function Unsubscribe() {
 
   const handleUnsubscribe = async (token) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/newsletter/unsubscribe/${token}`, {
+      const response = await fetch(getApiUrl(`/api/newsletter/unsubscribe/${token}`), {
         method: 'POST',
       });
 

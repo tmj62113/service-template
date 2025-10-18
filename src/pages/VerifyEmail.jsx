@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { getApiUrl } from '../config/api';
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
@@ -21,7 +22,7 @@ export default function VerifyEmail() {
 
   const handleVerifyEmail = async (token) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/verify-email/${token}`);
+      const response = await fetch(getApiUrl(`/api/verify-email/${token}`));
 
       if (!response.ok) {
         throw new Error('Failed to verify email');
@@ -43,7 +44,7 @@ export default function VerifyEmail() {
     setResendSuccess(false);
 
     try {
-      const response = await fetch('http://localhost:3001/api/resend-verification', {
+      const response = await fetch(getApiUrl('/api/resend-verification'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

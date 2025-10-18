@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { getApiUrl } from '../config/api';
 
 export default function AdminNewsletterCreate() {
   const { isAuthenticated } = useAuth();
@@ -26,7 +27,7 @@ export default function AdminNewsletterCreate() {
 
   const fetchSubscriberCount = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/newsletter/stats', {
+      const response = await fetch(getApiUrl('/api/newsletter/stats'), {
         credentials: 'include',
       });
 
@@ -42,7 +43,7 @@ export default function AdminNewsletterCreate() {
   const loadDraft = async (id) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/api/newsletter/drafts/${id}`, {
+      const response = await fetch(getApiUrl(`/api/newsletter/drafts/${id}`), {
         credentials: 'include',
       });
 
@@ -71,8 +72,8 @@ export default function AdminNewsletterCreate() {
 
     try {
       const url = draftId
-        ? `http://localhost:3001/api/newsletter/drafts/${draftId}`
-        : 'http://localhost:3001/api/newsletter/drafts';
+        ? getApiUrl(`/api/newsletter/drafts/${draftId}`)
+        : getApiUrl('/api/newsletter/drafts');
 
       const method = draftId ? 'PUT' : 'POST';
 
@@ -122,7 +123,7 @@ export default function AdminNewsletterCreate() {
       setSending(true);
 
       try {
-        const response = await fetch(`http://localhost:3001/api/newsletter/drafts/${draftId}/send`, {
+        const response = await fetch(getApiUrl(`/api/newsletter/drafts/${draftId}/send`), {
           method: 'POST',
           credentials: 'include',
         });
@@ -150,7 +151,7 @@ export default function AdminNewsletterCreate() {
 
       try {
         // First save as draft
-        const draftResponse = await fetch('http://localhost:3001/api/newsletter/drafts', {
+        const draftResponse = await fetch(getApiUrl('/api/newsletter/drafts'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -170,7 +171,7 @@ export default function AdminNewsletterCreate() {
         const newDraftId = draftResult.draft._id;
 
         // Then send it
-        const sendResponse = await fetch(`http://localhost:3001/api/newsletter/drafts/${newDraftId}/send`, {
+        const sendResponse = await fetch(getApiUrl(`/api/newsletter/drafts/${newDraftId}/send`), {
           method: 'POST',
           credentials: 'include',
         });

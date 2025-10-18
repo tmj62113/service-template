@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 export default function AdminSecurity() {
   const [stats, setStats] = useState(null);
@@ -29,7 +30,7 @@ export default function AdminSecurity() {
 
       // Fetch statistics
       const statsRes = await fetch(
-        `http://localhost:3001/api/audit-logs/stats?startDate=${startDate.toISOString()}`,
+        getApiUrl(`/api/audit-logs/stats?startDate=${startDate.toISOString()}`),
         { headers, credentials: 'include' }
       );
       const statsData = await statsRes.json();
@@ -37,7 +38,7 @@ export default function AdminSecurity() {
 
       // Fetch failed logins
       const failedRes = await fetch(
-        `http://localhost:3001/api/audit-logs?eventType=login_failed&limit=20&startDate=${startDate.toISOString()}`,
+        getApiUrl(`/api/audit-logs?eventType=login_failed&limit=20&startDate=${startDate.toISOString()}`),
         { headers, credentials: 'include' }
       );
       const failedData = await failedRes.json();
@@ -45,7 +46,7 @@ export default function AdminSecurity() {
 
       // Fetch security events
       const eventsRes = await fetch(
-        `http://localhost:3001/api/audit-logs/security-events?limit=15&startDate=${startDate.toISOString()}`,
+        getApiUrl(`/api/audit-logs/security-events?limit=15&startDate=${startDate.toISOString()}`),
         { headers, credentials: 'include' }
       );
       const eventsData = await eventsRes.json();

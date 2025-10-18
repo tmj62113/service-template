@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { getApiUrl } from "../../config/api";
 import ProductCard from "./ProductCard";
 
 export default function ProductGallery() {
@@ -12,7 +13,7 @@ export default function ProductGallery() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/products");
+      const response = await fetch(getApiUrl("/api/products"));
       const data = await response.json();
       setProducts(data.products);
     } catch (error) {

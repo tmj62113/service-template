@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { getApiUrl } from "../config/api";
 
 export default function AdminMessages() {
   const { isAuthenticated } = useAuth();
@@ -35,7 +36,7 @@ export default function AdminMessages() {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/messages", {
+      const response = await fetch(getApiUrl("/api/messages"), {
         credentials: "include",
       });
 
@@ -58,7 +59,7 @@ export default function AdminMessages() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/customers", {
+      const response = await fetch(getApiUrl("/api/customers"), {
         credentials: "include",
       });
 
@@ -134,7 +135,7 @@ export default function AdminMessages() {
     // Fetch the message thread
     try {
       const threadResponse = await fetch(
-        `http://localhost:3001/api/messages/${message._id}/thread`,
+        getApiUrl(`/api/messages/${message._id}/thread`),
         {
           credentials: "include",
         }
@@ -151,7 +152,7 @@ export default function AdminMessages() {
     if (message.status === "unread") {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/messages/${message._id}`,
+          getApiUrl(`/api/messages/${message._id}`),
           {
             method: "PATCH",
             headers: {
@@ -183,7 +184,7 @@ export default function AdminMessages() {
 
   const handleArchive = async (id) => {
     try {
-      await fetch(`http://localhost:3001/api/messages/${id}`, {
+      await fetch(getApiUrl(`/api/messages/${id}`), {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -218,7 +219,7 @@ export default function AdminMessages() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/messages/${id}`, {
+      const response = await fetch(getApiUrl(`/api/messages/${id}`), {
         method: "DELETE",
         credentials: "include",
       });
@@ -278,7 +279,7 @@ export default function AdminMessages() {
       // Delete all selected messages
       await Promise.all(
         selectedIds.map((id) =>
-          fetch(`http://localhost:3001/api/messages/${id}`, {
+          fetch(getApiUrl(`/api/messages/${id}`), {
             method: "DELETE",
             credentials: "include",
           })
@@ -347,7 +348,7 @@ export default function AdminMessages() {
 
     try {
       const response = await fetch(
-        "http://localhost:3001/api/messages/send-email",
+        getApiUrl("/api/messages/send-email"),
         {
           method: "POST",
           headers: {
@@ -372,7 +373,7 @@ export default function AdminMessages() {
       // If this is a reply to an existing message, refresh the thread
       if (selectedMessage) {
         const threadResponse = await fetch(
-          `http://localhost:3001/api/messages/${selectedMessage._id}/thread`,
+          getApiUrl(`/api/messages/${selectedMessage._id}/thread`),
           {
             credentials: "include",
           }

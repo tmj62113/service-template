@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 export default function AdminOverview() {
   const [stats, setStats] = useState(null);
@@ -10,7 +11,7 @@ export default function AdminOverview() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/orders/stats/summary', {
+      const response = await fetch(getApiUrl('/api/orders/stats/summary'), {
         credentials: 'include',
       });
       const data = await response.json();

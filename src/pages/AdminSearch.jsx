@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { getApiUrl } from '../config/api';
 
 export default function AdminSearch() {
   const [searchParams] = useSearchParams();
@@ -24,10 +25,10 @@ export default function AdminSearch() {
     setLoading(true);
     try {
       const [productsRes, ordersRes, customersRes, messagesRes] = await Promise.all([
-        fetch('http://localhost:3001/api/products', { credentials: 'include' }),
-        fetch('http://localhost:3001/api/orders', { credentials: 'include' }),
-        fetch('http://localhost:3001/api/customers', { credentials: 'include' }),
-        fetch('http://localhost:3001/api/messages', { credentials: 'include' })
+        fetch(getApiUrl('/api/products'), { credentials: 'include' }),
+        fetch(getApiUrl('/api/orders'), { credentials: 'include' }),
+        fetch(getApiUrl('/api/customers'), { credentials: 'include' }),
+        fetch(getApiUrl('/api/messages'), { credentials: 'include' })
       ]);
 
       const [productsData, ordersData, customersData, messagesData] = await Promise.all([

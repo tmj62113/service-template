@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { getApiUrl } from '../config/api';
 
 export default function AdminNewsletterSent() {
   const { isAuthenticated } = useAuth();
@@ -18,7 +19,7 @@ export default function AdminNewsletterSent() {
 
   const fetchSentNewsletters = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/newsletter/sent?page=${currentPage}&limit=${itemsPerPage}`, {
+      const response = await fetch(getApiUrl(`/api/newsletter/sent?page=${currentPage}&limit=${itemsPerPage}`), {
         credentials: 'include',
       });
 

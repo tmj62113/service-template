@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { getApiUrl } from "../config/api";
 
 export default function ProductEditModal({
   product,
@@ -136,7 +137,7 @@ export default function ProductEditModal({
       formDataUpload.append("image", imageFile);
 
       const response = await fetch(
-        "http://localhost:3001/api/products/upload-image",
+        getApiUrl("/api/products/upload-image"),
         {
           method: "POST",
           credentials: "include",
@@ -182,8 +183,8 @@ export default function ProductEditModal({
       }
 
       const url = product
-        ? `http://localhost:3001/api/products/${product._id}`
-        : "http://localhost:3001/api/products";
+        ? getApiUrl(`/api/products/${product._id}`)
+        : getApiUrl("/api/products");
 
       const method = product ? "PUT" : "POST";
 

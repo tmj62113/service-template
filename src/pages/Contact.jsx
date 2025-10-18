@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { theme } from '../config/theme';
+import { getApiUrl } from '../config/api';
 import SEO from '../components/SEO';
 
 export default function Contact() {
@@ -27,7 +28,7 @@ export default function Contact() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3001/api/messages', {
+      const response = await fetch(getApiUrl('/api/messages'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

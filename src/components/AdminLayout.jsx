@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { theme } from "../config/theme";
+import { getApiUrl } from "../config/api";
 
 export default function AdminLayout() {
   const location = useLocation();
@@ -26,7 +27,7 @@ export default function AdminLayout() {
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/messages', {
+        const response = await fetch(getApiUrl('/api/messages'), {
           credentials: 'include',
         });
 
@@ -64,8 +65,8 @@ export default function AdminLayout() {
     const fetchNotifications = async () => {
       try {
         const [ordersRes, productsRes] = await Promise.all([
-          fetch('http://localhost:3001/api/orders', { credentials: 'include' }),
-          fetch('http://localhost:3001/api/products', { credentials: 'include' })
+          fetch(getApiUrl('/api/orders'), { credentials: 'include' }),
+          fetch(getApiUrl('/api/products'), { credentials: 'include' })
         ]);
 
         if (ordersRes.ok && productsRes.ok) {

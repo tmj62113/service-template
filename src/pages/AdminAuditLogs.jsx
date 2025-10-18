@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../config/api';
 
 export default function AdminAuditLogs() {
   const [logs, setLogs] = useState([]);
@@ -31,7 +32,7 @@ export default function AdminAuditLogs() {
       params.append('skip', page * filters.limit);
 
       const response = await fetch(
-        `http://localhost:3001/api/audit-logs?${params.toString()}`,
+        getApiUrl(`/api/audit-logs?${params.toString()}`),
         {
           headers: {
             'Authorization': `Bearer ${token}`,

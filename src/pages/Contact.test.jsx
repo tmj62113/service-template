@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { HelmetProvider } from 'react-helmet-async';
 import userEvent from '@testing-library/user-event';
 import Contact from './Contact';
+import { getApiUrl } from '../config/api';
 
 const renderContact = () => {
   return render(
@@ -58,7 +59,7 @@ describe('Contact', () => {
     await user.click(screen.getByText('Send Message'));
 
     expect(fetch).toHaveBeenCalledWith(
-      'http://localhost:3001/api/messages',
+      getApiUrl('/api/messages'),
       expect.objectContaining({
         method: 'POST',
         headers: {

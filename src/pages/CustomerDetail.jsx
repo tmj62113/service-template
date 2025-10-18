@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../config/api';
 
 export default function CustomerDetail() {
   const { email, name } = useParams();
@@ -29,7 +30,7 @@ export default function CustomerDetail() {
   async function fetchCustomer() {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:3001/api/customers/${encodeURIComponent(email)}/${encodeURIComponent(name)}`, {
+      const response = await fetch(getApiUrl(`/api/customers/${encodeURIComponent(email)}/${encodeURIComponent(name)}`), {
         credentials: 'include',
       });
       if (!response.ok) {
@@ -93,7 +94,7 @@ export default function CustomerDetail() {
 
     setSaving(true);
     try {
-      const response = await fetch(`http://localhost:3001/api/customers/${encodeURIComponent(email)}/${encodeURIComponent(name)}`, {
+      const response = await fetch(getApiUrl(`/api/customers/${encodeURIComponent(email)}/${encodeURIComponent(name)}`), {
         method: 'PUT',
         credentials: 'include',
         headers: {

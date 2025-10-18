@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { theme } from '../config/theme';
+import { getApiUrl } from '../config/api';
 import { resetCookieConsent } from './CookieConsent';
 
 export default function Footer() {
@@ -19,7 +20,7 @@ export default function Footer() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/newsletter/subscribe', {
+      const response = await fetch(getApiUrl('/api/newsletter/subscribe'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCartStore } from '../stores/cartStore';
 import { theme } from '../config/theme';
+import { getApiUrl } from '../config/api';
 import SEO, { generateProductStructuredData, generateBreadcrumbStructuredData } from '../components/SEO';
 
 export default function ProductDetail() {
@@ -16,7 +17,7 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:3001/api/products/${id}`);
+        const response = await fetch(getApiUrl(`/api/products/${id}`));
 
         if (!response.ok) {
           throw new Error('Product not found');

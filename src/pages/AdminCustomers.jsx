@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../config/api';
 
 export default function AdminCustomers() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function AdminCustomers() {
 
   const fetchCustomers = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/customers', {
+      const response = await fetch(getApiUrl('/api/customers'), {
         credentials: 'include',
       });
       const data = await response.json();

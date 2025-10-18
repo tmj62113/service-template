@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ProductEditModal from '../components/ProductEditModal';
+import { getApiUrl } from '../config/api';
 
 export default function AdminProducts() {
   // State management for products and UI
@@ -36,7 +37,7 @@ export default function AdminProducts() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3001/api/products', {
+      const response = await fetch(getApiUrl('/api/products'), {
         credentials: 'include',
       });
 
@@ -113,7 +114,7 @@ export default function AdminProducts() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/api/products/${productId}`, {
+      const response = await fetch(getApiUrl(`/api/products/${productId}`), {
         method: 'DELETE',
         credentials: 'include',
       });
