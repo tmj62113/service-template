@@ -24,7 +24,7 @@ export default function About() {
           <h1>About MJ Peterson</h1>
           <div className="about-content">
             <div className="about-image">
-              <img src="/images/homepage/peterson_headshot.jpg" alt="MJ Peterson" />
+              <img src="/images/peterson_headshot.jpg" alt="MJ Peterson" />
             </div>
             <div className="about-text">
               <p>
