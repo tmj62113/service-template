@@ -84,6 +84,11 @@
   border-top: 1px solid var(--color-ecru);
 }
 
+.announcement-cta {
+  margin-top: 32px;
+  text-align: center;
+}
+
 /* =====================================
    EXPERIENCE SECTION (2023 Intro)
    ===================================== */

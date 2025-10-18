@@ -83,6 +83,16 @@ export default function ParadeOfHearts() {
             Follow along as I document the creative process, from initial concepts to the final
             sculpture, sharing insights, challenges, and inspiration along the way.
           </p>
+          <div className="announcement-cta">
+            <a
+              href="https://theparadeofhearts.com/2026-artists/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn--primary btn--lg"
+            >
+              View All 2026 Artists
+            </a>
+          </div>
         </div>
       </section>
 
