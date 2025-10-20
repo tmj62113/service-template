@@ -56,11 +56,14 @@ export class User {
   }
 
   /**
-   * Create a new admin user
+   * Create a new user (admin or client)
    * @param {Object} userData - User data
    * @param {string} userData.email - User email
    * @param {string} userData.password - Plain text password (will be hashed)
    * @param {string} userData.name - User's full name
+   * @param {string} userData.role - User role ('admin' or 'client')
+   * @param {string} userData.phone - Phone number (optional)
+   * @param {string} userData.timeZone - Timezone (optional)
    * @returns {Promise<Object>} Created user (without password)
    */
   static async create(userData) {
@@ -89,7 +92,30 @@ export class User {
       email: userData.email,
       password: hashedPassword,
       name: userData.name,
-      role: 'admin',
+      role: userData.role || 'client', // Default to 'client' for service booking
+      phone: userData.phone || null,
+      timeZone: userData.timeZone || 'America/New_York',
+
+      // Client-specific fields
+      preferredStaffIds: userData.preferredStaffIds || [],
+      communicationPreferences: {
+        emailReminders: userData.communicationPreferences?.emailReminders !== false, // Default true
+        smsReminders: userData.communicationPreferences?.smsReminders || false,
+      },
+
+      // Booking history counters
+      totalBookings: 0,
+      completedBookings: 0,
+      cancelledBookings: 0,
+      noShowCount: 0,
+
+      // Client notes (staff-facing)
+      clientNotes: userData.clientNotes || null,
+
+      // Status
+      isActive: userData.isActive !== undefined ? userData.isActive : true,
+      blockedReason: null,
+
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -299,6 +325,214 @@ export class User {
       isLocked,
       lockoutUntil,
       remainingAttempts
+    };
+  }
+
+  /**
+   * Increment booking counter for a client
+   * @param {string} userId - User ID
+   * @param {string} type - Type of counter to increment ('total', 'completed', 'cancelled', 'noShow')
+   * @returns {Promise<void>}
+   */
+  static async incrementBookingCount(userId, type = 'total') {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const fieldMap = {
+      total: 'totalBookings',
+      completed: 'completedBookings',
+      cancelled: 'cancelledBookings',
+      noShow: 'noShowCount'
+    };
+
+    const field = fieldMap[type];
+    if (!field) {
+      throw new Error('Invalid booking count type');
+    }
+
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $inc: { [field]: 1 },
+        $set: { updatedAt: new Date() }
+      }
+    );
+  }
+
+  /**
+   * Add preferred staff member for a client
+   * @param {string} userId - User ID
+   * @param {string} staffId - Staff ID to add to preferences
+   * @returns {Promise<void>}
+   */
+  static async addPreferredStaff(userId, staffId) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $addToSet: { preferredStaffIds: new ObjectId(staffId) },
+        $set: { updatedAt: new Date() }
+      }
+    );
+  }
+
+  /**
+   * Remove preferred staff member for a client
+   * @param {string} userId - User ID
+   * @param {string} staffId - Staff ID to remove from preferences
+   * @returns {Promise<void>}
+   */
+  static async removePreferredStaff(userId, staffId) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $pull: { preferredStaffIds: new ObjectId(staffId) },
+        $set: { updatedAt: new Date() }
+      }
+    );
+  }
+
+  /**
+   * Update communication preferences
+   * @param {string} userId - User ID
+   * @param {Object} preferences - Communication preferences
+   * @returns {Promise<void>}
+   */
+  static async updateCommunicationPreferences(userId, preferences) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $set: {
+          communicationPreferences: preferences,
+          updatedAt: new Date()
+        }
+      }
+    );
+  }
+
+  /**
+   * Update client notes (staff-facing)
+   * @param {string} userId - User ID
+   * @param {string} notes - Client notes
+   * @returns {Promise<void>}
+   */
+  static async updateClientNotes(userId, notes) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $set: {
+          clientNotes: notes,
+          updatedAt: new Date()
+        }
+      }
+    );
+  }
+
+  /**
+   * Block a client from booking
+   * @param {string} userId - User ID
+   * @param {string} reason - Reason for blocking
+   * @returns {Promise<void>}
+   */
+  static async blockClient(userId, reason) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $set: {
+          isActive: false,
+          blockedReason: reason,
+          updatedAt: new Date()
+        }
+      }
+    );
+  }
+
+  /**
+   * Unblock a client
+   * @param {string} userId - User ID
+   * @returns {Promise<void>}
+   */
+  static async unblockClient(userId) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        $set: {
+          isActive: true,
+          blockedReason: null,
+          updatedAt: new Date()
+        }
+      }
+    );
+  }
+
+  /**
+   * Get all clients (users with role='client')
+   * @param {Object} options - Query options
+   * @param {number} options.page - Page number (default: 1)
+   * @param {number} options.limit - Items per page (default: 20)
+   * @returns {Promise<Object>} Clients and pagination info
+   */
+  static async findAllClients({ page = 1, limit = 20 } = {}) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const query = { role: 'client' };
+    const skip = (page - 1) * limit;
+
+    const [clients, total] = await Promise.all([
+      collection
+        .find(query, { projection: { password: 0 } }) // Exclude password
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .toArray(),
+      collection.countDocuments(query),
+    ]);
+
+    return {
+      clients,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  /**
+   * Get client statistics
+   * @returns {Promise<Object>} Client stats
+   */
+  static async getClientStats() {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const totalClients = await collection.countDocuments({ role: 'client' });
+    const activeClients = await collection.countDocuments({ role: 'client', isActive: true });
+    const blockedClients = await collection.countDocuments({ role: 'client', isActive: false });
+
+    return {
+      totalClients,
+      activeClients,
+      blockedClients
     };
   }
 }

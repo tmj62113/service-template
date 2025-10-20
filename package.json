@@ -1,8 +1,8 @@
 {
-  "name": "mark-j-peterson-art",
+  "name": "service-booking-app",
   "private": true,
   "version": "1.0.0",
-  "description": "E-commerce store for Mark J Peterson Art",
+  "description": "Service booking and appointment scheduling platform for consulting and coaching",
   "type": "module",
   "scripts": {
     "dev": "vite",
