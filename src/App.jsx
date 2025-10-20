@@ -10,6 +10,9 @@ import ParadeOfHearts from './pages/ParadeOfHearts';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import About from './pages/About';
+// Service booking pages
+import Services from './pages/Services';
+import ServiceDetail from './pages/ServiceDetail';
 import Checkout from './pages/Checkout';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
@@ -81,6 +84,8 @@ function App() {
                     <Route path="/parade-of-hearts" element={<ParadeOfHearts />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/:id" element={<ProductDetail />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/services/:id" element={<ServiceDetail />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/success" element={<Success />} />
