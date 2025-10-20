@@ -25,6 +25,12 @@ import { Subscriber } from './db/models/Subscriber.js';
 import { Newsletter } from './db/models/Newsletter.js';
 import { AuditLog } from './db/models/AuditLog.js';
 import { BlockedIP } from './db/models/BlockedIP.js';
+// Service booking models
+import { Service } from './db/models/Service.js';
+import { Staff } from './db/models/Staff.js';
+import { Booking } from './db/models/Booking.js';
+import { Availability } from './db/models/Availability.js';
+import { RecurringBooking } from './db/models/RecurringBooking.js';
 import { generateOrderConfirmationEmail } from './utils/emailTemplates.js';
 import { authenticateToken, generateToken } from './middleware/auth.js';
 import { createShipment, getTrackingStatus } from './services/shippoService.js';
@@ -1208,6 +1214,558 @@ app.get('/api/products/stats/summary', authenticateToken, async (req, res) => {
     res.json(stats);
   } catch (error) {
     console.error('Error fetching product stats:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
+  }
+});
+
+// ============================================
+// SERVICE ENDPOINTS (Service Booking System)
+// ============================================
+
+// Get all services (public)
+app.get('/api/services', async (req, res) => {
+  try {
+    const { page = 1, limit = 20, category, isActive, staffId } = req.query;
+
+    const result = await Service.findAll({
+      page: parseInt(page),
+      limit: parseInt(limit),
+      category,
+      isActive: isActive !== undefined ? isActive === 'true' : null,
+      staffId
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching services:', error);
+    res.status(500).json({ error: 'Failed to fetch services' });
+  }
+});
+
+// Get single service by ID (public)
+app.get('/api/services/:id', async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    res.json(service);
+  } catch (error) {
+    console.error('Error fetching service:', error);
+    res.status(500).json({ error: 'Failed to fetch service' });
+  }
+});
+
+// Create new service (admin only)
+app.post('/api/services', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const service = await Service.create(req.body);
+    res.status(201).json(service);
+  } catch (error) {
+    console.error('Error creating service:', error);
+    res.status(500).json({ error: 'Failed to create service' });
+  }
+});
+
+// Update service (admin only)
+app.put('/api/services/:id', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const service = await Service.update(req.params.id, req.body);
+
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    res.json(service);
+  } catch (error) {
+    console.error('Error updating service:', error);
+    res.status(500).json({ error: 'Failed to update service' });
+  }
+});
+
+// Delete service (admin only)
+app.delete('/api/services/:id', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const success = await Service.softDelete(req.params.id);
+
+    if (!success) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    res.json({ message: 'Service deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting service:', error);
+    res.status(500).json({ error: 'Failed to delete service' });
+  }
+});
+
+// Get service categories (public)
+app.get('/api/services/meta/categories', async (req, res) => {
+  try {
+    const categories = await Service.getCategories();
+    res.json(categories);
+  } catch (error) {
+    console.error('Error fetching service categories:', error);
+    res.status(500).json({ error: 'Failed to fetch categories' });
+  }
+});
+
+// Search services (public)
+app.get('/api/services/search/:term', async (req, res) => {
+  try {
+    const services = await Service.search(req.params.term);
+    res.json(services);
+  } catch (error) {
+    console.error('Error searching services:', error);
+    res.status(500).json({ error: 'Failed to search services' });
+  }
+});
+
+// Get service statistics (admin only)
+app.get('/api/services/stats/summary', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const stats = await Service.getStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching service stats:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
+  }
+});
+
+// ============================================
+// STAFF ENDPOINTS
+// ============================================
+
+// Get all staff (public for active, admin for all)
+app.get('/api/staff', async (req, res) => {
+  try {
+    const { page = 1, limit = 20, isActive, acceptingBookings, serviceId } = req.query;
+
+    const result = await Staff.findAll({
+      page: parseInt(page),
+      limit: parseInt(limit),
+      isActive: isActive !== undefined ? isActive === 'true' : null,
+      acceptingBookings: acceptingBookings !== undefined ? acceptingBookings === 'true' : null,
+      serviceId
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching staff:', error);
+    res.status(500).json({ error: 'Failed to fetch staff' });
+  }
+});
+
+// Get single staff member by ID (public)
+app.get('/api/staff/:id', async (req, res) => {
+  try {
+    const staff = await Staff.findById(req.params.id);
+
+    if (!staff) {
+      return res.status(404).json({ error: 'Staff member not found' });
+    }
+
+    res.json(staff);
+  } catch (error) {
+    console.error('Error fetching staff member:', error);
+    res.status(500).json({ error: 'Failed to fetch staff member' });
+  }
+});
+
+// Create new staff member (admin only)
+app.post('/api/staff', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const staff = await Staff.create(req.body);
+    res.status(201).json(staff);
+  } catch (error) {
+    console.error('Error creating staff member:', error);
+    res.status(500).json({ error: 'Failed to create staff member' });
+  }
+});
+
+// Update staff member (admin only)
+app.put('/api/staff/:id', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const staff = await Staff.update(req.params.id, req.body);
+
+    if (!staff) {
+      return res.status(404).json({ error: 'Staff member not found' });
+    }
+
+    res.json(staff);
+  } catch (error) {
+    console.error('Error updating staff member:', error);
+    res.status(500).json({ error: 'Failed to update staff member' });
+  }
+});
+
+// Deactivate staff member (admin only)
+app.delete('/api/staff/:id', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const staff = await Staff.deactivate(req.params.id);
+
+    if (!staff) {
+      return res.status(404).json({ error: 'Staff member not found' });
+    }
+
+    res.json({ message: 'Staff member deactivated successfully' });
+  } catch (error) {
+    console.error('Error deactivating staff member:', error);
+    res.status(500).json({ error: 'Failed to deactivate staff member' });
+  }
+});
+
+// Get staff statistics (admin only)
+app.get('/api/staff/stats/summary', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const stats = await Staff.getStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching staff stats:', error);
+    res.status(500).json({ error: 'Failed to fetch statistics' });
+  }
+});
+
+// ============================================
+// AVAILABILITY ENDPOINTS
+// ============================================
+
+// Get availability for a staff member
+app.get('/api/availability/staff/:staffId', async (req, res) => {
+  try {
+    const availability = await Availability.findByStaff(req.params.staffId);
+
+    if (!availability) {
+      return res.status(404).json({ error: 'Availability not found for this staff member' });
+    }
+
+    res.json(availability);
+  } catch (error) {
+    console.error('Error fetching availability:', error);
+    res.status(500).json({ error: 'Failed to fetch availability' });
+  }
+});
+
+// Get available time slots for a staff member on a specific date
+app.get('/api/availability/slots', async (req, res) => {
+  try {
+    const { staffId, date, duration, bufferTime = 0 } = req.query;
+
+    if (!staffId || !date || !duration) {
+      return res.status(400).json({ error: 'staffId, date, and duration are required' });
+    }
+
+    const slots = await Availability.getAvailableSlots(
+      staffId,
+      new Date(date),
+      parseInt(duration),
+      parseInt(bufferTime)
+    );
+
+    res.json({ slots });
+  } catch (error) {
+    console.error('Error fetching available slots:', error);
+    res.status(500).json({ error: 'Failed to fetch available slots' });
+  }
+});
+
+// Create or update availability schedule (admin/staff only)
+app.post('/api/availability/staff/:staffId', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    // Check if availability exists
+    const existing = await Availability.findByStaff(req.params.staffId);
+
+    let availability;
+    if (existing) {
+      availability = await Availability.update(existing._id, req.body);
+    } else {
+      availability = await Availability.create({
+        staffId: req.params.staffId,
+        ...req.body
+      });
+    }
+
+    res.json(availability);
+  } catch (error) {
+    console.error('Error setting availability:', error);
+    res.status(500).json({ error: 'Failed to set availability' });
+  }
+});
+
+// Add exception (time off or special hours)
+app.post('/api/availability/:id/exceptions', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const availability = await Availability.addException(req.params.id, req.body);
+
+    if (!availability) {
+      return res.status(404).json({ error: 'Availability not found' });
+    }
+
+    res.json(availability);
+  } catch (error) {
+    console.error('Error adding exception:', error);
+    res.status(500).json({ error: 'Failed to add exception' });
+  }
+});
+
+// ============================================
+// BOOKING ENDPOINTS
+// ============================================
+
+// Get all bookings (filtered by user role)
+app.get('/api/bookings', authenticateToken, async (req, res) => {
+  try {
+    const { page = 1, limit = 20, status, startDate, endDate, staffId, serviceId } = req.query;
+
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      status,
+      startDate: startDate ? new Date(startDate) : null,
+      endDate: endDate ? new Date(endDate) : null,
+      staffId,
+      serviceId
+    };
+
+    // If client, only show their bookings
+    if (req.user.role === 'client') {
+      options.clientId = req.user._id;
+    }
+
+    const result = await Booking.findAll(options);
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
+// Get single booking by ID
+app.get('/api/bookings/:id', authenticateToken, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Clients can only view their own bookings
+    if (req.user.role === 'client' && booking.clientId.toString() !== req.user._id) {
+      return res.status(403).json({ error: 'Forbidden: You can only view your own bookings' });
+    }
+
+    res.json(booking);
+  } catch (error) {
+    console.error('Error fetching booking:', error);
+    res.status(500).json({ error: 'Failed to fetch booking' });
+  }
+});
+
+// Create new booking
+app.post('/api/bookings', authenticateToken, async (req, res) => {
+  try {
+    // Check if time slot is available
+    const isAvailable = await Booking.isSlotAvailable(
+      req.body.staffId,
+      req.body.startDateTime,
+      req.body.endDateTime
+    );
+
+    if (!isAvailable) {
+      return res.status(400).json({ error: 'This time slot is not available' });
+    }
+
+    // Set clientId from authenticated user
+    const bookingData = {
+      ...req.body,
+      clientId: req.user._id,
+      clientInfo: {
+        name: req.user.name,
+        email: req.user.email,
+        phone: req.user.phone || '',
+        notes: req.body.clientInfo?.notes || ''
+      }
+    };
+
+    const booking = await Booking.create(bookingData);
+
+    // Increment user's booking count
+    await User.incrementBookingCount(req.user._id, 'total');
+
+    res.status(201).json(booking);
+  } catch (error) {
+    console.error('Error creating booking:', error);
+    res.status(500).json({ error: 'Failed to create booking' });
+  }
+});
+
+// Update booking (reschedule)
+app.put('/api/bookings/:id', authenticateToken, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Only admin or the client who made the booking can update it
+    if (req.user.role !== 'admin' && booking.clientId.toString() !== req.user._id) {
+      return res.status(403).json({ error: 'Forbidden: You can only update your own bookings' });
+    }
+
+    // If rescheduling, check availability
+    if (req.body.startDateTime || req.body.endDateTime) {
+      const isAvailable = await Booking.isSlotAvailable(
+        req.body.staffId || booking.staffId,
+        req.body.startDateTime || booking.startDateTime,
+        req.body.endDateTime || booking.endDateTime,
+        req.params.id // Exclude this booking from conflict check
+      );
+
+      if (!isAvailable) {
+        return res.status(400).json({ error: 'This time slot is not available' });
+      }
+    }
+
+    const updatedBooking = await Booking.update(req.params.id, req.body);
+    res.json(updatedBooking);
+  } catch (error) {
+    console.error('Error updating booking:', error);
+    res.status(500).json({ error: 'Failed to update booking' });
+  }
+});
+
+// Cancel booking
+app.delete('/api/bookings/:id', authenticateToken, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Only admin or the client who made the booking can cancel it
+    if (req.user.role !== 'admin' && booking.clientId.toString() !== req.user._id) {
+      return res.status(403).json({ error: 'Forbidden: You can only cancel your own bookings' });
+    }
+
+    const cancelledBooking = await Booking.cancel(
+      req.params.id,
+      req.user._id,
+      req.body.reason
+    );
+
+    // Increment cancelled count
+    await User.incrementBookingCount(booking.clientId.toString(), 'cancelled');
+
+    res.json({ message: 'Booking cancelled successfully', booking: cancelledBooking });
+  } catch (error) {
+    console.error('Error cancelling booking:', error);
+    res.status(500).json({ error: 'Failed to cancel booking' });
+  }
+});
+
+// Mark booking as completed (staff/admin only)
+app.post('/api/bookings/:id/complete', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    const completedBooking = await Booking.markAsCompleted(req.params.id);
+
+    // Increment completed count
+    await User.incrementBookingCount(booking.clientId.toString(), 'completed');
+
+    res.json({ message: 'Booking marked as completed', booking: completedBooking });
+  } catch (error) {
+    console.error('Error completing booking:', error);
+    res.status(500).json({ error: 'Failed to complete booking' });
+  }
+});
+
+// Mark booking as no-show (staff/admin only)
+app.post('/api/bookings/:id/no-show', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    const noShowBooking = await Booking.markAsNoShow(req.params.id);
+
+    // Increment no-show count
+    await User.incrementBookingCount(booking.clientId.toString(), 'noShow');
+
+    res.json({ message: 'Booking marked as no-show', booking: noShowBooking });
+  } catch (error) {
+    console.error('Error marking booking as no-show:', error);
+    res.status(500).json({ error: 'Failed to mark booking as no-show' });
+  }
+});
+
+// Get booking statistics (admin only)
+app.get('/api/bookings/stats/summary', authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin access required' });
+    }
+
+    const stats = await Booking.getStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching booking stats:', error);
     res.status(500).json({ error: 'Failed to fetch statistics' });
   }
 });
