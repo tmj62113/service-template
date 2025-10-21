@@ -6,16 +6,16 @@ export default function About() {
     <div className="about-page">
       <SEO
         title="About Clockwork"
-        description="Learn about Clockwork, a modern platform connecting clients with professional coaches and tutors for personalized growth and development."
+        description="Learn about Clockwork, the scheduling platform built for service professionals who want to escape calendar chaos and focus on doing what they love."
         keywords={[
           "about clockwork",
-          "coaching platform",
-          "tutoring services",
-          "professional development",
-          "life coaching",
-          "career coaching",
-          "online tutoring",
           "booking platform",
+          "scheduling software",
+          "service business management",
+          "appointment booking",
+          "calendar management",
+          "payment processing",
+          "business automation",
         ]}
       />
 
@@ -24,7 +24,7 @@ export default function About() {
         <div className="container">
           <h1>About Clockwork</h1>
           <p className="hero-subtitle">
-            Empowering personal and professional growth through expert coaching and tutoring
+            The scheduling platform that helps service professionals escape the chaos and focus on their craft
           </p>
         </div>
       </section>
@@ -36,15 +36,13 @@ export default function About() {
             <div className="about-text">
               <h2>Our Mission</h2>
               <p>
-                At Clockwork, we believe that everyone deserves access to quality coaching and
-                tutoring services that can help them reach their full potential. Our platform
-                connects ambitious individuals with experienced professionals who are passionate
-                about helping others succeed.
+                At Clockwork, we're on a mission to free service professionals from administrative chaos so they can focus on what truly matters—delivering exceptional service to their clients.
               </p>
               <p>
-                Whether you're looking to advance your career, develop new skills, overcome
-                personal challenges, or achieve academic excellence, Clockwork makes it easy to
-                find and schedule sessions with the right expert for your needs.
+                Whether you're a coach, consultant, therapist, tutor, or creative professional, you didn't start your business to spend hours managing calendars, chasing payments, or coordinating schedules. You started because you're passionate about your craft and helping your clients succeed.
+              </p>
+              <p>
+                Clockwork gives you back your time by automating the tedious parts of running a service business, so you can spend more energy doing the work you love.
               </p>
             </div>
           </div>
@@ -100,22 +98,16 @@ export default function About() {
             <div className="about-text">
               <h2>Our Story</h2>
               <p>
-                Clockwork was founded with a simple vision: to make professional coaching and
-                tutoring accessible to everyone. We saw that while there were many talented
-                coaches and tutors available, it was often difficult for clients to find the
-                right match and coordinate schedules.
+                We believe running a service business shouldn't feel like juggling chaos.
               </p>
               <p>
-                Our platform solves this problem by providing a seamless booking experience,
-                transparent pricing, and a carefully curated network of verified professionals.
-                We handle the logistics so you can focus on what matters most—your growth and
-                development.
+                Every service professional knows the frustration: clients calling to book, appointment conflicts, payment follow-ups, calendar chaos, and endless admin work that keeps you from doing what you actually love.
               </p>
               <p>
-                Since our launch, we've helped thousands of clients achieve their goals through
-                personalized coaching and tutoring sessions. We're proud to be part of their
-                success stories and are committed to continuing to provide the highest quality
-                service.
+                That's why we built Clockwork.
+              </p>
+              <p>
+                Our platform handles the logistics so you can focus on what matters most—serving your clients and doing the work you're passionate about. From automated scheduling and payment processing to calendar management and client communications, Clockwork takes care of the admin chaos that drains your time and energy.
               </p>
             </div>
           </div>
