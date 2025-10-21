@@ -44,46 +44,46 @@ export const theme = {
   },
 
   // ===================================================
-  // COLOR SCHEME - Mark J Peterson Art Brand
+  // COLOR SCHEME - Minimalist Palette
   // ===================================================
   colors: {
-    // Primary brand colors - Dark blues for text and headings
-    primary: "#122D38", // Gunmetal - main text, headings, footer
-    primaryHover: "#0C3A4B", // Charcoal - darker shade on hover
-    primaryText: "#F7F6EF", // Cream text on dark backgrounds
+    // Primary brand colors - Dark for text and headings
+    primary: "#101014", // Dark - main text, headings, footer
+    primaryHover: "#101014", // Dark - same on hover
+    primaryText: "#f2f0ea", // Light text on dark backgrounds
 
-    // Secondary colors - Browns for accents
-    secondary: "#692413", // Seal brown - deep brown accent, borders
-    secondaryHover: "#B93A0C", // Rust - accent rust (minimal usage)
+    // Secondary colors - Beige for accents and surfaces
+    secondary: "#e1dbcb", // Tan - secondary elements, hover states
+    secondaryHover: "#e1dbcb", // Tan - same on hover
 
-    // Accent colors - Golds for CTAs and highlights
-    accent: "#C0A679", // Ecru - primary buttons, CTAs, active states
-    accentHover: "#B49A68", // Lion - hover states, borders (often 20% opacity)
+    // Accent colors - Tan for CTAs and highlights
+    accent: "#e1dbcb", // Tan - primary buttons, CTAs, active states
+    accentHover: "#e1dbcb", // Tan - hover states
 
-    // Neutral colors - Cream base
-    background: "#F7F6EF", // Cream - primary background (replaces white everywhere)
-    surface: "#F7F6EF", // Cream - card/surface background
-    surfaceHover: "#EFEEE5", // Slightly darker cream on hover
+    // Neutral colors - Light beige base
+    background: "#f2f0ea", // Light beige - primary background
+    surface: "#f2f0ea", // Light beige - card/surface background
+    surfaceHover: "#e1dbcb", // Tan - surface hover state
 
     // Text colors
-    text: "#122D38", // Gunmetal - primary text
-    textSecondary: "#0C3A4B", // Charcoal - secondary/muted text
-    textTertiary: "#B49A68", // Lion - tertiary/accent text
+    text: "#101014", // Dark - primary text
+    textSecondary: "#101014", // Dark - secondary text
+    textTertiary: "#101014", // Dark - tertiary text
 
     // Border colors
-    border: "rgba(180, 154, 104, 0.2)", // Lion at 20% opacity - subtle borders
-    borderLight: "rgba(180, 154, 104, 0.1)", // Lion at 10% opacity - very subtle
-    borderDark: "#692413", // Seal brown - darker borders
+    border: "#e1dbcb", // Tan - borders
+    borderLight: "#e1dbcb", // Tan - light borders
+    borderDark: "#101014", // Dark - dark borders
 
     // Feedback colors
-    error: "#B93A0C", // Rust - error state
-    errorLight: "#FEE2E2", // Error background
-    success: "#10B981", // Success state
-    successLight: "#D1FAE5", // Success background
-    warning: "#F59E0B", // Warning state
-    warningLight: "#FEF3C7", // Warning background
-    info: "#0C3A4B", // Charcoal - info state
-    infoLight: "#DBEAFE", // Info background
+    error: "#101014", // Dark - error state
+    errorLight: "#e1dbcb", // Tan - error background
+    success: "#101014", // Dark - success state
+    successLight: "#e1dbcb", // Tan - success background
+    warning: "#101014", // Dark - warning state
+    warningLight: "#e1dbcb", // Tan - warning background
+    info: "#101014", // Dark - info state
+    infoLight: "#e1dbcb", // Tan - info background
   },
 
   // ===================================================

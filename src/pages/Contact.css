@@ -13,9 +13,9 @@
 
 .contact-hero {
   padding: 120px 20px 80px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: #101014;
   text-align: center;
-  color: #ffffff;
+  color: #f2f0ea;
 }
 
 .contact-hero h1 {
@@ -91,9 +91,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary);
+  background: #101014;
   border-radius: var(--radius-full);
-  color: #ffffff;
+  color: #f2f0ea;
   flex-shrink: 0;
 }
 
@@ -153,18 +153,18 @@
   font-family: var(--font-body);
   font-size: 16px;
   padding: 12px 16px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #e1dbcb;
   border-radius: var(--radius-sm);
-  background-color: #ffffff;
-  color: var(--color-gunmetal);
+  background-color: #f2f0ea;
+  color: #101014;
   transition: all 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+  border-color: #101014;
+  box-shadow: none;
 }
 
 .form-group textarea {
@@ -199,8 +199,8 @@
   font-family: var(--font-body);
   font-size: 16px;
   font-weight: 600;
-  background-color: var(--color-primary);
-  color: #ffffff;
+  background-color: #101014;
+  color: #f2f0ea;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -209,9 +209,9 @@
 }
 
 .submit-btn:hover {
-  background-color: var(--color-secondary);
+  background-color: #e1dbcb;
+  color: #101014;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
 }
 
 /* =====================================
@@ -221,8 +221,8 @@
 .success-message {
   padding: 48px 32px;
   text-align: center;
-  background-color: rgba(34, 197, 94, 0.1);
-  border: 2px solid #22c55e;
+  background-color: #e1dbcb;
+  border: 2px solid #101014;
   border-radius: var(--radius-md);
 }
 

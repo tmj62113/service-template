@@ -13,9 +13,9 @@
 
 .about-hero {
   padding: 120px 20px 80px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: #101014;
   text-align: center;
-  color: #ffffff;
+  color: #f2f0ea;
 }
 
 .about-hero h1 {
@@ -44,7 +44,7 @@
 }
 
 .about-section.alt-bg {
-  background-color: #f8f9fa;
+  background-color: #e1dbcb;
 }
 
 .about-section .container {
@@ -96,16 +96,16 @@
 }
 
 .feature-card {
-  background: #ffffff;
+  background: #f2f0ea;
+  border: 1px solid #e1dbcb;
   border-radius: var(--radius-lg);
   padding: 40px 24px;
   text-align: center;
-  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
 
 .feature-card:hover {
-  box-shadow: var(--shadow-md);
+  border-color: #101014;
   transform: translateY(-4px);
 }
 
@@ -116,9 +116,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-primary);
+  background: #101014;
   border-radius: var(--radius-full);
-  color: #ffffff;
+  color: #f2f0ea;
 }
 
 .feature-icon .material-symbols-outlined {
@@ -155,9 +155,9 @@
 
 .value-item {
   padding: 32px;
-  background: #ffffff;
+  background: #f2f0ea;
+  border: 1px solid #e1dbcb;
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
 }
 
 .value-item h3 {
@@ -182,9 +182,9 @@
 
 .about-cta {
   padding: 80px 0;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: #101014;
   text-align: center;
-  color: #ffffff;
+  color: #f2f0ea;
 }
 
 .about-cta h2 {
