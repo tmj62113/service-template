@@ -132,7 +132,7 @@ export default function TermsOfService() {
 
             <h3>5.2 Pricing</h3>
             <p>
-              All prices are listed in {theme.commerce.currency} and are subject to change without notice. We reserve the right to modify or discontinue products at any time.
+              All prices are listed in {theme.booking.currency} and are subject to change without notice. We reserve the right to modify or discontinue services at any time.
             </p>
 
             <h3>5.3 Product Availability</h3>

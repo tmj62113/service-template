@@ -42,7 +42,6 @@
     "react-helmet-async": "^2.0.5",
     "react-router-dom": "^7.9.3",
     "resend": "^6.1.2",
-    "shippo": "^2.15.0",
     "stripe": "^18.5.0",
     "winston": "^3.18.3",
     "zod": "^4.1.12",

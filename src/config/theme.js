@@ -143,40 +143,35 @@ export const theme = {
   },
 
   // ===================================================
-  // COMMERCE SETTINGS
+  // BOOKING & PAYMENT SETTINGS
   // ===================================================
-  commerce: {
+  booking: {
     currency: "USD",
     currencySymbol: "$",
     currencyPosition: "before", // "before" or "after"
     taxRate: 0.08, // 8% (adjust for your region)
-    shippingThreshold: 50, // Free shipping over $50
 
-    // Product display settings
-    productsPerPage: 12,
-    showOutOfStock: true,
-    allowBackorders: false,
+    // Service display settings
+    servicesPerPage: 12,
   },
 
   // ===================================================
   // FEATURES TOGGLES
   // ===================================================
   features: {
-    // Product features
+    // Service features
     showRatings: false,
     showReviews: true,
-    showStock: true,
     showCategories: true,
 
     // User features
-    enableWishlist: true,
     enableGuestCheckout: true,
     enableSocialLogin: false,
 
-    // Commerce features
+    // Booking features
     enableCoupons: false,
     enableGiftCards: false,
-    enableSubscriptions: false,
+    enableRecurringBookings: true,
 
     // Search & filters
     enableSearch: true,
@@ -308,7 +303,7 @@ export const getCSSVariables = () => {
 
 // Format currency based on theme settings
 export const formatCurrency = (amount) => {
-  const { currency, currencySymbol, currencyPosition } = theme.commerce;
+  const { currency, currencySymbol, currencyPosition } = theme.booking;
   const formatted = amount.toFixed(2);
   return currencyPosition === "before"
     ? `${currencySymbol}${formatted}`

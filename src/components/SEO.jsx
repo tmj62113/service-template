@@ -114,7 +114,7 @@ export function generateProductStructuredData(product) {
     "offers": {
       "@type": "Offer",
       "url": `${window.location.origin}/products/${product._id}`,
-      "priceCurrency": theme.commerce.currency,
+      "priceCurrency": theme.booking.currency,
       "price": product.price,
       "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
       "availability": product.stock > 0
