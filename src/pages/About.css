@@ -104,7 +104,7 @@
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 32px;
   margin-top: 48px;
 }
@@ -145,6 +145,14 @@
   font-weight: 600;
   color: var(--color-gunmetal);
   margin-bottom: 12px;
+}
+
+.feature-card h4 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-gunmetal);
+  margin-bottom: 8px;
 }
 
 .feature-card p {
