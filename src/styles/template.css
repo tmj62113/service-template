@@ -785,9 +785,15 @@ main {
   max-width: 1440px;
   margin: 0 auto;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 48px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+}
+
+.nav-content li {
+  width: 100%;
 }
 
 .nav-content a {
@@ -798,6 +804,8 @@ main {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   transition: color var(--transition-base);
+  display: block;
+  padding: 8px 0;
 }
 
 .nav-content a:hover {

@@ -67,17 +67,19 @@ export default function Header() {
 
         {/* Desktop Navigation - Below Header */}
         <nav className="nav-bar desktop-nav" role="navigation" aria-label="Main navigation">
-          <div className="nav-content">
-            <a href="/services">Services</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
+          <ul className="nav-content">
+            <li><a href="/services">Services</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
             {user?.role === 'admin' && (
-              <a href="/admin" className="admin-nav-link" aria-label="Admin dashboard">
-                <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>
-                Admin
-              </a>
+              <li>
+                <a href="/admin" className="admin-nav-link" aria-label="Admin dashboard">
+                  <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>
+                  Admin
+                </a>
+              </li>
             )}
-          </div>
+          </ul>
         </nav>
       </header>
     </>
