@@ -8,32 +8,22 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
 
-  // Hero slideshow images
+  // Hero slideshow images - placeholder paths for coaching/tutoring images
   const slideshowImages = [
     {
       id: 1,
-      src: "/images/homepage/slideshow/IMG_1719.JPG",
-      alt: "Steampunk Dreams",
+      src: "/images/hero/coaching-session.webp",
+      alt: "Professional coaching session",
     },
     {
       id: 2,
-      src: "/images/homepage/slideshow/IMG_1724.JPG",
-      alt: "Industrial Elegance",
+      src: "/images/hero/success-celebration.webp",
+      alt: "Celebrating success and achievement",
     },
     {
       id: 3,
-      src: "/images/homepage/slideshow/IMG_1727.JPG",
-      alt: "Victorian Automatons",
-    },
-    {
-      id: 4,
-      src: "/images/homepage/slideshow/IMG_1731.JPG",
-      alt: "Artistic Machinery",
-    },
-    {
-      id: 5,
-      src: "/images/homepage/slideshow/IMG_1751.JPG",
-      alt: "Creative Visions",
+      src: "/images/hero/growth-mindset.webp",
+      alt: "Personal growth and development",
     },
   ];
 
@@ -55,65 +45,60 @@ export default function Home() {
     );
   };
 
-  // Collections - 3 collections with 3x2 grids
-  const collections = [
+  // Service Categories
+  const serviceCategories = [
     {
-      name: "Steampunk Art",
-      count: "24 pieces",
-      images: [
-        "/images/homepage/collections/grid-1/00tv_bowlingpin.JPG",
-        "/images/homepage/collections/grid-1/02AA6A1994-BAF2-48F8-A901-F77C84B379DC.png",
-        "/images/homepage/collections/grid-1/03shapes_1.png",
-        "/images/homepage/collections/grid-1/04shapes_2.png",
-        "/images/homepage/collections/grid-1/05shapes_3.png",
-        "/images/homepage/collections/grid-1/meditate.png",
-      ],
+      name: "1-on-1 Coaching",
+      description: "Personalized coaching sessions tailored to your goals",
+      icon: "person",
+      link: "/services",
     },
     {
-      name: "Brass & Copper",
-      count: "32 pieces",
-      images: [
-        "/images/homepage/collections/grid 2/airplane.JPG",
-        "/images/homepage/collections/grid 2/computer_man.JPG",
-        "/images/homepage/collections/grid 2/memory.PNG",
-        "/images/homepage/collections/grid 2/relic_1.PNG",
-        "/images/homepage/collections/grid 2/relic_3.jpeg",
-        "/images/homepage/collections/grid 2/robot.PNG",
-      ],
+      name: "Group Sessions",
+      description: "Collaborative learning in small group settings",
+      icon: "groups",
+      link: "/services",
     },
     {
-      name: "Victorian Dreams",
-      count: "15 pieces",
-      images: [
-        "/images/homepage/collections/ink/IMG_1165.JPG",
-        "/images/homepage/collections/ink/IMG_1166.JPG",
-        "/images/homepage/collections/ink/IMG_1167.JPG",
-        "/images/homepage/collections/ink/IMG_2202.JPG",
-        "/images/homepage/collections/ink/ink_1.JPG",
-        "/images/homepage/collections/ink/ink_2.png",
-      ],
+      name: "Career Development",
+      description: "Professional coaching for career advancement",
+      icon: "trending_up",
+      link: "/services",
     },
   ];
 
-  // Artwork grid - masonry layout
-  const artworkGrid = [
-    { image: "/images/homepage/artwork/IMG_1712.PNG", size: "tall" },
-    { image: "/images/homepage/artwork/IMG_1714.JPG", size: "tall" },
-    { image: "/images/homepage/artwork/IMG_1716.PNG", size: "medium" },
-    { image: "/images/homepage/artwork/IMG_1720.PNG", size: "small" },
-    { image: "/images/homepage/artwork/IMG_1722.PNG", size: "small" },
-    { image: "/images/homepage/artwork/IMG_1725.PNG", size: "medium" },
-    { image: "/images/homepage/artwork/IMG_1730.PNG", size: "tall" },
-    { image: "/images/homepage/artwork/IMG_1732.JPG", size: "medium" },
-    { image: "/images/homepage/artwork/IMG_1733.PNG", size: "tall" },
-    { image: "/images/homepage/artwork/IMG_1735.PNG", size: "medium" },
-    { image: "/images/homepage/artwork/IMG_1736.JPG", size: "small" },
-    { image: "/images/homepage/artwork/IMG_1738.PNG", size: "tall" },
-    { image: "/images/homepage/artwork/IMG_1740.PNG", size: "small" },
-    { image: "/images/homepage/artwork/IMG_1742.PNG", size: "medium" },
-    { image: "/images/homepage/artwork/IMG_1746.PNG", size: "tall" },
-    { image: "/images/homepage/artwork/IMG_1748.JPG", size: "medium" },
-    { image: "/images/homepage/artwork/IMG_1749.PNG", size: "tall" },
+  // Benefits/Features
+  const benefits = [
+    {
+      icon: "calendar_month",
+      title: "Flexible Scheduling",
+      description: "Book appointments at times that work for you",
+    },
+    {
+      icon: "verified",
+      title: "Expert Coaches",
+      description: "Work with experienced, certified professionals",
+    },
+    {
+      icon: "video_call",
+      title: "Virtual & In-Person",
+      description: "Choose the format that suits your needs",
+    },
+    {
+      icon: "analytics",
+      title: "Track Progress",
+      description: "Monitor your growth and achievements over time",
+    },
+    {
+      icon: "schedule",
+      title: "Recurring Bookings",
+      description: "Set up regular sessions for consistent progress",
+    },
+    {
+      icon: "support_agent",
+      title: "Ongoing Support",
+      description: "Get help and guidance whenever you need it",
+    },
   ];
 
   // Contact form state
@@ -202,19 +187,21 @@ export default function Home() {
     <div className="home-container">
       <SEO
         title="Home"
-        description="Discover original steampunk and Victorian-inspired artwork by Mark J Peterson. Explore unique brass and copper artwork, fine art prints, and limited edition pieces."
+        description="Transform your life with professional coaching and tutoring services. Book personalized sessions with expert coaches for career development, personal growth, and skill advancement."
         keywords={[
-          "steampunk art",
-          "Victorian art",
-          "brass artwork",
-          "copper artwork",
-          "fine art prints",
-          "original artwork",
-          "Mark J Peterson",
-          "industrial art",
+          "coaching",
+          "tutoring",
+          "life coach",
+          "career coaching",
+          "personal development",
+          "professional coaching",
+          "online tutoring",
+          "appointment booking",
+          "schedule coaching session",
         ]}
         structuredData={generateOrganizationStructuredData()}
       />
+
       {/* Hero Slideshow */}
       <section className="hero-slideshow">
         <div className="slideshow-container">
@@ -223,7 +210,22 @@ export default function Home() {
               key={slide.id}
               className={`slide ${index === currentSlide ? "active" : ""}`}
               style={{ backgroundImage: `url(${slide.src})` }}
-            />
+            >
+              {/* Hero Content Overlay */}
+              <div className="hero-content">
+                <h1>Schedule Your Success</h1>
+                <p>
+                  Professional coaching and tutoring services to help you reach
+                  your goals
+                </p>
+                <button
+                  className="btn btn--primary btn--lg"
+                  onClick={() => navigate("/services")}
+                >
+                  Browse Services
+                </button>
+              </div>
+            </div>
           ))}
 
           {/* Slideshow Controls */}
@@ -258,65 +260,89 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Collections Section */}
-      <section className="collections-section">
+      {/* Service Categories Section */}
+      <section className="services-section">
         <div className="container">
           <div className="section-header">
-            <h2>Art Collections</h2>
+            <h2>Our Services</h2>
             <p>
-              Shop for artwork from Gallery Owners and Dealers from all over the
-              world. Through my partnership with Curated Art Source, these
-              limited edition prints are available direct to you.
+              Choose from a variety of coaching and tutoring services designed
+              to help you achieve your personal and professional goals.
             </p>
           </div>
 
-          <div className="collections-grid-container">
-            {collections.map((collection, index) => (
-              <div key={index} className="collection-card">
-                <div className="collection-images">
-                  {collection.images.map((image, idx) => (
-                    <img
-                      key={idx}
-                      src={image}
-                      alt={`${collection.name} ${idx + 1}`}
-                    />
-                  ))}
+          <div className="services-grid">
+            {serviceCategories.map((category, index) => (
+              <div key={index} className="service-category-card">
+                <div className="category-icon">
+                  <span className="material-symbols-outlined">
+                    {category.icon}
+                  </span>
                 </div>
-                <div className="collection-info">
-                  <button
-                    className="btn btn--primary"
-                    onClick={() => navigate("/products")}
-                  >
-                    {collection.name}
-                  </button>
-                </div>
+                <h3>{category.name}</h3>
+                <p>{category.description}</p>
+                <button
+                  className="btn btn--primary"
+                  onClick={() => navigate(category.link)}
+                >
+                  Learn More
+                </button>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Artwork Grid Section */}
-      <section className="artwork-section">
+      {/* Benefits Section */}
+      <section className="benefits-section">
         <div className="container">
           <div className="section-header">
-            <h2>Featured Art</h2>
+            <h2>Why Choose Booked</h2>
             <p>
-              Each image may be purchased as a canvas print, framed print, metal
-              print, and more! Every purchase comes with a 30-day money-back
-              guarantee.
+              Experience a seamless booking process with features designed to
+              support your growth journey.
             </p>
           </div>
 
-          <div className="masonry-grid">
-            {artworkGrid.map((item, index) => (
-              <div
-                key={index}
-                className={`masonry-item masonry-item--${item.size}`}
-              >
-                <img src={item.image} alt={`Artwork ${index + 1}`} />
+          <div className="benefits-grid">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="benefit-card">
+                <div className="benefit-icon">
+                  <span className="material-symbols-outlined">
+                    {benefit.icon}
+                  </span>
+                </div>
+                <h3>{benefit.title}</h3>
+                <p>{benefit.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="cta-section">
+        <div className="container">
+          <div className="cta-content">
+            <h2>Ready to Get Started?</h2>
+            <p>
+              Book your first session today and take the first step towards
+              achieving your goals.
+            </p>
+            <div className="cta-buttons">
+              <button
+                className="btn btn--primary btn--lg"
+                onClick={() => navigate("/services")}
+              >
+                Browse Services
+              </button>
+              <button
+                className="btn btn--outline btn--lg"
+                onClick={() => navigate("/about")}
+              >
+                Learn More About Us
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -324,13 +350,12 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contact" className="contact-section">
         <div className="container">
-          <h2>CONTACT</h2>
+          <h2>Contact Us</h2>
 
           <div className="contact-intro">
             <p>
-              Contact me directly at{" "}
-              <a href="mailto:mark@mjpetersonart.com">mark@mjpetersonart.com</a>{" "}
-              or leave a message below.
+              Have questions? We'd love to hear from you. Send us a message and
+              we'll respond as soon as possible.
             </p>
           </div>
 
@@ -402,12 +427,12 @@ export default function Home() {
                     onChange={handleChange}
                   />
                   <label htmlFor="mailingList">
-                    SIGN UP FOR MY MAILING LIST
+                    Subscribe to our newsletter for updates and tips
                   </label>
                 </div>
 
                 <button type="submit" className="submit-btn">
-                  Send
+                  Send Message
                 </button>
               </form>
             )}
