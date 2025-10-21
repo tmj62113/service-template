@@ -23,15 +23,29 @@
   font-size: 48px;
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.hero-subtitle {
+.hero-body {
   font-family: var(--font-body);
   font-size: 20px;
   line-height: 1.6;
-  max-width: 700px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: 0 auto 24px;
+  color: #101014;
+}
+
+.hero-emphasis {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+  max-width: 800px;
+  margin: 32px auto;
+  color: #101014;
 }
 
 /* =====================================
@@ -233,8 +247,12 @@
     font-size: 36px;
   }
 
-  .hero-subtitle {
+  .hero-body {
     font-size: 18px;
+  }
+
+  .hero-emphasis {
+    font-size: 22px;
   }
 
   .about-section h2 {
@@ -278,8 +296,12 @@
     font-size: 28px;
   }
 
-  .hero-subtitle {
+  .hero-body {
     font-size: 16px;
+  }
+
+  .hero-emphasis {
+    font-size: 20px;
   }
 
   .about-section {

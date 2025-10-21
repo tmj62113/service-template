@@ -22,17 +22,14 @@ export default function About() {
       {/* Hero Section */}
       <section className="about-hero">
         <div className="container">
-          <h1>About Clockwork</h1>
-          <p className="hero-subtitle">
-            We believe running a service business shouldn't feel like juggling chaos.
-          </p>
-          <p className="hero-subtitle">
+          <h1>We believe running a service business shouldn't feel like juggling chaos.</h1>
+          <p className="hero-body">
             Every service professional knows the frustration: clients calling to book, appointment conflicts, payment follow-ups, calendar chaos, and endless admin work that keeps you from doing what you actually love.
           </p>
-          <p className="hero-subtitle">
+          <p className="hero-emphasis">
             That's why we built Clockwork.
           </p>
-          <p className="hero-subtitle">
+          <p className="hero-body">
             Our platform handles the logistics so you can focus on what matters most—serving your clients and doing the work you're passionate about. From automated scheduling and payment processing to calendar management and client communications, Clockwork takes care of the admin chaos that drains your time and energy.
           </p>
         </div>
