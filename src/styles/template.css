@@ -720,17 +720,13 @@ main {
   gap: 24px;
 }
 
-.logo img {
-  height: 40px;
-  width: auto;
-  display: block;
-}
-
-.logo h1 {
-  margin: 0;
+.logo-text {
+  font-family: var(--font-heading);
   font-size: 24px;
-  color: var(--color-dark);
   font-weight: 700;
+  color: #101014;
+  margin: 0;
+  display: block;
 }
 
 .nav {
@@ -850,7 +846,7 @@ main {
 }
 
 @media (max-width: 768px) {
-  .logo h1 {
+  .logo-text {
     font-size: 20px;
   }
 
