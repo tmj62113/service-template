@@ -43,6 +43,48 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Features Section */}
+      <section className="features-section">
+        <div className="container">
+          <h2>Everything You Need. Nothing You Don't.</h2>
+
+          <div className="features-grid">
+            <div className="feature-card">
+              <h3>📅 Smart Scheduling</h3>
+              <p>
+                Clients book online anytime. Your calendar updates in real-time.
+                Double-bookings? Impossible. Conflicts? Gone.
+              </p>
+            </div>
+
+            <div className="feature-card">
+              <h3>💰 Get Paid Faster</h3>
+              <p>
+                Accept payments at booking. Process cards, track invoices,
+                collect deposits—all automated. No more payment follow-ups.
+              </p>
+            </div>
+
+            <div className="feature-card">
+              <h3>✨ Your Brand, Your Way</h3>
+              <p>
+                Choose your colors. Upload your logo. Customize everything.
+                Clients see your brand, not ours.
+              </p>
+            </div>
+          </div>
+
+          <div className="features-cta">
+            <button
+              className="btn btn--primary btn--lg"
+              onClick={() => navigate("/services")}
+            >
+              Start Your Free Trial
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action Section */}
       <section className="cta-section">
         <div className="container">

@@ -206,6 +206,62 @@
 }
 
 /* =====================================
+   FEATURES SECTION
+   ===================================== */
+
+.features-section {
+  padding: 80px 0;
+  background-color: #f2f0ea;
+  text-align: center;
+}
+
+.features-section h2 {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 600;
+  color: #101014;
+  margin-bottom: 64px;
+  text-align: center;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto 48px;
+}
+
+.feature-card {
+  background: #f2f0ea;
+  border: 1px solid #e1dbcb;
+  border-radius: var(--radius-md);
+  padding: 32px 24px;
+  text-align: left;
+}
+
+.feature-card h3 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 600;
+  color: #101014;
+  margin-bottom: 16px;
+}
+
+.feature-card p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #101014;
+  margin: 0;
+}
+
+.features-cta {
+  text-align: center;
+  margin-top: 48px;
+}
+
+/* =====================================
    CALL TO ACTION SECTION
    ===================================== */
 
@@ -248,7 +304,8 @@
 
 @media (max-width: 1024px) {
   .services-grid,
-  .benefits-grid {
+  .benefits-grid,
+  .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -271,13 +328,15 @@
   }
 
   .services-section h2,
-  .benefits-section h2 {
+  .benefits-section h2,
+  .features-section h2 {
     font-size: 24px;
     line-height: 30px;
   }
 
   .services-grid,
-  .benefits-grid {
+  .benefits-grid,
+  .features-grid {
     grid-template-columns: 1fr;
   }
 
@@ -320,12 +379,14 @@
 
   .services-section,
   .benefits-section,
+  .features-section,
   .cta-section {
     padding: 60px 0;
   }
 
   .service-category-card,
-  .benefit-card {
+  .benefit-card,
+  .feature-card {
     padding: 24px 16px;
   }
 }
