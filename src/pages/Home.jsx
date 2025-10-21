@@ -85,6 +85,61 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Detailed Features Grid */}
+      <section className="detailed-features-section">
+        <div className="container">
+          <h2>Built for Service Professionals</h2>
+
+          <div className="detailed-features-grid">
+            <div className="detailed-feature-card">
+              <h3>📆 Online Booking</h3>
+              <p>
+                Let clients book 24/7 from any device. No phone tag required.
+              </p>
+            </div>
+
+            <div className="detailed-feature-card">
+              <h3>💳 Payment Processing</h3>
+              <p>
+                Accept deposits or full payments. Stripe, Square, PayPal—all
+                integrated.
+              </p>
+            </div>
+
+            <div className="detailed-feature-card">
+              <h3>📧 Smart Reminders</h3>
+              <p>
+                Automatic email and SMS reminders reduce no-shows by up to 70%.
+              </p>
+            </div>
+
+            <div className="detailed-feature-card">
+              <h3>👥 Client Management</h3>
+              <p>
+                Store contacts, history, preferences, and notes—all in one
+                place.
+              </p>
+            </div>
+
+            <div className="detailed-feature-card">
+              <h3>📄 Professional Invoicing</h3>
+              <p>
+                Generate branded invoices automatically. Track what's paid and
+                what's pending.
+              </p>
+            </div>
+
+            <div className="detailed-feature-card">
+              <h3>🎨 Full Customization</h3>
+              <p>
+                Make it yours. Custom colors, branding, forms, and booking
+                flows.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Call to Action Section */}
       <section className="cta-section">
         <div className="container">
