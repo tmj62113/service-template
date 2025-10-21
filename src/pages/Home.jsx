@@ -83,7 +83,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Schedule Your Success</h1>
+          <h1>your business, always on time</h1>
           <p>
             Professional coaching and tutoring services to help you reach
             your goals

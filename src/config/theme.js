@@ -10,7 +10,7 @@ export const theme = {
   // BRAND IDENTITY
   // ===================================================
   brandName: "Clockwork",
-  tagline: "Schedule Your Success",
+  tagline: "your business, always on time",
 
   // Logo and images
   logo: "/clockwork_logo.png",
@@ -200,7 +200,7 @@ export const theme = {
   // SEO & META
   // ===================================================
   seo: {
-    title: "Clockwork - Schedule Your Success",
+    title: "Clockwork - your business, always on time",
     description: "Streamline your booking process with Clockwork. Schedule appointments, manage services, and grow your business with our powerful booking platform.",
     keywords: "booking, appointments, scheduling, calendar, services, business management, booking system",
     ogImage: "/og-image.jpg",
