@@ -15,7 +15,7 @@ export const theme = {
   // Logo and images
   logo: "/clockwork_logo.png",
   logoAlt: "Clockwork Logo",
-  favicon: "/favicon.ico",
+  favicon: "/clockwork_favicon.png",
 
   // ===================================================
   // COMPANY INFORMATION
