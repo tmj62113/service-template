@@ -5,7 +5,7 @@
 .not-found {
   min-height: calc(100vh - 200px);
   padding: var(--spacing-3xl) 0;
-  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface-hover) 100%);
+  background: var(--color-background);
 }
 
 .not-found__container {
@@ -70,7 +70,7 @@
   background: var(--color-white);
   padding: var(--spacing-xl);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
   margin-bottom: var(--spacing-2xl);
 }
 
@@ -178,7 +178,6 @@
 .not-found__suggestion-card:hover {
   border-color: var(--color-accent);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
 }
 
 .not-found__suggestion-card:hover::before {

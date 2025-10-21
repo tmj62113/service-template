@@ -39,38 +39,38 @@
    ===================================================== */
 
 :root {
-  /* Colors */
-  --color-primary: #f8f8f8;
-  --color-primary-dark: #e0e0e0;
-  --color-primary-light: #ffffff;
+  /* Colors - Minimalist Three-Color Palette */
+  --color-primary: #e1dbcb;
+  --color-primary-dark: #e1dbcb;
+  --color-primary-light: #f2f0ea;
 
-  --color-dark: #1a1a1a;
-  --color-dark-secondary: #2d2d2d;
-  --color-gray-900: #111827;
-  --color-gray-800: #1f2937;
-  --color-gray-700: #374151;
-  --color-gray-600: #4b5563;
-  --color-gray-500: #6b7280;
-  --color-gray-400: #9ca3af;
-  --color-gray-300: #d1d5db;
-  --color-gray-200: #e5e7eb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-50: #f9fafb;
+  --color-dark: #101014;
+  --color-dark-secondary: #101014;
+  --color-gray-900: #101014;
+  --color-gray-800: #101014;
+  --color-gray-700: #101014;
+  --color-gray-600: #101014;
+  --color-gray-500: #101014;
+  --color-gray-400: #e1dbcb;
+  --color-gray-300: #e1dbcb;
+  --color-gray-200: #e1dbcb;
+  --color-gray-100: #f2f0ea;
+  --color-gray-50: #f2f0ea;
 
-  --color-success: #10b981;
-  --color-success-light: #d1fae5;
-  --color-success-dark: #065f46;
+  --color-success: #101014;
+  --color-success-light: #e1dbcb;
+  --color-success-dark: #101014;
 
-  --color-error: #ef4444;
-  --color-error-light: #fee2e2;
-  --color-error-dark: #991b1b;
+  --color-error: #101014;
+  --color-error-light: #e1dbcb;
+  --color-error-dark: #101014;
 
-  --color-warning: #f59e0b;
-  --color-warning-light: #fef3c7;
-  --color-warning-dark: #92400e;
+  --color-warning: #101014;
+  --color-warning-light: #e1dbcb;
+  --color-warning-dark: #101014;
 
-  --color-background: #f8f8f8;
-  --color-white: #ffffff;
+  --color-background: #f2f0ea;
+  --color-white: #f2f0ea;
 
   /* Typography */
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -114,13 +114,13 @@
 .card {
   background: var(--color-white);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-gray-200);
   padding: var(--spacing-lg);
   transition: all var(--transition-base);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-lg);
+  border-color: var(--color-dark);
 }
 
 .card--sm {
@@ -133,12 +133,11 @@
 }
 
 .card--elevated {
-  box-shadow: var(--shadow-xl);
+  border: 2px solid var(--color-gray-200);
 }
 
 .card--bordered {
   border: 1px solid var(--color-gray-200);
-  box-shadow: none;
 }
 
 /* Buttons
@@ -166,8 +165,7 @@
 
 .btn--primary:hover {
   background: var(--color-dark-secondary);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  opacity: 0.9;
 }
 
 .btn--secondary {
@@ -255,8 +253,7 @@
 .form-textarea:focus,
 .form-select:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--color-dark);
 }
 
 .form-textarea {
