@@ -78,26 +78,26 @@
     sans-serif;
   --font-family-mono: 'Monaco', 'Courier New', monospace;
 
-  /* Spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 48px;
+  /* Spacing (rem based on 16px) */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
 
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 9999px;
+  /* Border Radius (rem based on 16px) */
+  --radius-sm: 0.375rem;    /* 6px */
+  --radius-md: 0.5rem;      /* 8px */
+  --radius-lg: 0.75rem;     /* 12px */
+  --radius-xl: 1rem;        /* 16px */
+  --radius-full: 62.4375rem; /* 9999px */
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 0.625rem 0.9375rem rgba(0, 0, 0, 0.1);
 
   /* Transitions */
   --transition-fast: 0.15s ease;
@@ -114,7 +114,7 @@
 .card {
   background: var(--color-white);
   border-radius: var(--radius-xl);
-  border: 1px solid var(--color-gray-200);
+  border: 0.0625rem solid var(--color-gray-200);
   padding: var(--spacing-lg);
   transition: all var(--transition-base);
 }
@@ -133,11 +133,11 @@
 }
 
 .card--elevated {
-  border: 2px solid var(--color-gray-200);
+  border: 0.125rem solid var(--color-gray-200);
 }
 
 .card--bordered {
-  border: 1px solid var(--color-gray-200);
+  border: 0.0625rem solid var(--color-gray-200);
 }
 
 /* Buttons
@@ -147,8 +147,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  padding: 10px 20px;
-  font-size: 14px;
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;              /* 16px - accessibility minimum */
   font-weight: 600;
   border-radius: var(--radius-md);
   border: none;
@@ -171,7 +171,7 @@
 .btn--secondary {
   background: var(--color-white);
   color: var(--color-dark);
-  border: 1px solid var(--color-gray-200);
+  border: 0.0625rem solid var(--color-gray-200);
 }
 
 .btn--secondary:hover {
@@ -182,7 +182,7 @@
 .btn--outline {
   background: transparent;
   color: var(--color-dark);
-  border: 2px solid var(--color-dark);
+  border: 0.125rem solid var(--color-dark);
 }
 
 .btn--outline:hover {
@@ -209,13 +209,13 @@
 }
 
 .btn--sm {
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;              /* Keep at 1rem minimum */
 }
 
 .btn--lg {
-  padding: 12px 24px;
-  font-size: 16px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;          /* 18px */
 }
 
 .btn:disabled {
@@ -230,7 +230,7 @@
 
 .form-label {
   display: block;
-  font-size: 14px;
+  font-size: 1rem;              /* 16px - accessibility minimum */
   font-weight: 600;
   color: var(--color-gray-700);
   margin-bottom: var(--spacing-sm);
@@ -240,10 +240,10 @@
 .form-textarea,
 .form-select {
   width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
+  padding: 0.625rem 0.75rem;
+  font-size: 1rem;              /* 16px - accessibility minimum */
   font-family: var(--font-family);
-  border: 1px solid var(--color-gray-200);
+  border: 0.0625rem solid var(--color-gray-200);
   border-radius: var(--radius-md);
   background: var(--color-white);
   transition: all var(--transition-base);
@@ -258,12 +258,12 @@
 
 .form-textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 6.25rem;          /* 100px */
 }
 
 .form-error {
   color: var(--color-error);
-  font-size: 13px;
+  font-size: 1rem;              /* 16px - accessibility minimum */
   margin-top: var(--spacing-xs);
 }
 
@@ -271,8 +271,8 @@
    ----------------------------------------------------- */
 .badge {
   display: inline-block;
-  padding: 4px 12px;
-  font-size: 12px;
+  padding: 0.25rem 0.75rem;
+  font-size: 1rem;              /* 16px - accessibility minimum */
   font-weight: 600;
   border-radius: var(--radius-full);
 }
@@ -300,17 +300,17 @@
 /* Container
    ----------------------------------------------------- */
 .container {
-  max-width: 1280px;
+  max-width: 80rem;             /* 1280px */
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
 }
 
 .container--sm {
-  max-width: 768px;
+  max-width: 48rem;             /* 768px */
 }
 
 .container--lg {
-  max-width: 1440px;
+  max-width: 90rem;             /* 1440px */
 }
 
 /* Typography & Text
@@ -322,23 +322,24 @@
 }
 
 .heading--xl {
-  font-size: 48px;
+  font-size: 3rem;              /* 48px */
 }
 
 .heading--lg {
-  font-size: 36px;
+  font-size: 2.25rem;           /* 36px */
 }
 
 .heading--md {
-  font-size: 24px;
+  font-size: 1.5rem;            /* 24px */
 }
 
 .heading--sm {
-  font-size: 18px;
+  font-size: 1.125rem;          /* 18px */
 }
 
 .text {
   line-height: 1.6;
+  font-size: 1rem;              /* 16px - default body copy */
 }
 
 .text--center {
@@ -355,15 +356,15 @@
 
 .text--uppercase {
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.03125rem;   /* 0.5px */
 }
 
 .text--sm {
-  font-size: 14px;
+  font-size: 1rem;              /* 16px - maintain minimum */
 }
 
 .text--xs {
-  font-size: 13px;
+  font-size: 1rem;              /* 16px - maintain minimum */
 }
 
 /* Loading State */
@@ -391,10 +392,10 @@
    ----------------------------------------------------- */
 .sr-only {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 0.0625rem;
+  height: 0.0625rem;
   padding: 0;
-  margin: -1px;
+  margin: -0.0625rem;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -406,7 +407,7 @@
    ----------------------------------------------------- */
 .skip-link {
   position: absolute;
-  top: -100px;
+  top: -6.25rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
@@ -416,7 +417,7 @@
   text-decoration: none;
   border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 1rem;              /* 16px */
   transition: top var(--transition-fast);
 }
 
@@ -428,15 +429,15 @@
    Clear focus indicators for keyboard navigation (WCAG 2.1 AA)
    ----------------------------------------------------- */
 *:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 0.1875rem solid var(--color-primary);
+  outline-offset: 0.125rem;
   transition: outline var(--transition-fast);
 }
 
 /* Button focus styles */
 .btn:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 0.1875rem solid var(--color-primary);
+  outline-offset: 0.125rem;
 }
 
 .btn--primary:focus-visible {
@@ -447,14 +448,14 @@
 .form-input:focus-visible,
 .form-textarea:focus-visible,
 .form-select:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 0.1875rem solid var(--color-primary);
+  outline-offset: 0.125rem;
 }
 
 /* Link focus styles */
 a:focus-visible {
-  outline: 3px solid var(--color-primary);
-  outline-offset: 2px;
+  outline: 0.1875rem solid var(--color-primary);
+  outline-offset: 0.125rem;
   border-radius: var(--radius-sm);
 }
 
@@ -474,6 +475,7 @@ a:focus-visible {
   Variants:   .btn--primary, .btn--secondary, .btn--outline, .btn--success, .btn--error
   Sizes:      .btn--sm, .btn--lg
   State:      :disabled
+  Font Size:  1rem (16px) minimum for accessibility
 
   Usage:
   <button class="btn btn--primary">Primary Button</button>
@@ -494,18 +496,20 @@ a:focus-visible {
 
   📝 TYPOGRAPHY
   --------------------------------------------------
-  Headings:   .heading .heading--xl (48px)
-              .heading .heading--lg (36px)
-              .heading .heading--md (24px)
-              .heading .heading--sm (18px)
+  Headings:   .heading .heading--xl (3rem / 48px)
+              .heading .heading--lg (2.25rem / 36px)
+              .heading .heading--md (1.5rem / 24px)
+              .heading .heading--sm (1.125rem / 18px)
 
-  Text:       .text (default)
+  Text:       .text (1rem / 16px - default body copy)
               .text--muted (gray color)
               .text--bold (600 weight)
               .text--uppercase (ALL CAPS)
               .text--center (centered)
-              .text--sm (14px)
-              .text--xs (13px)
+              .text--sm (1rem / 16px)
+              .text--xs (1rem / 16px)
+
+  All text maintains 1rem (16px) minimum for accessibility
 
   Usage:
   <h1 class="heading heading--xl">Page Title</h1>
@@ -515,7 +519,7 @@ a:focus-visible {
 
   🏷️ BADGES
   --------------------------------------------------
-  Base:       .badge
+  Base:       .badge (1rem / 16px for accessibility)
   Variants:   .badge--success, .badge--error, .badge--warning, .badge--primary
 
   Usage:
@@ -526,9 +530,9 @@ a:focus-visible {
 
   📦 CONTAINERS
   --------------------------------------------------
-  Base:       .container (1280px max-width)
-  Sizes:      .container--sm (768px max-width)
-              .container--lg (1440px max-width)
+  Base:       .container (80rem / 1280px max-width)
+  Sizes:      .container--sm (48rem / 768px max-width)
+              .container--lg (90rem / 1440px max-width)
 
   Usage:
   <div class="container">Standard page width</div>
@@ -538,9 +542,11 @@ a:focus-visible {
   📋 FORMS
   --------------------------------------------------
   Layout:     .form-group (wrapper with margin)
-  Label:      .form-label
-  Inputs:     .form-input, .form-textarea, .form-select
-  Error:      .form-error
+  Label:      .form-label (1rem / 16px)
+  Inputs:     .form-input, .form-textarea, .form-select (1rem / 16px)
+  Error:      .form-error (1rem / 16px)
+
+  All form elements use 1rem (16px) minimum for accessibility
 
   Usage:
   <div class="form-group">
@@ -562,20 +568,20 @@ a:focus-visible {
   --color-warning, --color-warning-light, --color-warning-dark
   --color-background, --color-white
 
-  SPACING:
-  --spacing-xs (4px)
-  --spacing-sm (8px)
-  --spacing-md (16px)
-  --spacing-lg (24px)
-  --spacing-xl (32px)
-  --spacing-2xl (48px)
+  SPACING (rem based on 16px):
+  --spacing-xs (0.25rem / 4px)
+  --spacing-sm (0.5rem / 8px)
+  --spacing-md (1rem / 16px)
+  --spacing-lg (1.5rem / 24px)
+  --spacing-xl (2rem / 32px)
+  --spacing-2xl (3rem / 48px)
 
-  BORDER RADIUS:
-  --radius-sm (6px)
-  --radius-md (8px)
-  --radius-lg (12px)
-  --radius-xl (16px)
-  --radius-full (9999px / fully rounded)
+  BORDER RADIUS (rem based on 16px):
+  --radius-sm (0.375rem / 6px)
+  --radius-md (0.5rem / 8px)
+  --radius-lg (0.75rem / 12px)
+  --radius-xl (1rem / 16px)
+  --radius-full (62.4375rem / 9999px / fully rounded)
 
   SHADOWS:
   --shadow-sm (subtle)
@@ -616,6 +622,20 @@ a:focus-visible {
      Visit http://localhost:5173/test-utilities to see all utilities
 
 
+  ♿ ACCESSIBILITY NOTES
+  --------------------------------------------------
+
+  All font sizes use rem units based on 16px base
+  Minimum font size is 1rem (16px) for:
+  - Body copy (.text)
+  - Links (a elements)
+  - Buttons (.btn)
+  - Form inputs (.form-input, .form-label, .form-error)
+  - Badges (.badge)
+
+  This ensures WCAG 2.1 AA compliance for readability
+
+
   🚫 ANTI-PATTERNS (DON'T DO THIS)
   --------------------------------------------------
 
@@ -624,6 +644,12 @@ a:focus-visible {
 
   ✅ Use CSS variables instead:
      .my-button { background: var(--color-error); }
+
+  ❌ Don't use px units:
+     .my-element { padding: 16px; font-size: 14px; }
+
+  ✅ Use rem units or CSS variables:
+     .my-element { padding: 1rem; font-size: 1rem; }
 
   ❌ Don't create duplicate utility classes:
      .primary-btn, .button-primary, .btn-primary-new
@@ -642,6 +668,7 @@ a:focus-visible {
   --------------------------------------------------
   - BEM Naming Convention: http://getbem.com/
   - CSS Variables Guide: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties
+  - Rem Units: https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units
   - Whitelabel Setup Guide: /NEW_CLIENT.md
   - CSS Customization Guide: /CSS_CUSTOMIZATION.md
   - Theme Configuration: /src/config/theme.js
