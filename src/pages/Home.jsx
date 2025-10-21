@@ -1,49 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SEO, { generateOrganizationStructuredData } from "../components/SEO";
 import { getApiUrl } from "../config/api";
 import "./Home.css";
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
-
-  // Hero slideshow images - placeholder paths for coaching/tutoring images
-  const slideshowImages = [
-    {
-      id: 1,
-      src: "/images/hero/coaching-session.webp",
-      alt: "Professional coaching session",
-    },
-    {
-      id: 2,
-      src: "/images/hero/success-celebration.webp",
-      alt: "Celebrating success and achievement",
-    },
-    {
-      id: 3,
-      src: "/images/hero/growth-mindset.webp",
-      alt: "Personal growth and development",
-    },
-  ];
-
-  // Auto-advance slideshow every 5 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [slideshowImages.length]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slideshowImages.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prev) => (prev - 1 + slideshowImages.length) % slideshowImages.length
-    );
-  };
 
   // Service Categories
   const serviceCategories = [
@@ -202,61 +164,20 @@ export default function Home() {
         structuredData={generateOrganizationStructuredData()}
       />
 
-      {/* Hero Slideshow */}
-      <section className="hero-slideshow">
-        <div className="slideshow-container">
-          {slideshowImages.map((slide, index) => (
-            <div
-              key={slide.id}
-              className={`slide ${index === currentSlide ? "active" : ""}`}
-              style={{ backgroundImage: `url(${slide.src})` }}
-            >
-              {/* Hero Content Overlay */}
-              <div className="hero-content">
-                <h1>Schedule Your Success</h1>
-                <p>
-                  Professional coaching and tutoring services to help you reach
-                  your goals
-                </p>
-                <button
-                  className="btn btn--primary btn--lg"
-                  onClick={() => navigate("/services")}
-                >
-                  Browse Services
-                </button>
-              </div>
-            </div>
-          ))}
-
-          {/* Slideshow Controls */}
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1>Schedule Your Success</h1>
+          <p>
+            Professional coaching and tutoring services to help you reach
+            your goals
+          </p>
           <button
-            className="slideshow-control prev"
-            onClick={prevSlide}
-            aria-label="Previous slide"
+            className="btn btn--primary btn--lg"
+            onClick={() => navigate("/services")}
           >
-            <span className="material-symbols-outlined">chevron_left</span>
+            Browse Services
           </button>
-          <button
-            className="slideshow-control next"
-            onClick={nextSlide}
-            aria-label="Next slide"
-          >
-            <span className="material-symbols-outlined">chevron_right</span>
-          </button>
-
-          {/* Dot Indicators */}
-          <div className="slideshow-dots">
-            {slideshowImages.map((_, index) => (
-              <button
-                key={index}
-                className={`dot-indicator ${
-                  index === currentSlide ? "active" : ""
-                }`}
-                onClick={() => setCurrentSlide(index)}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
       </section>
 
