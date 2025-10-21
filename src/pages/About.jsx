@@ -69,6 +69,50 @@ export default function About() {
         </div>
       </section>
 
+      {/* Who We Serve Section */}
+      <section className="about-section alt-bg">
+        <div className="container">
+          <h2>Who We Serve</h2>
+          <p className="section-intro">Built for Service Professionals of All Kinds</p>
+          <p className="section-intro">We work with people who trade their time and expertise for a living:</p>
+          <div className="service-types-grid">
+            <div className="service-type-card">
+              <h3>Beauty & Wellness</h3>
+              <p>
+                Hair stylists, estheticians, massage therapists, nail technicians who need elegant booking and client management.
+              </p>
+            </div>
+            <div className="service-type-card">
+              <h3>Health & Fitness</h3>
+              <p>
+                Personal trainers, yoga instructors, physical therapists, nutritionists who want to focus on helping people, not managing calendars.
+              </p>
+            </div>
+            <div className="service-type-card">
+              <h3>Professional Services</h3>
+              <p>
+                Consultants, coaches, therapists, tutors who need smart scheduling without the complexity.
+              </p>
+            </div>
+            <div className="service-type-card">
+              <h3>Home Services</h3>
+              <p>
+                Contractors, cleaners, repair services, landscapers who need reliable booking and payment processing.
+              </p>
+            </div>
+            <div className="service-type-card">
+              <h3>Creative Services</h3>
+              <p>
+                Photographers, designers, music teachers who want software as polished as their work.
+              </p>
+            </div>
+          </div>
+          <p className="section-closing">
+            What they all have in common: They deliver great service and deserve software that helps, not hinders.
+          </p>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="about-cta">
         <div className="container">
