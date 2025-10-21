@@ -13,8 +13,8 @@
 .hero-section {
   position: relative;
   width: 100%;
-  padding: 120px 20px;
-  margin-top: 48px;
+  padding: 7.5rem 1.25rem;
+  margin-top: 3rem;
   background: #f2f0ea;
   display: flex;
   align-items: center;
@@ -24,32 +24,32 @@
 .hero-content {
   text-align: center;
   color: #101014;
-  max-width: 800px;
+  max-width: 50rem;
   margin: 0 auto;
 }
 
 .hero-content h1 {
   font-family: var(--font-heading);
-  font-size: 48px;
+  font-size: 3rem;
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .hero-content p {
   font-family: var(--font-body);
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.6;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .hero-tagline {
   font-family: var(--font-heading);
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
   font-style: italic;
-  margin-top: 16px;
-  margin-bottom: 32px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
   color: #101014;
 }
 
@@ -58,52 +58,52 @@
    ===================================== */
 
 .services-section {
-  padding: 80px 0;
+  padding: 5rem 0;
   background-color: var(--color-cream);
 }
 
 .services-section .section-header {
   flex-direction: column;
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto 64px;
+  max-width: 50rem;
+  margin: 0 auto 4rem;
 }
 
 .services-section h2 {
   font-family: var(--font-heading);
-  font-size: 30px;
+  font-size: 1.875rem;
   font-weight: 600;
-  line-height: 36px;
+  line-height: 2.25rem;
   color: #101014;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .services-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  max-width: 1000px;
+  gap: 2rem;
+  max-width: 62.5rem;
   margin: 0 auto;
 }
 
 .service-category-card {
   background: #f2f0ea;
-  border: 1px solid #e1dbcb;
+  border: 0.0625rem solid #e1dbcb;
   border-radius: var(--radius-lg);
-  padding: 40px 32px;
+  padding: 2.5rem 2rem;
   text-align: center;
   transition: all 0.3s ease;
 }
 
 .service-category-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
+  transform: translateY(-0.25rem);
 }
 
 .category-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,23 +113,23 @@
 }
 
 .category-icon .material-symbols-outlined {
-  font-size: 40px;
+  font-size: 2.5rem;
 }
 
 .service-category-card h3 {
   font-family: var(--font-heading);
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #101014;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .service-category-card p {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.6;
   color: #101014;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
 }
 
 /* =====================================
@@ -137,46 +137,46 @@
    ===================================== */
 
 .benefits-section {
-  padding: 80px 0;
+  padding: 5rem 0;
   background-color: #e1dbcb;
 }
 
 .benefits-section .section-header {
   flex-direction: column;
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto 64px;
+  max-width: 50rem;
+  margin: 0 auto 4rem;
 }
 
 .benefits-section h2 {
   font-family: var(--font-heading);
-  font-size: 30px;
+  font-size: 1.875rem;
   font-weight: 600;
-  line-height: 36px;
+  line-height: 2.25rem;
   color: #101014;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  max-width: 1000px;
+  gap: 2rem;
+  max-width: 62.5rem;
   margin: 0 auto;
 }
 
 .benefit-card {
   background: #f2f0ea;
-  border: 1px solid #e1dbcb;
+  border: 0.0625rem solid #e1dbcb;
   border-radius: var(--radius-md);
-  padding: 32px 24px;
+  padding: 2rem 1.5rem;
   text-align: center;
 }
 
 .benefit-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 16px;
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,20 +186,20 @@
 }
 
 .benefit-icon .material-symbols-outlined {
-  font-size: 32px;
+  font-size: 2rem;
 }
 
 .benefit-card h3 {
   font-family: var(--font-heading);
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #101014;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 }
 
 .benefit-card p {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 1.6;
   color: #101014;
   margin: 0;
@@ -210,47 +210,47 @@
    ===================================== */
 
 .features-section {
-  padding: 80px 0;
+  padding: 5rem 0;
   background-color: #f2f0ea;
   text-align: center;
 }
 
 .features-section h2 {
   font-family: var(--font-heading);
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 600;
   color: #101014;
-  margin-bottom: 64px;
+  margin-bottom: 4rem;
   text-align: center;
 }
 
 .features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  max-width: 1000px;
-  margin: 0 auto 48px;
+  gap: 2rem;
+  max-width: 62.5rem;
+  margin: 0 auto 3rem;
 }
 
 .feature-card {
   background: #f2f0ea;
-  border: 1px solid #e1dbcb;
+  border: 0.0625rem solid #e1dbcb;
   border-radius: var(--radius-md);
-  padding: 32px 24px;
+  padding: 2rem 1.5rem;
   text-align: left;
 }
 
 .feature-card h3 {
   font-family: var(--font-heading);
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 600;
   color: #101014;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .feature-card p {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.6;
   color: #101014;
   margin: 0;
@@ -258,7 +258,7 @@
 
 .features-cta {
   text-align: center;
-  margin-top: 48px;
+  margin-top: 3rem;
 }
 
 /* =====================================
@@ -266,47 +266,47 @@
    ===================================== */
 
 .detailed-features-section {
-  padding: 80px 0;
+  padding: 5rem 0;
   background-color: #e1dbcb;
   text-align: center;
 }
 
 .detailed-features-section h2 {
   font-family: var(--font-heading);
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 600;
   color: #101014;
-  margin-bottom: 64px;
+  margin-bottom: 4rem;
   text-align: center;
 }
 
 .detailed-features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  max-width: 1000px;
+  gap: 1.5rem;
+  max-width: 62.5rem;
   margin: 0 auto;
 }
 
 .detailed-feature-card {
   background: #f2f0ea;
-  border: 1px solid #e1dbcb;
+  border: 0.0625rem solid #e1dbcb;
   border-radius: var(--radius-md);
-  padding: 24px 20px;
+  padding: 1.5rem 1.25rem;
   text-align: left;
 }
 
 .detailed-feature-card h3 {
   font-family: var(--font-heading);
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: #101014;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .detailed-feature-card p {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 1rem;
   line-height: 1.6;
   color: #101014;
   margin: 0;
@@ -317,34 +317,34 @@
    ===================================== */
 
 .cta-section {
-  padding: 80px 0;
+  padding: 5rem 0;
   background: #e1dbcb;
 }
 
 .cta-content {
   text-align: center;
-  max-width: 800px;
+  max-width: 50rem;
   margin: 0 auto;
   color: #101014;
 }
 
 .cta-content h2 {
   font-family: var(--font-heading);
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .cta-content p {
   font-family: var(--font-body);
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 1.6;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .cta-buttons {
   display: flex;
-  gap: 16px;
+  gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -364,27 +364,27 @@
 
 @media (max-width: 768px) {
   .hero-section {
-    padding: 80px 20px;
+    padding: 5rem 1.25rem;
   }
 
   .hero-content h1 {
-    font-size: 32px;
+    font-size: 2rem;
   }
 
   .hero-content p {
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .hero-tagline {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
   .services-section h2,
   .benefits-section h2,
   .features-section h2,
   .detailed-features-section h2 {
-    font-size: 24px;
-    line-height: 30px;
+    font-size: 1.5rem;
+    line-height: 1.875rem;
   }
 
   .services-grid,
@@ -395,11 +395,11 @@
   }
 
   .cta-content h2 {
-    font-size: 28px;
+    font-size: 1.75rem;
   }
 
   .cta-content p {
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   .cta-buttons {
@@ -409,39 +409,39 @@
 
   .cta-buttons .btn {
     width: 100%;
-    max-width: 300px;
+    max-width: 18.75rem;
   }
 }
 
 @media (max-width: 480px) {
   .hero-section {
-    padding: 60px 20px;
+    padding: 3.75rem 1.25rem;
   }
 
   .hero-content h1 {
-    font-size: 28px;
+    font-size: 1.75rem;
   }
 
   .hero-content p {
-    font-size: 16px;
-    margin-bottom: 24px;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .hero-tagline {
-    font-size: 18px;
+    font-size: 1.125rem;
   }
 
   .services-section,
   .benefits-section,
   .features-section,
   .cta-section {
-    padding: 60px 0;
+    padding: 3.75rem 0;
   }
 
   .service-category-card,
   .benefit-card,
   .feature-card,
   .detailed-feature-card {
-    padding: 24px 16px;
+    padding: 1.5rem 1rem;
   }
 }

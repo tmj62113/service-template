@@ -3,7 +3,7 @@
    ===================================================== */
 
 .not-found {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 12.5rem);
   padding: var(--spacing-3xl) 0;
   background: var(--color-background);
 }
@@ -22,7 +22,7 @@
 }
 
 .not-found__number {
-  font-size: 120px;
+  font-size: 7.5rem;
   font-weight: var(--font-weight-bold);
   font-family: var(--font-heading);
   color: var(--color-border);
@@ -32,17 +32,17 @@
 
 .not-found__icon {
   position: absolute;
-  font-size: 64px;
+  font-size: 4rem;
   color: var(--color-accent);
   animation: float 3s ease-in-out infinite;
 }
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-0.625rem);
   }
 }
 
@@ -60,7 +60,7 @@
   color: var(--color-text-secondary);
   line-height: 1.6;
   margin: 0 0 var(--spacing-2xl);
-  max-width: 500px;
+  max-width: 31.25rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -70,7 +70,7 @@
   background: var(--color-white);
   padding: var(--spacing-xl);
   border-radius: var(--radius-xl);
-  border: 1px solid var(--color-border);
+  border: 0.0625rem solid var(--color-border);
   margin-bottom: var(--spacing-2xl);
 }
 
@@ -100,15 +100,15 @@
   transform: translateY(-50%);
   color: var(--color-text-secondary);
   pointer-events: none;
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 
 .not-found__search-input {
   width: 100%;
-  padding: 12px 16px 12px 44px;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
   font-size: var(--font-size-base);
   font-family: var(--font-body);
-  border: 2px solid var(--color-border);
+  border: 0.125rem solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-background);
   transition: all var(--transition-base);
@@ -125,7 +125,7 @@
 }
 
 .not-found__search-form .btn {
-  min-width: 120px;
+  min-width: 7.5rem;
   white-space: nowrap;
 }
 
@@ -144,7 +144,7 @@
 
 .not-found__suggestions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
   gap: var(--spacing-md);
   text-align: left;
 }
@@ -155,7 +155,7 @@
   gap: var(--spacing-md);
   padding: var(--spacing-lg);
   background: var(--color-white);
-  border: 2px solid var(--color-border);
+  border: 0.125rem solid var(--color-border);
   border-radius: var(--radius-lg);
   text-decoration: none;
   transition: all var(--transition-base);
@@ -169,15 +169,15 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 4px;
+  width: 0.25rem;
   background: var(--color-accent);
-  transform: translateX(-4px);
+  transform: translateX(-0.25rem);
   transition: transform var(--transition-base);
 }
 
 .not-found__suggestion-card:hover {
   border-color: var(--color-accent);
-  transform: translateY(-2px);
+  transform: translateY(-0.125rem);
 }
 
 .not-found__suggestion-card:hover::before {
@@ -186,15 +186,15 @@
 
 .not-found__suggestion-icon {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-background);
   border-radius: var(--radius-md);
   color: var(--color-accent);
-  font-size: 28px;
+  font-size: 1.75rem;
   transition: all var(--transition-base);
 }
 
@@ -225,23 +225,23 @@
 .not-found__suggestion-arrow {
   flex-shrink: 0;
   color: var(--color-text-secondary);
-  font-size: 20px;
+  font-size: 1.25rem;
   transition: all var(--transition-base);
 }
 
 .not-found__suggestion-card:hover .not-found__suggestion-arrow {
   color: var(--color-accent);
-  transform: translateX(4px);
+  transform: translateX(0.25rem);
 }
 
 /* Back button */
 .not-found__back {
   padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--color-border);
+  border-top: 0.0625rem solid var(--color-border);
 }
 
 .not-found__back .btn .material-symbols-outlined {
-  font-size: 18px;
+  font-size: 1.125rem;
 }
 
 /* Mobile responsiveness */
@@ -251,11 +251,11 @@
   }
 
   .not-found__number {
-    font-size: 80px;
+    font-size: 5rem;
   }
 
   .not-found__icon {
-    font-size: 48px;
+    font-size: 3rem;
   }
 
   .not-found__title {
@@ -287,9 +287,9 @@
   }
 
   .not-found__suggestion-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
   }
 
   .not-found__suggestion-label {
