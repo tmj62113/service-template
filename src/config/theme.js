@@ -22,8 +22,8 @@ export const theme = {
   // ===================================================
   company: {
     name: "Clockwork",
-    email: "hello@clockwork.app",
-    supportEmail: "support@clockwork.app",
+    email: "hello@onclockwork.com",
+    supportEmail: "support@onclockwork.com",
     phone: "+1 (555) 555-5555",
     address: {
       street: "123 Main Street",
@@ -189,9 +189,9 @@ export const theme = {
   // ===================================================
   email: {
     fromName: "Clockwork",
-    fromEmail: "bookings@clockwork.app",
-    supportEmail: "support@clockwork.app",
-    logoUrl: "https://clockwork.app/clockwork_logo.png",
+    fromEmail: "bookings@onclockwork.com",
+    supportEmail: "support@onclockwork.com",
+    logoUrl: "https://onclockwork.com/clockwork_logo.png",
     accentColor: "#8E44AD",
     footerText: "© 2025 Clockwork. All rights reserved.",
   },

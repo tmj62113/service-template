@@ -83,10 +83,12 @@ export default function Home() {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>your business, always on time</h1>
+          <h1>The scheduling platform that never misses a beat.</h1>
           <p>
-            Professional coaching and tutoring services to help you reach
-            your goals
+            Clockwork brings your appointments, payments, and client relationships together in one elegant system that bends to your brand. Customize everything—colors, layout, features—to create a booking experience that's unmistakably yours. Spend less time managing your calendar and more time doing what you love.
+          </p>
+          <p className="hero-tagline">
+            Your business, always on time.
           </p>
           <button
             className="btn btn--primary btn--lg"
