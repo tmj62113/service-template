@@ -50,7 +50,7 @@ export default function Footer() {
     <footer className="footer" role="contentinfo">
       <div className="footer-content">
         <div className="footer-section">
-          <span className="footer-logo-text">Clockwork</span>
+          <img src="/clockwork_logo.png" alt="Clockwork" className="footer-logo" />
         </div>
 
         <div className="footer-section">

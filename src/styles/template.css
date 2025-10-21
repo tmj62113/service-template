@@ -633,12 +633,9 @@ main {
   flex-wrap: wrap;
 }
 
-.footer-logo-text {
-  font-family: var(--font-heading);
-  font-size: 24px;
-  font-weight: 700;
-  color: #101014;
-  margin: 0;
+.footer-logo {
+  height: 40px;
+  width: auto;
   display: block;
 }
 
@@ -705,8 +702,8 @@ main {
     padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
   }
 
-  .footer-logo-text {
-    font-size: 20px;
+  .footer-logo {
+    height: 32px;
   }
 
   .footer-section h3 {
@@ -733,12 +730,9 @@ main {
   gap: 24px;
 }
 
-.logo-text {
-  font-family: var(--font-heading);
-  font-size: 24px;
-  font-weight: 700;
-  color: #101014;
-  margin: 0;
+.logo-img {
+  height: 40px;
+  width: auto;
   display: block;
 }
 
@@ -859,8 +853,8 @@ main {
 }
 
 @media (max-width: 768px) {
-  .logo-text {
-    font-size: 20px;
+  .logo-img {
+    height: 32px;
   }
 
   .cart-button {
