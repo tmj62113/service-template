@@ -4,7 +4,7 @@ import useBookingStore from '../stores/bookingStore';
 import DateSelector from '../components/booking/DateSelector';
 import TimeSlotGrid from '../components/booking/TimeSlotGrid';
 import { formatDuration, formatPrice } from '../utils/dateTimeUtils';
-import './BookingFlow.css';
+import '../styles/BookingFlow.css';
 
 /**
  * BookingFlow page - Main booking experience

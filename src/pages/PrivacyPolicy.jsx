@@ -1,5 +1,5 @@
 import { theme } from '../config/theme';
-import './PrivacyPolicy.css';
+import '../styles/PrivacyPolicy.css';
 
 export default function PrivacyPolicy() {
   const lastUpdated = 'January 2025';

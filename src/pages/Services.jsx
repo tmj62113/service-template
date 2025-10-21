@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './Services.css';
+import '../styles/Services.css';
 
 function Services() {
   const [services, setServices] = useState([]);

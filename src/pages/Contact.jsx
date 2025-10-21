@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { theme } from '../config/theme';
 import { getApiUrl } from '../config/api';
 import SEO from '../components/SEO';
-import './Contact.css';
+import '../styles/Contact.css';
 
 export default function Contact() {
   const [formData, setFormData] = useState({

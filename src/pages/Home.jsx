@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import SEO, { generateOrganizationStructuredData } from "../components/SEO";
-import "./Home.css";
+import "../styles/Home.css";
 
 export default function Home() {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useBookingStore from '../stores/bookingStore';
 import BookingSummary from '../components/booking/BookingSummary';
-import './BookingReview.css';
+import '../styles/BookingReview.css';
 
 /**
  * BookingReview page - Review booking details before payment

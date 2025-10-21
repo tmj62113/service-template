@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import SEO from '../components/SEO';
-import './NotFound.css';
+import '../styles/NotFound.css';
 
 /**
  * NotFound - 404 Error Page

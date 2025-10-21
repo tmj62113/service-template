@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { formatDate, formatTimeSlot, formatDuration, formatPrice, generateICalContent, downloadICalFile } from '../utils/dateTimeUtils';
 import useBookingStore from '../stores/bookingStore';
-import './BookingConfirmation.css';
+import '../styles/BookingConfirmation.css';
 
 /**
  * BookingConfirmation page - Success page after booking payment

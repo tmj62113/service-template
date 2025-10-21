@@ -1,5 +1,5 @@
 import SEO from "../components/SEO";
-import "./About.css";
+import "../styles/About.css";
 
 export default function About() {
   return (
