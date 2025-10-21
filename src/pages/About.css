@@ -13,9 +13,9 @@
 
 .about-hero {
   padding: 120px 20px 80px;
-  background: #101014;
+  background: #f2f0ea;
   text-align: center;
-  color: #f2f0ea;
+  color: #101014;
 }
 
 .about-hero h1 {
@@ -182,9 +182,9 @@
 
 .about-cta {
   padding: 80px 0;
-  background: #101014;
+  background: #e1dbcb;
   text-align: center;
-  color: #f2f0ea;
+  color: #101014;
 }
 
 .about-cta h2 {
