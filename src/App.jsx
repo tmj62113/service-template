@@ -5,22 +5,21 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import AdminLayout from './components/AdminLayout';
 import Home from './pages/Home';
-import Gallery from './pages/Gallery';
-import ParadeOfHearts from './pages/ParadeOfHearts';
-import Products from './pages/Products';
-import ProductDetail from './pages/ProductDetail';
 import About from './pages/About';
 // Service booking pages
 import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
+import BookingFlow from './pages/BookingFlow';
+import BookingReview from './pages/BookingReview';
+import BookingConfirmation from './pages/BookingConfirmation';
 import Checkout from './pages/Checkout';
 import Success from './pages/Success';
 import Cancel from './pages/Cancel';
 import Login from './pages/Login';
 import AdminOverview from './pages/AdminOverview';
-import AdminProducts from './pages/AdminProducts';
+import AdminServices from './pages/AdminServices';
+import AdminStaff from './pages/AdminStaff';
 import AdminMessages from './pages/AdminMessages';
-import AdminOrders from './pages/AdminOrders';
 import AdminCustomers from './pages/AdminCustomers';
 import AdminSettings from './pages/AdminSettings';
 import AdminSearch from './pages/AdminSearch';
@@ -32,7 +31,6 @@ import AdminSecurity from './pages/AdminSecurity';
 import AdminIPBlocking from './pages/AdminIPBlocking';
 import AdminAuditLogs from './pages/AdminAuditLogs';
 import Unsubscribe from './pages/Unsubscribe';
-import OrderDetail from './pages/OrderDetail';
 import CustomerDetail from './pages/CustomerDetail';
 import TestUtilities from './pages/TestUtilities';
 import StyleGuide from './pages/StyleGuide';
@@ -80,12 +78,11 @@ function App() {
                 <main id="main-content" role="main">
                   <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/gallery" element={<Gallery />} />
-                    <Route path="/parade-of-hearts" element={<ParadeOfHearts />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/products/:id" element={<ProductDetail />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/services/:id" element={<ServiceDetail />} />
+                    <Route path="/book" element={<BookingFlow />} />
+                    <Route path="/booking/review" element={<BookingReview />} />
+                    <Route path="/booking/confirmation" element={<BookingConfirmation />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/success" element={<Success />} />
@@ -116,10 +113,9 @@ function App() {
             }
           >
             <Route index element={<AdminOverview />} />
-            <Route path="products" element={<AdminProducts />} />
+            <Route path="services" element={<AdminServices />} />
+            <Route path="staff" element={<AdminStaff />} />
             <Route path="messages" element={<AdminMessages />} />
-            <Route path="orders" element={<AdminOrders />} />
-            <Route path="orders/:id" element={<OrderDetail />} />
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="customers/:email/:name" element={<CustomerDetail />} />
             <Route path="newsletter" element={<AdminNewsletter />} />

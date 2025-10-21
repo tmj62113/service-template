@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useCartStore } from '../stores/cartStore';
 import { useAuth } from '../contexts/AuthContext';
 import { theme } from '../config/theme';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const items = useCartStore((state) => state.items);
-  const itemCount = items.reduce((count, item) => count + item.quantity, 0);
   const { user } = useAuth();
 
   // Close menu when route changes
@@ -77,22 +74,10 @@ export default function MobileMenu() {
             Home
           </Link>
           <Link
-            to="/parade-of-hearts"
-            className={location.pathname === '/parade-of-hearts' ? 'active' : ''}
+            to="/services"
+            className={location.pathname === '/services' ? 'active' : ''}
           >
-            Parade of Hearts
-          </Link>
-          <Link
-            to="/gallery"
-            className={location.pathname === '/gallery' ? 'active' : ''}
-          >
-            Gallery
-          </Link>
-          <Link
-            to="/products"
-            className={location.pathname === '/products' ? 'active' : ''}
-          >
-            Shop
+            Services
           </Link>
           <Link
             to="/about"
@@ -114,13 +99,6 @@ export default function MobileMenu() {
             </Link>
           )}
         </div>
-
-        {itemCount > 0 && (
-          <div className="mobile-menu-cart-info" aria-label={`${itemCount} ${itemCount === 1 ? 'item' : 'items'} in shopping cart`}>
-            <span className="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-            <span>{itemCount} {itemCount === 1 ? 'item' : 'items'} in cart</span>
-          </div>
-        )}
       </nav>
     </>
   );

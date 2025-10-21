@@ -56,9 +56,7 @@ export default function Footer() {
         <div className="footer-section">
           <h4>Quick Links</h4>
           <nav className="footer-nav">
-            <Link to="/parade-of-hearts">Parade of Hearts</Link>
-            <Link to="/gallery">Gallery</Link>
-            <Link to="/products">Products</Link>
+            <Link to="/services">Services</Link>
             <Link to="/about">About</Link>
             <a href="/#contact">Contact</a>
           </nav>

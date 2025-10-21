@@ -1,15 +1,9 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useCartStore } from '../stores/cartStore';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { theme } from '../config/theme';
-import Cart from './cart/Cart';
 import MobileMenu from './MobileMenu';
 
 export default function Header() {
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const items = useCartStore((state) => state.items);
-  const itemCount = items.reduce((count, item) => count + item.quantity, 0);
   const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
 
@@ -22,22 +16,20 @@ export default function Header() {
     <>
       <header className="header" role="banner">
         <div className="header-content">
-          <Link to="/" className="logo" aria-label="Home page">
+          <a href="/" className="logo" aria-label="Home page">
             <img src={theme.logo} alt={theme.logoAlt} />
-          </Link>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="nav desktop-nav" role="navigation" aria-label="Main navigation">
-            <Link to="/parade-of-hearts">Parade of Hearts</Link>
-            <Link to="/gallery">Gallery</Link>
-            <Link to="/products">Shop</Link>
-            <Link to="/about">About</Link>
+            <a href="/services">Services</a>
+            <a href="/about">About</a>
             <a href="/#contact">Contact</a>
             {user?.role === 'admin' && (
-              <Link to="/admin" className="admin-nav-link" aria-label="Admin dashboard">
+              <a href="/admin" className="admin-nav-link" aria-label="Admin dashboard">
                 <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>
                 Admin
-              </Link>
+              </a>
             )}
           </nav>
 
@@ -76,24 +68,12 @@ export default function Header() {
                 </button>
               </div>
             )}
-            <button
-              className="cart-button"
-              onClick={() => setIsCartOpen(true)}
-              aria-label={`Shopping cart with ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`}
-            >
-              <span className="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-              {itemCount > 0 && (
-                <span className="cart-badge" aria-hidden="true">{itemCount}</span>
-              )}
-            </button>
 
             {/* Mobile Menu - only visible on mobile */}
             <MobileMenu />
           </div>
         </div>
       </header>
-
-      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
 }

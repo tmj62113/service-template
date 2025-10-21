@@ -1,8 +1,14 @@
 import jwt from 'jsonwebtoken';
 import { User } from '../db/models/User.js';
 
-// JWT_SECRET is validated in server.js by validateEnv.js before this module is loaded
-const JWT_SECRET = process.env.JWT_SECRET;
+// Helper function to get JWT_SECRET
+function getJWTSecret() {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
+  return secret;
+}
 
 /**
  * Middleware to verify JWT token and protect routes
@@ -17,7 +23,7 @@ export async function authenticateToken(req, res, next) {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJWTSecret());
 
     // Get user from database
     const user = await User.findById(decoded.userId);
@@ -48,7 +54,7 @@ export async function authenticateToken(req, res, next) {
 export function generateToken(userId) {
   return jwt.sign(
     { userId },
-    JWT_SECRET,
+    getJWTSecret(),
     { expiresIn: '7d' } // Token expires in 7 days
   );
 }

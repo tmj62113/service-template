@@ -131,6 +131,65 @@ export class User {
   }
 
   /**
+   * Create a client user (for booking without registration)
+   * Simpler version without password - for clients who book services
+   * @param {Object} clientData - Client data
+   * @param {string} clientData.name - Client's full name
+   * @param {string} clientData.email - Client email
+   * @param {string} clientData.phone - Client phone number
+   * @param {string} clientData.timeZone - Timezone (optional)
+   * @returns {Promise<Object>} Created client user
+   */
+  static async createClient(clientData) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    // Check if user already exists
+    const existingUser = await collection.findOne({ email: clientData.email });
+    if (existingUser) {
+      // Return existing user if found
+      return existingUser;
+    }
+
+    const client = {
+      email: clientData.email,
+      name: clientData.name,
+      phone: clientData.phone,
+      role: 'client',
+      timeZone: clientData.timeZone || 'America/New_York',
+
+      // Client-specific fields
+      preferredStaffIds: [],
+      communicationPreferences: {
+        emailReminders: true,
+        smsReminders: false
+      },
+      totalBookings: 0,
+      completedBookings: 0,
+      cancelledBookings: 0,
+      noShowCount: 0,
+      clientNotes: '',
+      isActive: true,
+      blockedReason: null,
+
+      // Security fields
+      failedLoginAttempts: 0,
+      accountLockedUntil: null,
+      lastLoginAt: null,
+
+      // Timestamps
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    const result = await collection.insertOne(client);
+    return {
+      _id: result.insertedId,
+      ...client
+    };
+  }
+
+  /**
    * Find user by email
    * @param {string} email - User email
    * @returns {Promise<Object|null>} User object or null

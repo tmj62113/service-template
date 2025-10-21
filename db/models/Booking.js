@@ -48,6 +48,7 @@ export class Booking {
       // Payment
       paymentStatus: bookingData.paymentStatus || 'pending', // pending, paid, refunded, failed
       paymentIntentId: bookingData.paymentIntentId || null,
+      sessionId: bookingData.sessionId || null, // Stripe Checkout Session ID
       amount: bookingData.amount,
       currency: bookingData.currency || 'USD',
       refundAmount: 0,
@@ -102,6 +103,16 @@ export class Booking {
   static async findByPaymentIntent(paymentIntentId) {
     const collection = await getCollection(COLLECTION_NAME);
     return await collection.findOne({ paymentIntentId });
+  }
+
+  /**
+   * Find booking by Stripe session ID
+   * @param {string} sessionId - Stripe Checkout Session ID
+   * @returns {Promise<Object|null>}
+   */
+  static async findBySessionId(sessionId) {
+    const collection = await getCollection(COLLECTION_NAME);
+    return await collection.findOne({ sessionId });
   }
 
   /**

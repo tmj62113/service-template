@@ -188,6 +188,28 @@ export default function AdminLayout() {
           </Link>
 
           <Link
+            to="/admin/services"
+            className={`nav-item ${
+              isActive("/admin/services") ? "active" : ""
+            }`}
+            onClick={closeMobileMenu}
+          >
+            <span className="material-symbols-outlined">event_available</span>
+            <span>Services</span>
+          </Link>
+
+          <Link
+            to="/admin/staff"
+            className={`nav-item ${
+              isActive("/admin/staff") ? "active" : ""
+            }`}
+            onClick={closeMobileMenu}
+          >
+            <span className="material-symbols-outlined">badge</span>
+            <span>Staff</span>
+          </Link>
+
+          <Link
             to="/admin/orders"
             className={`nav-item ${isActive("/admin/orders") ? "active" : ""}`}
             onClick={closeMobileMenu}

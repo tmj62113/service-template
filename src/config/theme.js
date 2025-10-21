@@ -9,27 +9,27 @@ export const theme = {
   // ===================================================
   // BRAND IDENTITY
   // ===================================================
-  brandName: "Mark J Peterson Art",
-  tagline: "Original Artwork & Fine Art Prints",
+  brandName: "Booked",
+  tagline: "Schedule Your Success",
 
   // Logo and images
-  logo: "/peterson_logo.png",
-  logoAlt: "Mark J Peterson Art Logo",
+  logo: "/booked_logo.png",
+  logoAlt: "Booked Logo",
   favicon: "/favicon.ico",
 
   // ===================================================
   // COMPANY INFORMATION
   // ===================================================
   company: {
-    name: "Mark J Peterson Art",
-    email: "hello@markjpetersonart.com",
-    supportEmail: "support@markjpetersonart.com",
+    name: "Booked",
+    email: "hello@booked.app",
+    supportEmail: "support@booked.app",
     phone: "+1 (555) 555-5555",
     address: {
-      street: "123 Art Street",
-      city: "Portland",
-      state: "OR",
-      zip: "97201",
+      street: "123 Main Street",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94102",
       country: "USA",
     },
   },
@@ -38,9 +38,9 @@ export const theme = {
   // SOCIAL MEDIA LINKS
   // ===================================================
   social: {
-    facebook: "https://facebook.com/markjpetersonart",
-    instagram: "https://www.instagram.com/markpetersonart/",
-    youtube: "https://youtube.com/@markjpetersonart",
+    facebook: "",
+    instagram: "",
+    youtube: "",
   },
 
   // ===================================================
@@ -188,23 +188,23 @@ export const theme = {
   // EMAIL BRANDING
   // ===================================================
   email: {
-    fromName: "Mark J Peterson Art",
-    fromEmail: "orders@markjpetersonart.com",
-    supportEmail: "support@markjpetersonart.com",
-    logoUrl: "https://markjpetersonart.com/logo.png",
+    fromName: "Booked",
+    fromEmail: "bookings@booked.app",
+    supportEmail: "support@booked.app",
+    logoUrl: "https://booked.app/booked_logo.png",
     accentColor: "#8E44AD",
-    footerText: "© 2025 Mark J Peterson Art. All rights reserved.",
+    footerText: "© 2025 Booked. All rights reserved.",
   },
 
   // ===================================================
   // SEO & META
   // ===================================================
   seo: {
-    title: "Mark J Peterson Art - Original Artwork & Fine Art Prints",
-    description: "Discover original artwork and fine art prints by Mark J Peterson. Explore stunning paintings, digital art, and limited edition prints.",
-    keywords: "art, artwork, paintings, fine art prints, original art, Mark J Peterson, artist, gallery",
+    title: "Booked - Schedule Your Success",
+    description: "Streamline your booking process with Booked. Schedule appointments, manage services, and grow your business with our powerful booking platform.",
+    keywords: "booking, appointments, scheduling, calendar, services, business management, booking system",
     ogImage: "/og-image.jpg",
-    twitterHandle: "@markjpetersonart",
+    twitterHandle: "@booked",
   },
 
   // ===================================================

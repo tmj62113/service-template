@@ -340,108 +340,184 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
         expand: ['line_items', 'line_items.data.price.product', 'customer', 'payment_intent'],
       });
 
-      // Extract order information
-      const orderData = {
-        sessionId: fullSession.id,
-        paymentIntentId: typeof fullSession.payment_intent === 'string'
-          ? fullSession.payment_intent
-          : fullSession.payment_intent?.id,
-        customerId: fullSession.customer,
-        customerEmail: fullSession.customer_details?.email,
-        customerName: fullSession.customer_details?.name,
+      // Check if this is a booking or product order
+      const isBooking = fullSession.metadata?.booking_type === 'appointment';
 
-        // Shipping information (use shipping address if provided, otherwise use billing address)
-        shippingAddress: fullSession.shipping_details?.address || fullSession.customer_details?.address,
-        shippingName: fullSession.shipping_details?.name || fullSession.customer_details?.name,
+      if (isBooking) {
+        // Handle booking payment
+        console.log('📅 Processing booking payment');
 
-        // Billing information
-        billingAddress: fullSession.customer_details?.address,
+        // Check if booking already exists (idempotency)
+        const existingBooking = await Booking.findByPaymentIntent(
+          typeof fullSession.payment_intent === 'string'
+            ? fullSession.payment_intent
+            : fullSession.payment_intent?.id
+        );
 
-        // Order details
-        items: fullSession.line_items?.data.map(item => ({
-          name: item.description,
-          quantity: item.quantity,
-          price: (item.amount_total / item.quantity) / 100, // Unit price: divide total by quantity, then convert from cents
-        })),
+        if (existingBooking) {
+          console.log('⚠️  Booking already exists:', existingBooking._id);
+          break;
+        }
 
-        // Totals
-        subtotal: fullSession.amount_subtotal / 100,
-        total: fullSession.amount_total / 100,
-        currency: fullSession.currency,
+        // Create booking from metadata
+        const bookingData = {
+          serviceId: fullSession.metadata.service_id,
+          staffId: fullSession.metadata.staff_id || null,
+          startDateTime: new Date(fullSession.metadata.start_datetime),
+          endDateTime: new Date(fullSession.metadata.end_datetime),
+          timeZone: fullSession.metadata.timezone,
+          duration: parseInt(fullSession.metadata.duration),
+          status: 'confirmed', // Payment successful, booking confirmed
+          paymentStatus: 'paid',
+          paymentIntentId: typeof fullSession.payment_intent === 'string'
+            ? fullSession.payment_intent
+            : fullSession.payment_intent?.id,
+          sessionId: fullSession.id, // Save Stripe session ID for retrieval
+          amount: fullSession.amount_total, // Already in cents
+          currency: fullSession.currency,
+          clientInfo: {
+            name: fullSession.metadata.client_name,
+            email: fullSession.metadata.client_email,
+            phone: fullSession.metadata.client_phone,
+            notes: fullSession.metadata.client_notes || ''
+          }
+        };
 
-        // Status
-        paymentStatus: fullSession.payment_status,
-        status: fullSession.status,
+        console.log('📅 Booking Data:', JSON.stringify(bookingData, null, 2));
 
-        // Timestamps
-        createdAt: new Date(fullSession.created * 1000),
-      };
+        // Find or create client user
+        let client = await User.findByEmail(bookingData.clientInfo.email);
+        if (!client) {
+          console.log('👤 Creating new client user');
+          client = await User.createClient({
+            name: bookingData.clientInfo.name,
+            email: bookingData.clientInfo.email,
+            phone: bookingData.clientInfo.phone
+          });
+        }
 
-      console.log('📦 Order Data:', JSON.stringify(orderData, null, 2));
+        bookingData.clientId = client._id;
 
-      // Check if order already exists (idempotency)
-      const existingOrder = await Order.findBySessionId(orderData.sessionId);
-      if (existingOrder) {
-        console.log('⚠️  Order already exists:', existingOrder._id);
-        break;
-      }
+        // Create booking
+        const savedBooking = await Booking.create(bookingData);
+        console.log('✅ Booking saved to database:', savedBooking._id);
 
-      // Save order to database
-      const savedOrder = await Order.create(orderData);
-      console.log('✅ Order saved to database:', savedOrder._id);
+        // Update client booking count
+        await User.incrementBookingCount(client._id, 'total');
 
-      // Update product inventory
-      try {
-        const lineItems = fullSession.line_items?.data || [];
-        console.log(`📦 Processing ${lineItems.length} line items for inventory update`);
+        // TODO: Send booking confirmation email
+        // await sendBookingConfirmationEmail(savedBooking);
 
-        for (let i = 0; i < lineItems.length; i++) {
-          const lineItem = lineItems[i];
-          const quantity = lineItem.quantity;
+        // TODO: Send calendar invite
+        // await sendCalendarInvite(savedBooking);
 
-          // Try to get product ID from metadata
-          let productId = lineItem.price?.product?.metadata?.product_id;
-          console.log(`📦 Line item ${i}: ${lineItem.description}, quantity: ${quantity}, productId: ${productId || 'not found'}`);
+      } else {
+        // Handle product order payment
+        console.log('📦 Processing product order');
 
-          // If we have product ID, update directly
-          if (productId) {
-            const result = await Product.updateStock(productId, -quantity);
-            if (result) {
-              console.log(`✅ Updated stock for product ${productId}: -${quantity}`);
-            } else {
-              console.warn(`⚠️  Failed to update stock for product ${productId}`);
-            }
-          } else {
-            // Fallback: search by product name
-            const productName = lineItem.description;
-            console.log(`🔍 Searching for product by name: "${productName}"`);
-            const products = await Product.search(productName);
-            const product = products.find(p => p.name === productName);
+        // Extract order information
+        const orderData = {
+          sessionId: fullSession.id,
+          paymentIntentId: typeof fullSession.payment_intent === 'string'
+            ? fullSession.payment_intent
+            : fullSession.payment_intent?.id,
+          customerId: fullSession.customer,
+          customerEmail: fullSession.customer_details?.email,
+          customerName: fullSession.customer_details?.name,
 
-            if (product) {
-              const result = await Product.updateStock(product._id, -quantity);
+          // Shipping information (use shipping address if provided, otherwise use billing address)
+          shippingAddress: fullSession.shipping_details?.address || fullSession.customer_details?.address,
+          shippingName: fullSession.shipping_details?.name || fullSession.customer_details?.name,
+
+          // Billing information
+          billingAddress: fullSession.customer_details?.address,
+
+          // Order details
+          items: fullSession.line_items?.data.map(item => ({
+            name: item.description,
+            quantity: item.quantity,
+            price: (item.amount_total / item.quantity) / 100, // Unit price: divide total by quantity, then convert from cents
+          })),
+
+          // Totals
+          subtotal: fullSession.amount_subtotal / 100,
+          total: fullSession.amount_total / 100,
+          currency: fullSession.currency,
+
+          // Status
+          paymentStatus: fullSession.payment_status,
+          status: fullSession.status,
+
+          // Timestamps
+          createdAt: new Date(fullSession.created * 1000),
+        };
+
+        console.log('📦 Order Data:', JSON.stringify(orderData, null, 2));
+
+        // Check if order already exists (idempotency)
+        const existingOrder = await Order.findBySessionId(orderData.sessionId);
+        if (existingOrder) {
+          console.log('⚠️  Order already exists:', existingOrder._id);
+          break;
+        }
+
+        // Save order to database
+        const savedOrder = await Order.create(orderData);
+        console.log('✅ Order saved to database:', savedOrder._id);
+
+        // Update product inventory
+        try {
+          const lineItems = fullSession.line_items?.data || [];
+          console.log(`📦 Processing ${lineItems.length} line items for inventory update`);
+
+          for (let i = 0; i < lineItems.length; i++) {
+            const lineItem = lineItems[i];
+            const quantity = lineItem.quantity;
+
+            // Try to get product ID from metadata
+            let productId = lineItem.price?.product?.metadata?.product_id;
+            console.log(`📦 Line item ${i}: ${lineItem.description}, quantity: ${quantity}, productId: ${productId || 'not found'}`);
+
+            // If we have product ID, update directly
+            if (productId) {
+              const result = await Product.updateStock(productId, -quantity);
               if (result) {
-                console.log(`✅ Updated stock for ${product.name}: -${quantity}`);
+                console.log(`✅ Updated stock for product ${productId}: -${quantity}`);
               } else {
-                console.warn(`⚠️  Failed to update stock for ${product.name}`);
+                console.warn(`⚠️  Failed to update stock for product ${productId}`);
               }
             } else {
-              console.warn(`⚠️  Product not found for inventory update: ${productName}`);
+              // Fallback: search by product name
+              const productName = lineItem.description;
+              console.log(`🔍 Searching for product by name: "${productName}"`);
+              const products = await Product.search(productName);
+              const product = products.find(p => p.name === productName);
+
+              if (product) {
+                const result = await Product.updateStock(product._id, -quantity);
+                if (result) {
+                  console.log(`✅ Updated stock for ${product.name}: -${quantity}`);
+                } else {
+                  console.warn(`⚠️  Failed to update stock for ${product.name}`);
+                }
+              } else {
+                console.warn(`⚠️  Product not found for inventory update: ${productName}`);
+              }
             }
           }
+          console.log('✅ Inventory update completed');
+        } catch (inventoryError) {
+          console.error('❌ Error updating inventory:', inventoryError);
+          console.error('Stack trace:', inventoryError.stack);
+          // Don't fail the order if inventory update fails
         }
-        console.log('✅ Inventory update completed');
-      } catch (inventoryError) {
-        console.error('❌ Error updating inventory:', inventoryError);
-        console.error('Stack trace:', inventoryError.stack);
-        // Don't fail the order if inventory update fails
+
+        // Send confirmation email
+        await sendOrderConfirmationEmail(savedOrder);
+
+        // TODO: Notify admin/warehouse
+        // await notifyWarehouse(orderData);
       }
-
-      // Send confirmation email
-      await sendOrderConfirmationEmail(savedOrder);
-
-      // TODO: Notify admin/warehouse
-      // await notifyWarehouse(orderData);
 
       break;
 
@@ -527,6 +603,101 @@ app.post('/api/create-checkout-session', async (req, res) => {
     console.error('Stripe checkout error:', error);
     return res.status(500).json({
       error: 'Failed to create checkout session',
+      details: error.message
+    });
+  }
+});
+
+// Create Booking Checkout Session endpoint
+app.post('/api/create-booking-checkout', async (req, res) => {
+  try {
+    const {
+      serviceId,
+      staffId,
+      startDateTime,
+      endDateTime,
+      timeZone,
+      duration,
+      amount,
+      currency,
+      clientInfo
+    } = req.body;
+
+    // Validate required fields
+    if (!serviceId || !startDateTime || !endDateTime || !amount || !clientInfo) {
+      return res.status(400).json({ error: 'Missing required booking information' });
+    }
+
+    if (!clientInfo.name || !clientInfo.email || !clientInfo.phone) {
+      return res.status(400).json({ error: 'Client information is incomplete' });
+    }
+
+    // Fetch service details
+    const service = await Service.findById(serviceId);
+    if (!service) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    // Check if the slot is still available
+    const slotAvailable = await Booking.isSlotAvailable(
+      staffId,
+      new Date(startDateTime),
+      new Date(endDateTime)
+    );
+
+    if (!slotAvailable) {
+      return res.status(409).json({
+        error: 'Time slot no longer available',
+        message: 'This time slot has been booked by another client. Please select a different time.'
+      });
+    }
+
+    // Get the client URL from request origin or env
+    const clientUrl = req.headers.origin || process.env.CLIENT_URL || 'http://localhost:5173';
+
+    // Create Stripe Checkout Session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: currency || 'usd',
+          product_data: {
+            name: service.name,
+            description: `${duration} minute appointment`,
+            metadata: {
+              service_id: serviceId,
+              booking_type: 'appointment'
+            }
+          },
+          unit_amount: amount // Amount already in cents
+        },
+        quantity: 1
+      }],
+      mode: 'payment',
+      success_url: `${clientUrl}/booking/confirmation?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${clientUrl}/booking/review`,
+      customer_email: clientInfo.email,
+      // Store booking data in metadata for webhook processing
+      metadata: {
+        booking_type: 'appointment',
+        service_id: serviceId,
+        staff_id: staffId || '',
+        start_datetime: startDateTime,
+        end_datetime: endDateTime,
+        timezone: timeZone || 'America/New_York',
+        duration: duration.toString(),
+        client_name: clientInfo.name,
+        client_email: clientInfo.email,
+        client_phone: clientInfo.phone,
+        client_notes: clientInfo.notes || ''
+      }
+    });
+
+    return res.status(200).json({ url: session.url });
+  } catch (error) {
+    console.error('Booking checkout error:', error);
+    return res.status(500).json({
+      error: 'Failed to create booking checkout session',
       details: error.message
     });
   }
@@ -1599,6 +1770,22 @@ app.get('/api/bookings/:id', authenticateToken, async (req, res) => {
     res.json(booking);
   } catch (error) {
     console.error('Error fetching booking:', error);
+    res.status(500).json({ error: 'Failed to fetch booking' });
+  }
+});
+
+// Get booking by Stripe session ID (no auth required - for confirmation page)
+app.get('/api/bookings/session/:sessionId', async (req, res) => {
+  try {
+    const booking = await Booking.findBySessionId(req.params.sessionId);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    res.json(booking);
+  } catch (error) {
+    console.error('Error fetching booking by session:', error);
     res.status(500).json({ error: 'Failed to fetch booking' });
   }
 });
