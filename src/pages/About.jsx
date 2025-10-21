@@ -173,7 +173,7 @@ export default function About() {
             <a href="/services" className="btn btn--primary btn--lg">
               Browse Services
             </a>
-            <a href="/#contact" className="btn btn--outline btn--lg">
+            <a href="/contact" className="btn btn--outline btn--lg">
               Contact Us
             </a>
           </div>

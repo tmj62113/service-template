@@ -24,7 +24,7 @@ export default function Header() {
           <nav className="nav desktop-nav" role="navigation" aria-label="Main navigation">
             <a href="/services">Services</a>
             <a href="/about">About</a>
-            <a href="/#contact">Contact</a>
+            <a href="/contact">Contact</a>
             {user?.role === 'admin' && (
               <a href="/admin" className="admin-nav-link" aria-label="Admin dashboard">
                 <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>

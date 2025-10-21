@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import AdminLayout from './components/AdminLayout';
 import Home from './pages/Home';
 import About from './pages/About';
+import Contact from './pages/Contact';
 // Service booking pages
 import Services from './pages/Services';
 import ServiceDetail from './pages/ServiceDetail';
@@ -84,6 +85,7 @@ function App() {
                     <Route path="/booking/review" element={<BookingReview />} />
                     <Route path="/booking/confirmation" element={<BookingConfirmation />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/success" element={<Success />} />
                     <Route path="/cancel" element={<Cancel />} />

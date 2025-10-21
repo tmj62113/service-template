@@ -85,9 +85,12 @@ export default function MobileMenu() {
           >
             About
           </Link>
-          <a href="/#contact" onClick={toggleMenu}>
+          <Link
+            to="/contact"
+            className={location.pathname === '/contact' ? 'active' : ''}
+          >
             Contact
-          </a>
+          </Link>
           {user?.role === 'admin' && (
             <Link
               to="/admin"

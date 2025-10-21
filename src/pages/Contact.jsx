@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { theme } from '../config/theme';
 import { getApiUrl } from '../config/api';
 import SEO from '../components/SEO';
+import './Contact.css';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ export default function Contact() {
     email: '',
     subject: '',
     message: '',
+    mailingList: false,
     // Honeypot fields (hidden from users, bots will fill them)
     website: '',
     phone: '',
@@ -17,10 +19,10 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -40,10 +42,41 @@ export default function Contact() {
         throw new Error('Failed to send message');
       }
 
+      // If user opted in to mailing list, subscribe them to newsletter
+      if (formData.mailingList) {
+        try {
+          await fetch(getApiUrl('/api/newsletter/subscribe'), {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: formData.email,
+              source: 'contact-form',
+              metadata: {
+                name: formData.name,
+                submittedAt: new Date().toISOString(),
+              },
+            }),
+          });
+        } catch (newsletterError) {
+          console.error('Error subscribing to newsletter:', newsletterError);
+          // Don't fail the contact form submission if newsletter signup fails
+        }
+      }
+
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+          mailingList: false,
+          website: '',
+          phone: '',
+        });
       }, 3000);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -52,16 +85,16 @@ export default function Contact() {
   };
 
   return (
-    <div className="contact-container">
+    <div className="contact-page">
       <SEO
-        title="Contact"
-        description="Get in touch with Mark J Peterson Art. Have questions about artwork, prints, commissions, or exhibitions? We'd love to hear from you."
-        keywords={['contact', 'contact artist', 'art inquiries', 'commission art', 'art questions', 'get in touch']}
+        title="Contact Us"
+        description="Get in touch with Booked. Have questions about our coaching or tutoring services? We'd love to hear from you and help you get started."
+        keywords={['contact', 'contact us', 'coaching inquiries', 'tutoring questions', 'get in touch', 'customer support', 'book a session']}
       />
       <div className="contact-hero">
-        <h1>Get in Touch</h1>
+        <h1>Contact Us</h1>
         <p className="contact-lead">
-          Have questions? We'd love to hear from you.
+          Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
         </p>
       </div>
 
@@ -170,6 +203,19 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                   ></textarea>
+                </div>
+
+                <div className="form-checkbox">
+                  <input
+                    type="checkbox"
+                    id="mailingList"
+                    name="mailingList"
+                    checked={formData.mailingList}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="mailingList">
+                    Subscribe to our newsletter for updates and tips
+                  </label>
                 </div>
 
                 {/* Honeypot fields - hidden from users, bots will fill them */}
