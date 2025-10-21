@@ -70,7 +70,7 @@
   font-size: 36px;
   font-weight: 600;
   line-height: 1.3;
-  color: var(--color-gunmetal);
+  color: #101014;
   text-align: center;
   margin-bottom: 48px;
 }
@@ -95,7 +95,7 @@
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.8;
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 /* =====================================
@@ -143,7 +143,7 @@
   font-family: var(--font-heading);
   font-size: 22px;
   font-weight: 600;
-  color: var(--color-gunmetal);
+  color: #101014;
   margin-bottom: 12px;
 }
 
@@ -151,7 +151,7 @@
   font-family: var(--font-heading);
   font-size: 18px;
   font-weight: 600;
-  color: var(--color-gunmetal);
+  color: #101014;
   margin-bottom: 8px;
 }
 
@@ -159,7 +159,7 @@
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
-  color: var(--color-gunmetal);
+  color: #101014;
   margin: 0;
 }
 
@@ -251,7 +251,7 @@
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.7;
-  color: var(--color-gunmetal);
+  color: #101014;
   margin: 0;
 }
 

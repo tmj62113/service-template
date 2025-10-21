@@ -1,7 +1,7 @@
 /* =====================================================
-   MARK J PETERSON ART - CLIENT CUSTOMIZATIONS
+   CLOCKWORK - CLIENT CUSTOMIZATIONS
    =====================================================
-   Custom styles for Mark J Peterson Art brand.
+   Custom styles for Clockwork brand.
    This file loads AFTER design-system.css and template.css,
    so styles here override template defaults.
    ===================================================== */
@@ -10,32 +10,28 @@
    ROOT VARIABLES - Brand Colors
    ===================================== */
 :root {
-  /* Mark J Peterson Art Brand Colors */
-  --color-gunmetal: #122d38;
-  --color-charcoal: #0c3a4b;
-  --color-seal-brown: #692413;
-  --color-rust: #b93a0c;
-  --color-lion: #b49a68;
-  --color-ecru: #c0a679;
-  --color-cream: #f7f6ef;
+  /* Clockwork Brand Colors - Minimalist Three-Color Palette */
+  --color-cream: #f2f0ea;    /* Light beige - backgrounds */
+  --color-tan: #e1dbcb;      /* Tan - borders, accents, secondary surfaces */
+  --color-dark: #101014;     /* Dark - text only */
 
   /* Override design system colors with brand colors */
-  --color-primary: var(--color-gunmetal);
-  --color-primary-hover: var(--color-charcoal);
-  --color-accent: var(--color-ecru);
-  --color-accent-hover: var(--color-lion);
+  --color-primary: var(--color-dark);
+  --color-primary-hover: var(--color-dark);
+  --color-accent: var(--color-tan);
+  --color-accent-hover: var(--color-tan);
   --color-background: var(--color-cream);
   --color-surface: var(--color-cream);
-  --color-text: var(--color-gunmetal);
-  --color-border: rgba(180, 154, 104, 0.2);
+  --color-text: var(--color-dark);
+  --color-border: var(--color-tan);
 
   /* Typography */
-  --font-heading: "Anton", sans-serif;
-  --font-body: "Barlow Semi Condensed", sans-serif;
+  --font-heading: "Urbanist", sans-serif;
+  --font-body: "Work Sans", sans-serif;
 
   /* Layout */
   --max-width: 1050px;
-  --layout-max-width: 1050px; /* Override template.css default of 1280px */
+  --layout-max-width: 1050px;
   --radius-card: 8px;
   --radius-button: 4px;
   --radius-full: 9999px;
@@ -49,7 +45,7 @@
 body {
   background-color: var(--color-cream);
   font-family: var(--font-body);
-  color: var(--color-gunmetal);
+  color: #101014;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -81,7 +77,7 @@ h6,
 .h5,
 .h6 {
   font-family: var(--font-heading);
-  color: var(--color-gunmetal);
+  color: #101014;
   font-size: 30px;
   line-height: 36px;
   font-weight: 400;
@@ -129,8 +125,8 @@ p:last-child {
   cursor: pointer;
   transition: all 0.2s ease;
   background-color: transparent;
-  color: var(--color-gunmetal);
-  border: 2px solid var(--color-gunmetal);
+  color: #101014;
+  border: 2px solid #101014;
 }
 
 .btn--primary:hover,
@@ -143,7 +139,7 @@ p:last-child {
 /* Secondary buttons with Seal Brown border */
 .btn--secondary {
   background-color: transparent;
-  color: var(--color-gunmetal);
+  color: #101014;
   border: 2px solid var(--color-seal-brown);
   border-radius: var(--radius-button);
   font-weight: 600;
@@ -156,7 +152,7 @@ p:last-child {
 /* Outline buttons */
 .btn--outline {
   background-color: transparent;
-  color: var(--color-gunmetal);
+  color: #101014;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-button);
 }
@@ -248,7 +244,7 @@ header {
 
 /* Navigation links - Match localhost:3000 styling */
 .nav a {
-  color: var(--color-gunmetal);
+  color: #101014;
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 400;
@@ -262,7 +258,7 @@ header {
 }
 
 .nav-link {
-  color: var(--color-gunmetal);
+  color: #101014;
   font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 400;
@@ -283,7 +279,7 @@ header {
 }
 
 .header-social a {
-  color: var(--color-gunmetal);
+  color: #101014;
   display: flex;
   align-items: center;
   transition: color 0.2s ease;
@@ -306,7 +302,7 @@ header {
 /* Cart button - Match localhost:3000 minimal styling */
 .cart-button {
   background: transparent;
-  color: var(--color-gunmetal);
+  color: #101014;
   padding: 8px;
   border-radius: var(--radius-full);
   transition: background 0.2s ease;
@@ -335,7 +331,7 @@ header {
 
 .footer,
 footer {
-  background-color: var(--color-gunmetal);
+  background-color: #101014;
   color: var(--color-cream);
   padding: 64px 0;
 }
@@ -421,7 +417,7 @@ footer {
   background-color: var(--color-cream);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-button);
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 .newsletter-input:focus {
@@ -506,7 +502,7 @@ select {
   background-color: var(--color-cream);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-button);
-  color: var(--color-gunmetal);
+  color: #101014;
   font-family: var(--font-body);
 }
 
@@ -522,7 +518,7 @@ select:focus {
 
 .form-label,
 label {
-  color: var(--color-gunmetal);
+  color: #101014;
   font-family: var(--font-body);
   font-weight: 500;
 }
@@ -572,7 +568,7 @@ label {
    ===================================== */
 
 a {
-  color: var(--color-gunmetal);
+  color: #101014;
   transition: color 0.15s ease;
 }
 
@@ -819,7 +815,7 @@ select:focus-visible {
 .stat-value {
   font-size: 28px;
   font-weight: 600;
-  color: var(--color-gunmetal);
+  color: #101014;
   margin: 0;
   font-family: var(--font-heading);
 }
@@ -865,12 +861,12 @@ select:focus-visible {
 .event-name {
   flex: 1;
   font-size: 14px;
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 .event-count {
   font-weight: 600;
-  color: var(--color-gunmetal);
+  color: #101014;
   font-size: 16px;
   min-width: 40px;
   text-align: right;
@@ -913,7 +909,7 @@ select:focus-visible {
 .ip-header strong {
   font-family: "Courier New", monospace;
   font-size: 16px;
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 .ip-details p {
@@ -923,7 +919,7 @@ select:focus-visible {
 }
 
 .ip-details strong {
-  color: var(--color-gunmetal);
+  color: #101014;
   font-weight: 600;
 }
 
@@ -948,7 +944,7 @@ select:focus-visible {
 
 .badge--info {
   background-color: var(--color-ecru);
-  color: var(--color-gunmetal);
+  color: #101014;
   padding: 4px 12px;
   border-radius: var(--radius-full);
   font-size: 12px;
@@ -1014,7 +1010,7 @@ select:focus-visible {
 }
 
 .timeline-header strong {
-  color: var(--color-gunmetal);
+  color: #101014;
   font-size: 14px;
   font-weight: 600;
 }
@@ -1036,7 +1032,7 @@ select:focus-visible {
   border-radius: 3px;
   font-family: "Courier New", monospace;
   font-size: 12px;
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 /* User Agent Cell */
@@ -1059,7 +1055,7 @@ select:focus-visible {
 
 .security-tips h2 {
   margin-top: 0;
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 .security-tips ul {
@@ -1071,7 +1067,7 @@ select:focus-visible {
 .security-tips li {
   padding: 8px 0;
   font-size: 14px;
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 /* Empty State */
@@ -1123,7 +1119,7 @@ select:focus-visible {
   padding: 12px 16px;
   border-bottom: 1px solid rgba(180, 154, 104, 0.1);
   font-size: 14px;
-  color: var(--color-gunmetal);
+  color: #101014;
 }
 
 .admin-table tbody tr:last-child td {
