@@ -88,7 +88,7 @@ export default function Contact() {
     <div className="contact-page">
       <SEO
         title="Contact Us"
-        description="Get in touch with Booked. Have questions about our coaching or tutoring services? We'd love to hear from you and help you get started."
+        description="Get in touch with Clockwork. Have questions about our coaching or tutoring services? We'd love to hear from you and help you get started."
         keywords={['contact', 'contact us', 'coaching inquiries', 'tutoring questions', 'get in touch', 'customer support', 'book a session']}
       />
       <div className="contact-hero">

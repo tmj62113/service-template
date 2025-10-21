@@ -17,7 +17,7 @@ export default function Header() {
       <header className="header" role="banner">
         <div className="header-content">
           <a href="/" className="logo" aria-label="Home page">
-            <span className="logo-text">Booked</span>
+            <span className="logo-text">Clockwork</span>
           </a>
 
           {/* Desktop Navigation */}

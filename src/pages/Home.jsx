@@ -134,7 +134,7 @@ export default function Home() {
       <section className="benefits-section">
         <div className="container">
           <div className="section-header">
-            <h2>Why Choose Booked</h2>
+            <h2>Why Choose Clockwork</h2>
             <p>
               Experience a seamless booking process with features designed to
               support your growth journey.

@@ -5,10 +5,10 @@ export default function About() {
   return (
     <div className="about-page">
       <SEO
-        title="About Booked"
-        description="Learn about Booked, a modern platform connecting clients with professional coaches and tutors for personalized growth and development."
+        title="About Clockwork"
+        description="Learn about Clockwork, a modern platform connecting clients with professional coaches and tutors for personalized growth and development."
         keywords={[
-          "about booked",
+          "about clockwork",
           "coaching platform",
           "tutoring services",
           "professional development",
@@ -22,7 +22,7 @@ export default function About() {
       {/* Hero Section */}
       <section className="about-hero">
         <div className="container">
-          <h1>About Booked</h1>
+          <h1>About Clockwork</h1>
           <p className="hero-subtitle">
             Empowering personal and professional growth through expert coaching and tutoring
           </p>
@@ -36,14 +36,14 @@ export default function About() {
             <div className="about-text">
               <h2>Our Mission</h2>
               <p>
-                At Booked, we believe that everyone deserves access to quality coaching and
+                At Clockwork, we believe that everyone deserves access to quality coaching and
                 tutoring services that can help them reach their full potential. Our platform
                 connects ambitious individuals with experienced professionals who are passionate
                 about helping others succeed.
               </p>
               <p>
                 Whether you're looking to advance your career, develop new skills, overcome
-                personal challenges, or achieve academic excellence, Booked makes it easy to
+                personal challenges, or achieve academic excellence, Clockwork makes it easy to
                 find and schedule sessions with the right expert for your needs.
               </p>
             </div>
@@ -100,7 +100,7 @@ export default function About() {
             <div className="about-text">
               <h2>Our Story</h2>
               <p>
-                Booked was founded with a simple vision: to make professional coaching and
+                Clockwork was founded with a simple vision: to make professional coaching and
                 tutoring accessible to everyone. We saw that while there were many talented
                 coaches and tutors available, it was often difficult for clients to find the
                 right match and coordinate schedules.

@@ -9,21 +9,21 @@ export const theme = {
   // ===================================================
   // BRAND IDENTITY
   // ===================================================
-  brandName: "Booked",
+  brandName: "Clockwork",
   tagline: "Schedule Your Success",
 
   // Logo and images
-  logo: "/booked_logo.png",
-  logoAlt: "Booked Logo",
+  logo: "/clockwork_logo.png",
+  logoAlt: "Clockwork Logo",
   favicon: "/favicon.ico",
 
   // ===================================================
   // COMPANY INFORMATION
   // ===================================================
   company: {
-    name: "Booked",
-    email: "hello@booked.app",
-    supportEmail: "support@booked.app",
+    name: "Clockwork",
+    email: "hello@clockwork.app",
+    supportEmail: "support@clockwork.app",
     phone: "+1 (555) 555-5555",
     address: {
       street: "123 Main Street",
@@ -188,23 +188,23 @@ export const theme = {
   // EMAIL BRANDING
   // ===================================================
   email: {
-    fromName: "Booked",
-    fromEmail: "bookings@booked.app",
-    supportEmail: "support@booked.app",
-    logoUrl: "https://booked.app/booked_logo.png",
+    fromName: "Clockwork",
+    fromEmail: "bookings@clockwork.app",
+    supportEmail: "support@clockwork.app",
+    logoUrl: "https://clockwork.app/clockwork_logo.png",
     accentColor: "#8E44AD",
-    footerText: "© 2025 Booked. All rights reserved.",
+    footerText: "© 2025 Clockwork. All rights reserved.",
   },
 
   // ===================================================
   // SEO & META
   // ===================================================
   seo: {
-    title: "Booked - Schedule Your Success",
-    description: "Streamline your booking process with Booked. Schedule appointments, manage services, and grow your business with our powerful booking platform.",
+    title: "Clockwork - Schedule Your Success",
+    description: "Streamline your booking process with Clockwork. Schedule appointments, manage services, and grow your business with our powerful booking platform.",
     keywords: "booking, appointments, scheduling, calendar, services, business management, booking system",
     ogImage: "/og-image.jpg",
-    twitterHandle: "@booked",
+    twitterHandle: "@clockwork",
   },
 
   // ===================================================
