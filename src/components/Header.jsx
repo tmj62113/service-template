@@ -16,8 +16,34 @@ export default function Header() {
     <>
       <header className="header" role="banner">
         <div className="header-content">
-          {/* Left Section: Social Links */}
+          {/* Left Section: Navigation */}
           <div className="header-left">
+            <nav className="nav-bar desktop-nav" role="navigation" aria-label="Main navigation">
+              <ul className="nav-content">
+                <li><a href="/services">Services</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                {user?.role === 'admin' && (
+                  <li>
+                    <a href="/admin" className="admin-nav-link" aria-label="Admin dashboard">
+                      <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>
+                      Admin
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </nav>
+          </div>
+
+          {/* Center Section: Logo */}
+          <div className="header-center">
+            <a href="/" className="logo" aria-label="Home page">
+              <img src="/clockwork_logo.png" alt="Clockwork" className="logo-img" />
+            </a>
+          </div>
+
+          {/* Right Section: Social Icons & User Menu */}
+          <div className="header-right">
             <div className="header-social desktop-only">
               {theme.social.facebook && (
                 <a href={theme.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
@@ -41,34 +67,7 @@ export default function Header() {
                 </a>
               )}
             </div>
-          </div>
 
-          {/* Center Section: Logo and Navigation */}
-          <div className="header-center">
-            <a href="/" className="logo" aria-label="Home page">
-              <img src="/clockwork_logo.png" alt="Clockwork" className="logo-img" />
-            </a>
-
-            {/* Desktop Navigation */}
-            <nav className="nav-bar desktop-nav" role="navigation" aria-label="Main navigation">
-              <ul className="nav-content">
-                <li><a href="/services">Services</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
-                {user?.role === 'admin' && (
-                  <li>
-                    <a href="/admin" className="admin-nav-link" aria-label="Admin dashboard">
-                      <span className="material-symbols-outlined" aria-hidden="true">dashboard</span>
-                      Admin
-                    </a>
-                  </li>
-                )}
-              </ul>
-            </nav>
-          </div>
-
-          {/* Right Section: User Menu & Mobile Menu */}
-          <div className="header-right">
             {isAuthenticated && (
               <div className="user-menu desktop-only">
                 <span className="user-name">{user?.name}</span>
