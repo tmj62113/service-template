@@ -116,9 +116,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #101014;
+  background: #e1dbcb;
   border-radius: var(--radius-full);
-  color: #f2f0ea;
+  color: #101014;
 }
 
 .feature-icon .material-symbols-outlined {
