@@ -723,45 +723,84 @@ main {
 .header-content {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 16px 60px;
-  display: flex;
+  padding: 20px 60px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 24px;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .logo-img {
-  height: 80px;
+  height: 70px;
   width: auto;
   display: block;
 }
 
-.nav {
+/* Social Icons */
+.header-social {
   display: flex;
-  gap: var(--spacing-xl);
-  flex: 1;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-social a {
+  color: var(--color-dark);
+  opacity: 0.7;
+  transition: opacity var(--transition-base);
+  display: flex;
+  align-items: center;
+}
+
+.header-social a:hover {
+  opacity: 1;
+}
+
+/* Desktop Navigation Bar - Below Header */
+.nav-bar {
+  background: #f2f0ea;
+  border-bottom: 1px solid #e1dbcb;
+  padding: 16px 60px;
+}
+
+.nav-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 48px;
 }
 
-/* Desktop navigation - hide on mobile */
-.desktop-nav {
-  display: flex;
-}
-
-@media (max-width: 768px) {
-  .desktop-nav {
-    display: none;
-  }
-}
-
-.nav a {
+.nav-content a {
   color: var(--color-dark);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   transition: color var(--transition-base);
 }
 
-.nav a:hover {
+.nav-content a:hover {
   color: var(--color-gray-600);
 }
 
@@ -772,14 +811,28 @@ main {
 }
 
 .admin-nav-link .material-symbols-outlined {
-  font-size: 20px;
+  font-size: 18px;
 }
 
-/* Header Actions Container */
-.header-actions {
+/* Desktop navigation - hide on mobile */
+.desktop-nav {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+}
+
+.desktop-only {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
 }
 
 /* User Menu */
@@ -853,20 +906,18 @@ main {
 }
 
 @media (max-width: 768px) {
-  .logo-img {
-    height: 60px;
-  }
-
-  .cart-button {
-    padding: 10px var(--spacing-md);
-  }
-
   .header-content {
+    grid-template-columns: 1fr auto 1fr;
+    padding: 16px 20px;
     gap: var(--spacing-sm);
   }
 
-  .header-actions {
-    gap: var(--spacing-sm);
+  .logo-img {
+    height: 50px;
+  }
+
+  .nav-bar {
+    padding: 12px 20px;
   }
 
   .user-menu {
@@ -5498,7 +5549,6 @@ main {
   }
 }
 
-
 /* =====================================================
    CLOCKWORK BRANDING - CSS VARIABLE OVERRIDES ONLY
    =====================================================
@@ -5520,13 +5570,13 @@ main {
   --color-primary: #e1dbcb;
   --color-primary-dark: #e1dbcb;
   --color-primary-light: #f2f0ea;
-  
+
   --color-dark: #101014;
   --color-dark-secondary: #101014;
-  
+
   --color-background: #f2f0ea;
   --color-white: #f2f0ea;
-  
+
   /* Grayscale using Clockwork palette */
   --color-gray-900: #101014;
   --color-gray-800: #101014;
@@ -5543,11 +5593,11 @@ main {
   --color-success: #101014;
   --color-success-light: #e1dbcb;
   --color-success-dark: #101014;
-  
+
   --color-error: #101014;
   --color-error-light: #e1dbcb;
   --color-error-dark: #101014;
-  
+
   --color-warning: #101014;
   --color-warning-light: #e1dbcb;
   --color-warning-dark: #101014;
@@ -5570,7 +5620,12 @@ body {
 }
 
 /* Clockwork typography hierarchy - All headings same size */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-size: 30px;
   line-height: 1.2;
