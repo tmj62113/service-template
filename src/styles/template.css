@@ -633,6 +633,15 @@ main {
   flex-wrap: wrap;
 }
 
+.footer-logo-text {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: #101014;
+  margin: 0;
+  display: block;
+}
+
 .footer-section h3 {
   color: #101014;
   margin: 0 0 16px 0;
@@ -694,6 +703,10 @@ main {
     grid-template-columns: 1fr;
     gap: var(--spacing-xl);
     padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+  }
+
+  .footer-logo-text {
+    font-size: 20px;
   }
 
   .footer-section h3 {
