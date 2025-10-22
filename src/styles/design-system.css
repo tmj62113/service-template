@@ -1,29 +1,25 @@
 /* =====================================================
-   DESIGN SYSTEM - DIGITAL STYLE GUIDE
+   DESIGN SYSTEM - BEM UTILITY CLASSES
    ===================================================== */
 
 /*
-  ⚠️ IMPORTANT: HOW THIS FILE WORKS WITH theme.js
+  ⚠️ ARCHITECTURE OVERVIEW
 
-  This file provides:
-  ✅ Static CSS variables (defaults/fallbacks)
-  ✅ BEM utility classes (.btn, .card, .heading, etc.)
-  ✅ Universal values (spacing, shadows, transitions)
+  CSS FILES HIERARCHY:
+  1. global.css - CSS reset, design tokens (CSS variables), base styles, typography
+  2. design-system.css - THIS FILE - BEM utility classes only
+  3. [PageName].css - Page-specific styles
 
-  theme.js provides:
-  ✅ Client-specific brand colors
-  ✅ Company information
-  ✅ Feature toggles
-  ✅ JavaScript access to theme values
+  THIS FILE PROVIDES:
+  ✅ BEM utility classes (.btn, .card, .form-*, .badge, etc.)
+  ✅ Reusable component patterns following BEM naming convention
 
-  HOW THEY WORK TOGETHER:
-  1. design-system.css defines:   --color-primary: #f8f8f8 (default)
-  2. theme.js overrides via App.jsx inline styles:  --color-primary: #E9E9E9 (client brand)
-  3. All utility classes use:     background: var(--color-primary) (gets #E9E9E9)
+  THIS FILE REFERENCES:
+  ✅ CSS variables defined in global.css (var(--color-primary), var(--spacing-md), etc.)
 
   TO CUSTOMIZE BRAND COLORS:
-  ❌ DON'T edit this file's :root variables
-  ✅ DO edit /src/config/theme.js colors object
+  ✅ Edit /src/styles/global.css :root variables
+  ✅ OR edit /src/config/theme.js for JavaScript-controlled theme values
 
   TO ADD NEW UTILITY CLASSES:
   ✅ Add them to this file using BEM naming convention
@@ -33,77 +29,6 @@
   VISUAL TEST PAGE:
   View all utilities and color swatches: http://localhost:5173/test-utilities
 */
-
-/* =====================================================
-   CSS VARIABLES (Defaults/Fallbacks)
-   ===================================================== */
-
-:root {
-  /* Colors - Minimalist Three-Color Palette */
-  --color-primary: #e1dbcb;
-  --color-primary-dark: #e1dbcb;
-  --color-primary-light: #f2f0ea;
-
-  --color-dark: #101014;
-  --color-dark-secondary: #101014;
-  --color-gray-900: #101014;
-  --color-gray-800: #101014;
-  --color-gray-700: #101014;
-  --color-gray-600: #101014;
-  --color-gray-500: #101014;
-  --color-gray-400: #e1dbcb;
-  --color-gray-300: #e1dbcb;
-  --color-gray-200: #e1dbcb;
-  --color-gray-100: #f2f0ea;
-  --color-gray-50: #f2f0ea;
-
-  --color-success: #101014;
-  --color-success-light: #e1dbcb;
-  --color-success-dark: #101014;
-
-  --color-error: #101014;
-  --color-error-light: #e1dbcb;
-  --color-error-dark: #101014;
-
-  --color-warning: #101014;
-  --color-warning-light: #e1dbcb;
-  --color-warning-dark: #101014;
-
-  --color-background: #f2f0ea;
-  --color-white: #f2f0ea;
-
-  /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  --font-family-mono: 'Monaco', 'Courier New', monospace;
-
-  /* Spacing (rem based on 16px) */
-  --spacing-xs: 0.25rem;    /* 4px */
-  --spacing-sm: 0.5rem;     /* 8px */
-  --spacing-md: 1rem;       /* 16px */
-  --spacing-lg: 1.5rem;     /* 24px */
-  --spacing-xl: 2rem;       /* 32px */
-  --spacing-2xl: 3rem;      /* 48px */
-
-  /* Border Radius (rem based on 16px) */
-  --radius-sm: 0.375rem;    /* 6px */
-  --radius-md: 0.5rem;      /* 8px */
-  --radius-lg: 0.75rem;     /* 12px */
-  --radius-xl: 1rem;        /* 16px */
-  --radius-full: 62.4375rem; /* 9999px */
-
-  /* Shadows */
-  --shadow-sm: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 0.625rem 0.9375rem rgba(0, 0, 0, 0.1);
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.2s ease;
-  --transition-slow: 0.3s ease;
-}
 
 /* =====================================================
    UTILITY CLASSES (BEM Naming Convention)
