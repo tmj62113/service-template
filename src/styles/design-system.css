@@ -79,7 +79,7 @@
   border: none;
   cursor: pointer;
   transition: all var(--transition-base);
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   white-space: nowrap;
 }
 
@@ -167,7 +167,7 @@
   width: 100%;
   padding: 0.625rem 0.75rem;
   font-size: 1rem;              /* 16px - accessibility minimum */
-  font-family: var(--font-family);
+  font-family: var(--font-family-base);
   border: 0.0625rem solid var(--color-gray-200);
   border-radius: var(--radius-md);
   background: var(--color-white);

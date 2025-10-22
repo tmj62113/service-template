@@ -44,7 +44,7 @@
 }
 
 .hero-tagline {
-  font-family: var(--font-heading); /* Intentional override - p element styled as heading */
+  font-family: var(--font-family-heading); /* Intentional override - p element styled as heading */
   font-size: 1.5rem;
   font-weight: 600;
   font-style: italic;
