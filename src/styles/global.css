@@ -55,6 +55,10 @@ ul, ol {
   --color-secondary-dark: #000000;
   --color-secondary-light: #404044;
 
+  --color-tertiary: #6b6b6f;
+  --color-tertiary-dark: #404044;
+  --color-tertiary-light: #9ca3af;
+
   /* Status Colors */
   --color-success: #10b981;
   --color-danger: #ef4444;
