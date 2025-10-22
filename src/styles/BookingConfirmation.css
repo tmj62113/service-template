@@ -46,7 +46,7 @@
 
 .confirmation-error h2 {
   font-size: 1.5rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -95,7 +95,7 @@
 
 .confirmation-header h1 {
   font-size: 2rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -126,7 +126,7 @@
 
 .confirmation-details h2 {
   font-size: 1.25rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
   border-bottom: 0.125rem solid var(--color-gray-200);
@@ -195,7 +195,7 @@
 
 .detail-value {
   font-size: 1.0625rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   font-weight: 600;
   line-height: 1.4;
   margin-bottom: var(--spacing-xs);
@@ -253,7 +253,7 @@
 
 .confirmation-number .value {
   font-size: 0.875rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   font-family: 'Courier New', monospace;
   background: white;
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -285,7 +285,7 @@
 
 .confirmation-help h3 {
   font-size: 1.125rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
 

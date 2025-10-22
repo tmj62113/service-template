@@ -44,7 +44,7 @@
 
 .booking-error h2 {
   font-size: 1.5rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -87,13 +87,13 @@
 
 .booking-service-summary h1 {
   font-size: 1.75rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
 
 .service-info h2 {
   font-size: 1.25rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -130,7 +130,7 @@
 }
 
 .staff-name {
-  color: var(--color-dark);
+  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -165,7 +165,7 @@
   height: 2.5rem;
   border-radius: 50%;
   background: var(--color-gray-300);
-  color: var(--color-dark);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -176,7 +176,7 @@
 
 .progress-step.active .step-number {
   background: var(--color-primary);
-  border: 0.125rem solid var(--color-dark);
+  border: 0.125rem solid var(--color-text);
 }
 
 .progress-step span {

@@ -45,7 +45,7 @@
 }
 
 .card:hover {
-  border-color: var(--color-dark);
+  border-color: var(--color-text);
 }
 
 .card--sm {
@@ -84,7 +84,7 @@
 }
 
 .btn--primary {
-  background: var(--color-dark);
+  background: var(--color-text);
   color: var(--color-white);
 }
 
@@ -95,7 +95,7 @@
 
 .btn--secondary {
   background: var(--color-white);
-  color: var(--color-dark);
+  color: var(--color-text);
   border: 0.0625rem solid var(--color-gray-200);
 }
 
@@ -106,12 +106,12 @@
 
 .btn--outline {
   background: transparent;
-  color: var(--color-dark);
-  border: 0.125rem solid var(--color-dark);
+  color: var(--color-text);
+  border: 0.125rem solid var(--color-text);
 }
 
 .btn--outline:hover {
-  background: var(--color-dark);
+  background: var(--color-text);
   color: var(--color-white);
 }
 
@@ -178,7 +178,7 @@
 .form-textarea:focus,
 .form-select:focus {
   outline: none;
-  border-color: var(--color-dark);
+  border-color: var(--color-text);
 }
 
 .form-textarea {
@@ -219,7 +219,7 @@
 
 .badge--primary {
   background: var(--color-primary);
-  color: var(--color-dark);
+  color: var(--color-text);
 }
 
 /* Container
@@ -337,7 +337,7 @@
   transform: translateX(-50%);
   z-index: 9999;
   padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-dark);
+  background: var(--color-text);
   color: var(--color-white);
   text-decoration: none;
   border-radius: var(--radius-md);
@@ -366,7 +366,7 @@
 }
 
 .btn--primary:focus-visible {
-  outline-color: var(--color-dark);
+  outline-color: var(--color-text);
 }
 
 /* Form focus styles - already have focus styles, enhance them */

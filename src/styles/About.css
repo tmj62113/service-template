@@ -4,7 +4,7 @@
 
 .about-page {
   min-height: 100vh;
-  background-color: var(--color-cream);
+  background-color: var(--color-background);
 }
 
 /* =====================================
@@ -54,7 +54,7 @@
 
 .about-section {
   padding: 5rem 0;
-  background-color: var(--color-cream);
+  background-color: var(--color-background);
 }
 
 .about-section.alt-bg {

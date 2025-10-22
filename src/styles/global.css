@@ -46,15 +46,14 @@ ul, ol {
    ========================================================================== */
 
 :root {
-  /* Clockwork Brand Colors */
-  --color-cream: #f2f0ea;
-  --color-tan: #e1dbcb;
-  --color-dark: #101014;
-
-  /* Primary Palette (using Clockwork colors) */
+  /* Colors - Primary Palette */
   --color-primary: #e1dbcb;
   --color-primary-dark: #d4ceba;
   --color-primary-light: #f2f0ea;
+
+  --color-secondary: #101014;
+  --color-secondary-dark: #000000;
+  --color-secondary-light: #404044;
 
   /* Status Colors */
   --color-success: #10b981;
@@ -62,7 +61,7 @@ ul, ol {
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
 
-  /* Neutral Colors (Clockwork grayscale) */
+  /* Neutral Colors */
   --color-text: #101014;
   --color-text-light: #404044;
   --color-text-lighter: #6b6b6f;
@@ -70,18 +69,6 @@ ul, ol {
   --color-surface: #ffffff;
   --color-border: #e1dbcb;
   --color-border-dark: #d4ceba;
-
-  /* Legacy color mappings for backwards compatibility */
-  --color-gray-900: #101014;
-  --color-gray-800: #101014;
-  --color-gray-700: #404044;
-  --color-gray-600: #6b6b6f;
-  --color-gray-500: #9ca3af;
-  --color-gray-400: #d4ceba;
-  --color-gray-300: #e1dbcb;
-  --color-gray-200: #f2f0ea;
-  --color-gray-100: #f9fafb;
-  --color-white: #ffffff;
 
   /* Spacing Scale (rem based on 16px) */
   --spacing-xs: 0.25rem;    /* 4px */

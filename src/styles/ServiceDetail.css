@@ -70,7 +70,7 @@
 
 .service-detail-title {
   font-size: 2.5rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-lg);
   line-height: 1.2;
 }
@@ -110,7 +110,7 @@
 
 .service-detail-description h2 {
   font-size: 1.5rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
 
@@ -131,7 +131,7 @@
 
 .service-detail-policy h3 {
   font-size: 1.125rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -148,7 +148,7 @@
 
 .staff-selection h3 {
   font-size: 1.25rem;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-lg);
 }
 
@@ -210,7 +210,7 @@
 
 .staff-name {
   font-weight: 600;
-  color: var(--color-dark);
+  color: var(--color-text);
   margin-bottom: var(--spacing-xs);
 }
 
