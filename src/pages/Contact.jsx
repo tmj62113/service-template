@@ -91,14 +91,14 @@ export default function Contact() {
         description="Get in touch with Clockwork. Have questions about our coaching or tutoring services? We'd love to hear from you and help you get started."
         keywords={['contact', 'contact us', 'coaching inquiries', 'tutoring questions', 'get in touch', 'customer support', 'book a session']}
       />
-      <div className="contact-hero">
+      <div className="contact-hero section-container--hero">
         <h1>Contact Us</h1>
         <p className="contact-lead">
           Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
         </p>
       </div>
 
-      <div className="contact-content">
+      <div className="contact-content section-container--wide">
         <div className="contact-grid">
           <div className="contact-info">
             <h2>Contact Information</h2>

@@ -93,14 +93,14 @@ function Services() {
 
   if (loading && services.length === 0) {
     return (
-      <div className="services-page">
+      <div className="services-page section-container--wide">
         <div className="services-loading">Loading services...</div>
       </div>
     );
   }
 
   return (
-    <div className="services-page">
+    <div className="services-page section-container--wide">
       <div className="services-header">
         <h1>Our Services</h1>
         <p className="services-subtitle">

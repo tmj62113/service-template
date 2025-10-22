@@ -1,11 +1,6 @@
 .service-detail-page {
   min-height: calc(100vh - 12.5rem);
-  padding: var(--spacing-xl) var(--spacing-md);
-}
-
-.service-detail-container {
-  max-width: 75rem;
-  margin: 0 auto;
+  /* Container properties now handled by global .section-container--wide */
 }
 
 .breadcrumb {
@@ -268,10 +263,6 @@
 }
 
 @media (max-width: 768px) {
-  .service-detail-page {
-    padding: var(--spacing-md);
-  }
-
   .service-detail-content {
     padding: var(--spacing-lg);
   }

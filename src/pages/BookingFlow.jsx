@@ -163,7 +163,7 @@ function BookingFlow() {
   // Loading state
   if (loading) {
     return (
-      <div className="booking-flow">
+      <div className="booking-flow section-container">
         <div className="booking-loading">
           <div className="spinner"></div>
           <p>Loading booking information...</p>
@@ -175,7 +175,7 @@ function BookingFlow() {
   // Error state
   if (error && !service) {
     return (
-      <div className="booking-flow">
+      <div className="booking-flow section-container">
         <div className="booking-error">
           <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm0 1A8 8 0 108 0a8 8 0 000 16z"/>
@@ -192,10 +192,9 @@ function BookingFlow() {
   }
 
   return (
-    <div className="booking-flow">
-      <div className="booking-container">
-        {/* Header with service info */}
-        <div className="booking-header">
+    <div className="booking-flow section-container">
+      {/* Header with service info */}
+      <div className="booking-header">
           <button className="back-button" onClick={handleBack}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path fillRule="evenodd" d="M15 8a.5.5 0 00-.5-.5H2.707l3.147-3.146a.5.5 0 10-.708-.708l-4 4a.5.5 0 000 .708l4 4a.5.5 0 00.708-.708L2.707 8.5H14.5A.5.5 0 0015 8z"/>
@@ -299,7 +298,6 @@ function BookingFlow() {
             </button>
           </div>
         )}
-      </div>
     </div>
   );
 }

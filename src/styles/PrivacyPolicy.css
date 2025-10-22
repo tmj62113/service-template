@@ -3,13 +3,7 @@
 .privacy-policy-page {
   min-height: 100vh;
   background: var(--color-background, #F7F6EF);
-  padding: var(--spacing-2xl, 3rem) 0;
-}
-
-.privacy-policy-container {
-  max-width: var(--max-width-narrow, 50rem);
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg, 1.5rem);
+  /* Container properties now handled by global .section-container--narrow */
 }
 
 .privacy-policy-header {
@@ -141,10 +135,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .privacy-policy-page {
-    padding: var(--spacing-xl, 2rem) 0;
-  }
-
   .privacy-policy-header h1 {
     font-size: var(--font-size-4xl, 2.25rem);
   }
@@ -185,10 +175,6 @@
 }
 
 @media (max-width: 480px) {
-  .privacy-policy-container {
-    padding: 0 var(--spacing-md, 1rem);
-  }
-
   .privacy-policy-header h1 {
     font-size: var(--font-size-3xl, 1.875rem);
   }

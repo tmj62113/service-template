@@ -1,7 +1,5 @@
 .services-page {
-  max-width: 75rem;
-  margin: 0 auto;
-  padding: var(--spacing-2xl) var(--spacing-md);
+  /* Container properties now handled by global .section-container--wide */
 }
 
 .services-header {
@@ -224,10 +222,6 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .services-page {
-    padding: var(--spacing-lg) var(--spacing-sm);
-  }
-
   .services-header h1 {
     font-size: 2rem;
   }

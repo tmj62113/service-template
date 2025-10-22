@@ -50,7 +50,7 @@ export default function NotFound() {
   ];
 
   return (
-    <div className="not-found">
+    <div className="not-found section-container">
       <SEO
         title="Page Not Found"
         description="The page you're looking for could not be found. Browse our artwork collection or return to the homepage."

@@ -12,7 +12,6 @@
    ===================================== */
 
 .about-hero {
-  padding: 7.5rem 1.25rem 5rem;
   background: #f2f0ea;
   text-align: center;
   color: #101014;
@@ -53,16 +52,11 @@
    ===================================== */
 
 .about-section {
-  padding: 5rem 0;
   background-color: var(--color-background);
 }
 
 .about-section.alt-bg {
   background-color: #e1dbcb;
-}
-
-.about-section .container {
-  max-width: 62.5rem;
 }
 
 .about-section h2 {
@@ -256,7 +250,6 @@
    ===================================== */
 
 .about-cta {
-  padding: 5rem 0;
   background: #e1dbcb;
   text-align: center;
   color: #101014;
@@ -305,10 +298,6 @@
 }
 
 @media (max-width: 768px) {
-  .about-hero {
-    padding: 5rem 1.25rem 3.75rem;
-  }
-
   .about-hero h1 {
     font-size: 2.25rem;
   }
@@ -324,10 +313,6 @@
   .about-section h2 {
     font-size: 1.75rem;
     margin-bottom: 2rem;
-  }
-
-  .about-section {
-    padding: 3.75rem 0;
   }
 
   .features-grid {
@@ -368,10 +353,6 @@
 }
 
 @media (max-width: 480px) {
-  .about-hero {
-    padding: 3.75rem 1.25rem 2.5rem;
-  }
-
   .about-hero h1 {
     font-size: 1.75rem;
   }
@@ -384,10 +365,6 @@
     font-size: 1.25rem;
   }
 
-  .about-section {
-    padding: 2.5rem 0;
-  }
-
   .about-section h2 {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
@@ -396,10 +373,6 @@
   .feature-card,
   .value-item {
     padding: 1.5rem 1rem;
-  }
-
-  .about-cta {
-    padding: 3.75rem 0;
   }
 
   .about-cta h2 {

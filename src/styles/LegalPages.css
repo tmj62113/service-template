@@ -5,13 +5,7 @@
 .legal-page {
   min-height: 100vh;
   background-color: var(--color-background);
-  padding: var(--spacing-2xl) 0;
-}
-
-.legal-container {
-  max-width: var(--max-width-narrow);
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
+  /* Container properties now handled by global .section-container--narrow */
 }
 
 /* =====================================================

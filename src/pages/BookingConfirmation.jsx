@@ -91,7 +91,7 @@ function BookingConfirmation() {
   // Loading state
   if (loading) {
     return (
-      <div className="booking-confirmation">
+      <div className="booking-confirmation section-container--narrow">
         <div className="confirmation-loading">
           <div className="spinner"></div>
           <p>Loading confirmation details...</p>
@@ -103,7 +103,7 @@ function BookingConfirmation() {
   // Error state
   if (error || !booking) {
     return (
-      <div className="booking-confirmation">
+      <div className="booking-confirmation section-container--narrow">
         <div className="confirmation-error">
           <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 15A7 7 0 118 1a7 7 0 010 14zm0 1A8 8 0 108 0a8 8 0 000 16z"/>
@@ -126,10 +126,9 @@ function BookingConfirmation() {
   const endDate = new Date(booking.endDateTime);
 
   return (
-    <div className="booking-confirmation">
-      <div className="confirmation-container">
-        {/* Success Icon */}
-        <div className="confirmation-success-icon">
+    <div className="booking-confirmation section-container--narrow">
+      {/* Success Icon */}
+      <div className="confirmation-success-icon">
           <svg width="64" height="64" viewBox="0 0 16 16" fill="currentColor">
             <path d="M16 8A8 8 0 110 8a8 8 0 0116 0zm-3.97-3.03a.75.75 0 00-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 00-1.06 1.06L6.97 11.03a.75.75 0 001.079-.02l3.992-4.99a.75.75 0 00-.01-1.05z"/>
           </svg>
@@ -275,7 +274,6 @@ function BookingConfirmation() {
             <li>If you have any questions, please contact us</li>
           </ul>
         </div>
-      </div>
     </div>
   );
 }

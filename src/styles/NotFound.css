@@ -4,8 +4,8 @@
 
 .not-found {
   min-height: calc(100vh - 12.5rem);
-  padding: var(--spacing-3xl) 0;
   background: var(--color-background);
+  /* Container properties now handled by global .section-container */
 }
 
 .not-found__container {
@@ -246,10 +246,6 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .not-found {
-    padding: var(--spacing-2xl) 0;
-  }
-
   .not-found__number {
     font-size: 5rem;
   }

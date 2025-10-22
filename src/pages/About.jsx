@@ -20,26 +20,23 @@ export default function About() {
       />
 
       {/* Hero Section */}
-      <section className="about-hero">
-        <div className="container">
-          <h1>
-            We believe running a service business shouldn't feel like juggling
-            chaos.
-          </h1>
-          <p className="hero-body">
-            Every service professional knows the frustration: clients calling to
-            book, appointment conflicts, payment follow-ups, calendar chaos, and
-            endless admin work that keeps you from doing what you actually love.
-          </p>
-          <p className="hero-emphasis">That's why we built Clockwork.</p>
-        </div>
+      <section className="about-hero section-container--hero">
+        <h1>
+          We believe running a service business shouldn't feel like juggling
+          chaos.
+        </h1>
+        <p className="hero-body">
+          Every service professional knows the frustration: clients calling to
+          book, appointment conflicts, payment follow-ups, calendar chaos, and
+          endless admin work that keeps you from doing what you actually love.
+        </p>
+        <p className="hero-emphasis">That's why we built Clockwork.</p>
       </section>
 
       {/* What Makes Us Different Section */}
-      <section className="about-section">
-        <div className="container">
-          <h2>What Makes Us Different</h2>
-          <div className="features-grid">
+      <section className="about-section section-container">
+        <h2>What Makes Us Different</h2>
+        <div className="features-grid">
             <div className="feature-card">
               <h3>Built for How You Actually Work</h3>
               <h4>Customize Everything</h4>
@@ -64,15 +61,13 @@ export default function About() {
               <p>
                 Whether you're solo today or managing a team tomorrow, Clockwork scales with you. Start simple, grow when you're ready. No forced upgrades, no artificial limits.
               </p>
-            </div>
           </div>
         </div>
       </section>
 
       {/* Who We Serve Section */}
-      <section className="about-section alt-bg">
-        <div className="container">
-          <h2>Who We Serve</h2>
+      <section className="about-section alt-bg section-container">
+        <h2>Who We Serve</h2>
           <p className="section-intro">Built for Service Professionals of All Kinds</p>
           <p className="section-intro">We work with people who trade their time and expertise for a living:</p>
           <div className="service-types-grid">
@@ -107,28 +102,25 @@ export default function About() {
               </p>
             </div>
           </div>
-          <p className="section-closing">
-            What they all have in common: They deliver great service and deserve software that helps, not hinders.
-          </p>
-        </div>
+        <p className="section-closing">
+          What they all have in common: They deliver great service and deserve software that helps, not hinders.
+        </p>
       </section>
 
       {/* CTA Section */}
-      <section className="about-cta">
-        <div className="container">
-          <h2>Ready to reclaim your time?</h2>
-          <p>
-            Join service professionals who focus on their craft, not calendar
-            chaos.
-          </p>
-          <div className="cta-buttons">
-            <a href="/services" className="btn btn-primary btn-lg">
-              Browse Services
-            </a>
-            <a href="/contact" className="btn btn-secondary btn-lg">
-              Contact Us
-            </a>
-          </div>
+      <section className="about-cta section-container--narrow">
+        <h2>Ready to reclaim your time?</h2>
+        <p>
+          Join service professionals who focus on their craft, not calendar
+          chaos.
+        </p>
+        <div className="cta-buttons">
+          <a href="/services" className="btn btn-primary btn-lg">
+            Browse Services
+          </a>
+          <a href="/contact" className="btn btn-secondary btn-lg">
+            Contact Us
+          </a>
         </div>
       </section>
     </div>

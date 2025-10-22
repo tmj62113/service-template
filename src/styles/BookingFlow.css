@@ -1,13 +1,7 @@
 .booking-flow {
   min-height: 100vh;
   background: var(--color-gray-50);
-  padding: var(--spacing-xl) 0;
-}
-
-.booking-container {
-  max-width: 56.25rem;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
+  /* Container properties now handled by global .section-container */
 }
 
 /* Loading and Error States */
@@ -249,14 +243,6 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .booking-flow {
-    padding: var(--spacing-md) 0;
-  }
-
-  .booking-container {
-    padding: 0 var(--spacing-md);
-  }
-
   .booking-service-summary {
     padding: var(--spacing-lg);
   }

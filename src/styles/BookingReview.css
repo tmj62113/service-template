@@ -1,13 +1,7 @@
 .booking-review {
   min-height: 100vh;
   background: var(--color-gray-50);
-  padding: var(--spacing-xl) 0;
-}
-
-.review-container {
-  max-width: 50rem;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
+  /* Container properties now handled by global .section-container--narrow */
 }
 
 /* Loading and Error States */
@@ -179,14 +173,6 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .booking-review {
-    padding: var(--spacing-md) 0;
-  }
-
-  .review-container {
-    padding: 0 var(--spacing-md);
-  }
-
   .booking-progress {
     gap: var(--spacing-md);
   }

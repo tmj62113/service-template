@@ -84,7 +84,7 @@ function ServiceDetail() {
 
   if (loading) {
     return (
-      <div className="service-detail-page">
+      <div className="service-detail-page section-container--wide">
         <div className="loading">Loading service...</div>
       </div>
     );
@@ -92,7 +92,7 @@ function ServiceDetail() {
 
   if (error) {
     return (
-      <div className="service-detail-page">
+      <div className="service-detail-page section-container--wide">
         <div className="error-container">
           <h2>Error</h2>
           <p>{error}</p>
@@ -109,10 +109,9 @@ function ServiceDetail() {
   }
 
   return (
-    <div className="service-detail-page">
-      <div className="service-detail-container">
-        {/* Breadcrumb */}
-        <nav className="breadcrumb">
+    <div className="service-detail-page section-container--wide">
+      {/* Breadcrumb */}
+      <nav className="breadcrumb">
           <Link to="/services">Services</Link>
           <span className="breadcrumb-separator">/</span>
           <span>{service.name}</span>
@@ -231,7 +230,6 @@ function ServiceDetail() {
             </button>
           </div>
         </div>
-      </div>
     </div>
   );
 }

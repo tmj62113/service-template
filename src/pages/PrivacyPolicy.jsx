@@ -5,9 +5,8 @@ export default function PrivacyPolicy() {
   const lastUpdated = 'January 2025';
 
   return (
-    <div className="privacy-policy-page">
-      <div className="privacy-policy-container">
-        <header className="privacy-policy-header">
+    <div className="privacy-policy-page section-container--narrow">
+      <header className="privacy-policy-header">
           <h1>Privacy Policy</h1>
           <p className="last-updated">Last Updated: {lastUpdated}</p>
         </header>
@@ -243,7 +242,6 @@ export default function PrivacyPolicy() {
             </p>
           </section>
         </div>
-      </div>
     </div>
   );
 }
