@@ -90,9 +90,9 @@ export const theme = {
   // TYPOGRAPHY
   // ===================================================
   fonts: {
-    heading: "'Urbanist', sans-serif", // All headings (h1-h6)
-    body: "'Work Sans', sans-serif", // Body text, paragraphs, UI elements
-    mono: "'Courier New', monospace",
+    heading: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif", // All headings (h1-h6)
+    body: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif", // Body text, paragraphs, UI elements
+    mono: "'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace",
   },
 
   fontSize: {
@@ -258,9 +258,9 @@ export const getCSSVariables = () => {
     "--color-info-light": colors.infoLight,
 
     // Typography
-    "--font-heading": fonts.heading,
-    "--font-body": fonts.body,
-    "--font-mono": fonts.mono,
+    "--font-family-heading": fonts.heading,
+    "--font-family-base": fonts.body,
+    "--font-family-mono": fonts.mono,
 
     // Font sizes
     "--font-size-xs": fontSize.xs,
