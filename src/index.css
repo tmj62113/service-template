@@ -2,12 +2,10 @@
    MAIN STYLESHEET - Clockwork Service Booking Platform
    =====================================================
    Import order:
-   1. global.css - CSS reset, variables, base styles, typography
-   2. design-system.css - BEM utility classes (buttons, cards, forms)
+   1. global.css - CSS reset, variables, base styles, typography, utility classes
 
    Page-specific styles are imported directly in their respective
    page components (e.g., Home.jsx imports Home.css)
    ===================================================== */
 
 @import './styles/global.css';
-@import './styles/design-system.css';

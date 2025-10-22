@@ -18,7 +18,6 @@ import Stripe from 'stripe';
 import { Resend } from 'resend';
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
-import { Order } from './db/models/Order.js';
 import { User } from './db/models/User.js';
 import { Product } from './db/models/Product.js';
 import { Subscriber } from './db/models/Subscriber.js';

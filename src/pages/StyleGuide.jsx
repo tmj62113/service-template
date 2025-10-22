@@ -19,11 +19,12 @@ export default function StyleGuide() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
             <div>
-              <h3 className="heading heading--sm" style={{ marginBottom: '10px' }}>design-system.css provides:</h3>
+              <h3 className="heading heading--sm" style={{ marginBottom: '10px' }}>global.css provides:</h3>
               <ul style={{ marginLeft: '20px' }}>
-                <li className="text text--sm">✅ Static CSS variables (defaults/fallbacks)</li>
-                <li className="text text--sm">✅ BEM utility classes (.btn, .card, etc.)</li>
-                <li className="text text--sm">✅ Universal values (spacing, shadows)</li>
+                <li className="text text--sm">✅ CSS reset and base styles</li>
+                <li className="text text--sm">✅ CSS variables (design tokens)</li>
+                <li className="text text--sm">✅ Utility classes (.btn, .container, etc.)</li>
+                <li className="text text--sm">✅ Typography and form styles</li>
               </ul>
             </div>
 
@@ -41,15 +42,15 @@ export default function StyleGuide() {
           <div className="card" style={{ marginTop: '20px', background: 'white' }}>
             <p className="text text--bold" style={{ marginBottom: '10px' }}>How they work together:</p>
             <ol style={{ marginLeft: '20px' }}>
-              <li className="text text--sm">design-system.css defines: <code>--color-primary: #f8f8f8</code> (default)</li>
-              <li className="text text--sm">theme.js overrides via App.jsx: <code>--color-primary: {theme.colors.primary}</code> (client brand)</li>
-              <li className="text text--sm">All utility classes use: <code>background: var(--color-primary)</code> (gets client color)</li>
+              <li className="text text--sm">global.css defines: <code>--color-primary: #e1dbcb</code> (Clockwork default)</li>
+              <li className="text text--sm">theme.js can override via App.jsx: <code>--color-primary: {theme.colors.primary}</code> (client brand)</li>
+              <li className="text text--sm">All utility classes use: <code>background: var(--color-primary)</code> (gets theme color)</li>
             </ol>
           </div>
 
           <div style={{ marginTop: '20px', padding: '15px', background: 'white', borderRadius: '8px' }}>
             <p className="text text--bold">To customize brand colors:</p>
-            <p className="text text--sm">❌ DON'T edit design-system.css :root variables</p>
+            <p className="text text--sm">❌ DON'T edit global.css :root variables directly</p>
             <p className="text text--sm">✅ DO edit <code>/src/config/theme.js</code> colors object</p>
           </div>
         </div>

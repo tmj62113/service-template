@@ -7,7 +7,7 @@ export default function TestUtilities() {
         BEM Utility Classes Test Page
       </h1>
       <p className="text text--muted" style={{ marginBottom: '40px' }}>
-        Testing all utility classes from design-system.css and theme.js color palette
+        Testing all utility classes from global.css and theme.js color palette
       </p>
 
       {/* Color Swatches Section */}
