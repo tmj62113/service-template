@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import SEO, { generateOrganizationStructuredData } from "../components/SEO";
+import "../styles/components/FeatureCard.css";
 import "../styles/Home.css";
 
 export default function Home() {

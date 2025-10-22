@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import "../styles/components/FeatureCard.css";
 import "../styles/About.css";
 
 export default function About() {
