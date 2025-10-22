@@ -171,7 +171,7 @@ ol {
    ========================================================================== */
 
 body {
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
