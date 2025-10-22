@@ -25,7 +25,7 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section className="hero-section">
+      <section className="hero-section section-container--hero">
         <div className="hero-content">
           <h1>The scheduling platform that never misses a beat.</h1>
           <p>
@@ -44,11 +44,10 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="features-section">
-        <div className="container">
-          <h2>Everything You Need. Nothing You Don't.</h2>
+      <section className="features-section section-container">
+        <h2>Everything You Need. Nothing You Don't.</h2>
 
-          <div className="features-grid">
+        <div className="features-grid">
             <div className="feature-card">
               <h3>📅 Smart Scheduling</h3>
               <p>
@@ -72,25 +71,23 @@ export default function Home() {
                 Clients see your brand, not ours.
               </p>
             </div>
-          </div>
+        </div>
 
-          <div className="features-cta">
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={() => navigate("/services")}
-            >
-              Start Your Free Trial
-            </button>
-          </div>
+        <div className="features-cta">
+          <button
+            className="btn btn-primary btn-lg"
+            onClick={() => navigate("/services")}
+          >
+            Start Your Free Trial
+          </button>
         </div>
       </section>
 
       {/* Detailed Features Grid */}
-      <section className="detailed-features-section">
-        <div className="container">
-          <h2>Built for Service Professionals</h2>
+      <section className="detailed-features-section section-container">
+        <h2>Built for Service Professionals</h2>
 
-          <div className="detailed-features-grid">
+        <div className="detailed-features-grid">
             <div className="detailed-feature-card">
               <h3>📆 Online Booking</h3>
               <p>
@@ -135,15 +132,13 @@ export default function Home() {
                 Make it yours. Custom colors, branding, forms, and booking
                 flows.
               </p>
-            </div>
           </div>
         </div>
       </section>
 
       {/* Call to Action Section */}
-      <section className="cta-section">
-        <div className="container">
-          <div className="cta-content">
+      <section className="cta-section section-container--narrow">
+        <div className="cta-content">
             <h2>Ready to Get Started?</h2>
             <p>
               Book your first session today and take the first step towards
@@ -162,7 +157,6 @@ export default function Home() {
               >
                 Contact Us
               </button>
-            </div>
           </div>
         </div>
       </section>
