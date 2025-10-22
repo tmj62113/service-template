@@ -180,40 +180,44 @@ body {
 }
 
 /* ==========================================================================
-   Typography - Clockwork Style
+   Typography
    ========================================================================== */
 
-/* Clockwork brand: All headings same size, uppercase, Urbanist font */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-heading);
-  font-size: var(--font-size-3xl);  /* 30px - Clockwork standard */
-  font-weight: var(--font-weight-normal);  /* 400 */
+  font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
-  text-transform: uppercase;
   margin-bottom: var(--spacing-md);
   color: var(--color-text);
 }
 
-/* Allow individual heading overrides if needed */
-h1.display {
-  font-size: var(--font-size-5xl);  /* 48px for hero headings */
+h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
 }
 
-h2.large {
-  font-size: var(--font-size-4xl);  /* 36px for section headings */
+h2 {
+  font-size: var(--font-size-3xl);
 }
 
-h3.medium {
-  font-size: var(--font-size-2xl);  /* 24px for subsections */
+h3 {
+  font-size: var(--font-size-2xl);
 }
 
-h4.small, h5.small, h6.small {
-  font-size: var(--font-size-lg);   /* 18px for small headings */
+h4 {
+  font-size: var(--font-size-xl);
+}
+
+h5 {
+  font-size: var(--font-size-lg);
+}
+
+h6 {
+  font-size: var(--font-size-base);
 }
 
 p {
   margin-bottom: var(--spacing-md);
-  line-height: var(--line-height-relaxed);
 }
 
 a {
