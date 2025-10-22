@@ -532,6 +532,60 @@ a:focus-visible {
 }
 
 /* ==========================================================================
+   Background Utilities - Section Background Colors
+   ========================================================================== */
+
+/* Primary Background - Beige/cream brand color */
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+/* Primary Light Background - Very light beige */
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
+
+/* Secondary Background - Dark charcoal */
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+/* Surface Background - Pure white */
+.bg-surface {
+  background-color: var(--color-surface);
+}
+
+/* Default Background - Light cream (site default) */
+.bg-background {
+  background-color: var(--color-background);
+}
+
+/* Transparent Background - Reset/override */
+.bg-transparent {
+  background-color: transparent;
+}
+
+/* Success Background - Green tint */
+.bg-success {
+  background-color: rgba(16, 185, 129, 0.1); /* 10% opacity success color */
+}
+
+/* Warning Background - Amber tint */
+.bg-warning {
+  background-color: rgba(245, 158, 11, 0.1); /* 10% opacity warning color */
+}
+
+/* Info Background - Blue tint */
+.bg-info {
+  background-color: rgba(59, 130, 246, 0.1); /* 10% opacity info color */
+}
+
+/* Danger Background - Red tint */
+.bg-danger {
+  background-color: rgba(239, 68, 68, 0.1); /* 10% opacity danger color */
+}
+
+/* ==========================================================================
    Logo Sizing - Clockwork Brand
    ========================================================================== */
 
