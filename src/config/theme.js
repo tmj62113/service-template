@@ -90,8 +90,8 @@ export const theme = {
   // TYPOGRAPHY
   // ===================================================
   fonts: {
-    heading: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif", // All headings (h1-h6)
-    body: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif", // Body text, paragraphs, UI elements
+    heading: "'Urbanist', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif", // All headings (h1-h6)
+    body: "'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif", // Body text, paragraphs, UI elements
     mono: "'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace",
   },
 
