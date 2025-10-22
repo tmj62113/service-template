@@ -19,7 +19,7 @@
 }
 
 .contact-hero h1 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 3rem;
   font-weight: 700;
   line-height: 1.2;
@@ -27,7 +27,7 @@
 }
 
 .contact-lead {
-  font-family: var(--font-body);
+  /* font-family inherited from global.css */
   font-size: 1.25rem;
   line-height: 1.6;
   max-width: 43.75rem;
@@ -58,7 +58,7 @@
    ===================================== */
 
 .contact-info h2 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.75rem;
   font-weight: 600;
   color: #101014;
@@ -66,8 +66,7 @@
 }
 
 .contact-info > p {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   line-height: 1.6;
   color: #101014;
   margin-bottom: 2rem;
@@ -102,7 +101,7 @@
 }
 
 .info-item h3 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.125rem;
   font-weight: 600;
   color: #101014;
@@ -110,8 +109,7 @@
 }
 
 .info-item p {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   line-height: 1.6;
   color: #101014;
   margin: 0;
@@ -122,7 +120,7 @@
    ===================================== */
 
 .contact-form-section h2 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.75rem;
   font-weight: 600;
   color: #101014;
@@ -142,16 +140,14 @@
 }
 
 .form-group label {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   font-weight: 600;
   color: #101014;
 }
 
 .form-group input,
 .form-group textarea {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   padding: 0.75rem 1rem;
   border: 0.0625rem solid #e1dbcb;
   border-radius: var(--radius-sm);
@@ -186,8 +182,7 @@
 }
 
 .form-checkbox label {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   font-weight: 400;
   color: #101014;
   cursor: pointer;
@@ -196,8 +191,7 @@
 
 .submit-btn {
   padding: 0.875rem 2rem;
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   font-weight: 600;
   background-color: #101014;
   color: #f2f0ea;
@@ -227,7 +221,7 @@
 }
 
 .success-message h3 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.5rem;
   font-weight: 600;
   color: #101014;
@@ -235,8 +229,7 @@
 }
 
 .success-message p {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   color: #101014;
   margin: 0;
 }

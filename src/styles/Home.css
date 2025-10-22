@@ -29,7 +29,7 @@
 }
 
 .hero-content h1 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 3rem;
   font-weight: 700;
   line-height: 1.2;
@@ -37,14 +37,14 @@
 }
 
 .hero-content p {
-  font-family: var(--font-body);
+  /* font-family inherited from global.css */
   font-size: 1.25rem;
   line-height: 1.6;
   margin-bottom: 2rem;
 }
 
 .hero-tagline {
-  font-family: var(--font-heading);
+  font-family: var(--font-heading); /* Intentional override - p element styled as heading */
   font-size: 1.5rem;
   font-weight: 600;
   font-style: italic;
@@ -70,7 +70,7 @@
 }
 
 .services-section h2 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.875rem;
   font-weight: 600;
   line-height: 2.25rem;
@@ -117,7 +117,7 @@
 }
 
 .service-category-card h3 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.5rem;
   font-weight: 600;
   color: #101014;
@@ -125,8 +125,7 @@
 }
 
 .service-category-card p {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   line-height: 1.6;
   color: #101014;
   margin-bottom: 1.5rem;
@@ -149,7 +148,7 @@
 }
 
 .benefits-section h2 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.875rem;
   font-weight: 600;
   line-height: 2.25rem;
@@ -190,7 +189,7 @@
 }
 
 .benefit-card h3 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.125rem;
   font-weight: 600;
   color: #101014;
@@ -198,8 +197,7 @@
 }
 
 .benefit-card p {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   line-height: 1.6;
   color: #101014;
   margin: 0;
@@ -216,7 +214,7 @@
 }
 
 .features-section h2 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 2.25rem;
   font-weight: 600;
   color: #101014;
@@ -241,7 +239,7 @@
 }
 
 .feature-card h3 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.375rem;
   font-weight: 600;
   color: #101014;
@@ -249,8 +247,7 @@
 }
 
 .feature-card p {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   line-height: 1.6;
   color: #101014;
   margin: 0;
@@ -272,7 +269,7 @@
 }
 
 .detailed-features-section h2 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 2.25rem;
   font-weight: 600;
   color: #101014;
@@ -297,7 +294,7 @@
 }
 
 .detailed-feature-card h3 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 1.125rem;
   font-weight: 600;
   color: #101014;
@@ -305,8 +302,7 @@
 }
 
 .detailed-feature-card p {
-  font-family: var(--font-body);
-  font-size: 1rem;
+  /* font-family and font-size inherited from global.css */
   line-height: 1.6;
   color: #101014;
   margin: 0;
@@ -329,14 +325,14 @@
 }
 
 .cta-content h2 {
-  font-family: var(--font-heading);
+  /* font-family inherited from global.css */
   font-size: 2.25rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
 
 .cta-content p {
-  font-family: var(--font-body);
+  /* font-family inherited from global.css */
   font-size: 1.125rem;
   line-height: 1.6;
   margin-bottom: 2rem;
@@ -371,9 +367,7 @@
     font-size: 2rem;
   }
 
-  .hero-content p {
-    font-size: 1rem;
-  }
+  /* .hero-content p - inherits base styles from global.css */
 
   .hero-tagline {
     font-size: 1.25rem;
@@ -398,9 +392,7 @@
     font-size: 1.75rem;
   }
 
-  .cta-content p {
-    font-size: 1rem;
-  }
+  /* .cta-content p - inherits base styles from global.css */
 
   .cta-buttons {
     flex-direction: column;
@@ -423,8 +415,7 @@
   }
 
   .hero-content p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem; /* Override default margin only */
   }
 
   .hero-tagline {

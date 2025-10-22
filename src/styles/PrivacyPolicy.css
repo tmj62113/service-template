@@ -20,7 +20,7 @@
 }
 
 .privacy-policy-header h1 {
-  font-family: var(--font-heading, 'Anton', sans-serif);
+  /* font-family inherited from global.css */
   font-size: var(--font-size-5xl, 3rem);
   color: var(--color-text, #122D38);
   margin: 0 0 var(--spacing-md, 1rem) 0;
@@ -29,7 +29,7 @@
 }
 
 .last-updated {
-  font-family: var(--font-body, 'Barlow Semi Condensed', sans-serif);
+  /* font-family inherited from global.css */
   font-size: var(--font-size-sm, 0.875rem);
   color: var(--color-text-secondary, #0C3A4B);
   font-style: italic;
@@ -37,7 +37,7 @@
 }
 
 .privacy-policy-content {
-  font-family: var(--font-body, 'Barlow Semi Condensed', sans-serif);
+  /* font-family inherited from global.css */
   color: var(--color-text, #122D38);
   line-height: 1.8;
 }
@@ -51,7 +51,7 @@
 }
 
 .privacy-section h2 {
-  font-family: var(--font-heading, 'Anton', sans-serif);
+  /* font-family inherited from global.css */
   font-size: var(--font-size-3xl, 1.875rem);
   color: var(--color-text, #122D38);
   margin: 0 0 var(--spacing-lg, 1.5rem) 0;
@@ -60,7 +60,7 @@
 }
 
 .privacy-section h3 {
-  font-family: var(--font-heading, 'Anton', sans-serif);
+  /* font-family inherited from global.css */
   font-size: var(--font-size-xl, 1.25rem);
   color: var(--color-text-secondary, #0C3A4B);
   margin: var(--spacing-xl, 2rem) 0 var(--spacing-md, 1rem) 0;
