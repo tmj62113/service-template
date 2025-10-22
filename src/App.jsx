@@ -41,7 +41,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ToastContainer from './components/toast/ToastContainer';
 import CookieConsent from './components/CookieConsent';
 import SkipToContent from './components/SkipToContent';
-import { getCSSVariables } from './config/theme';
 import { initializeAnalytics, trackPageView } from './utils/analytics';
 
 // Component to track page views on route changes
@@ -56,9 +55,6 @@ function AnalyticsTracker() {
 }
 
 function App() {
-  // Apply theme CSS variables
-  const themeStyles = getCSSVariables();
-
   // Initialize analytics on mount
   useEffect(() => {
     initializeAnalytics();
@@ -73,7 +69,7 @@ function App() {
           <Route
             path="/*"
             element={
-              <div style={themeStyles} className="app-container">
+              <div className="app-container">
                 <SkipToContent />
                 <Header />
                 <main id="main-content" role="main">

@@ -1,5 +1,3 @@
-import { theme } from '../config/theme';
-
 export default function StyleGuide() {
   return (
     <div className="container" style={{ padding: '40px 0' }}>
@@ -31,27 +29,27 @@ export default function StyleGuide() {
             <div>
               <h3 className="heading heading--sm" style={{ marginBottom: '10px' }}>theme.js provides:</h3>
               <ul style={{ marginLeft: '20px' }}>
-                <li className="text text--sm">✅ Client-specific brand colors</li>
                 <li className="text text--sm">✅ Company information</li>
                 <li className="text text--sm">✅ Feature toggles</li>
-                <li className="text text--sm">✅ JavaScript access to theme values</li>
+                <li className="text text--sm">✅ Business configuration</li>
+                <li className="text text--sm">✅ SEO and analytics settings</li>
               </ul>
             </div>
           </div>
 
           <div className="card" style={{ marginTop: '20px', background: 'white' }}>
-            <p className="text text--bold" style={{ marginBottom: '10px' }}>How they work together:</p>
+            <p className="text text--bold" style={{ marginBottom: '10px' }}>How to customize styling:</p>
             <ol style={{ marginLeft: '20px' }}>
-              <li className="text text--sm">global.css defines: <code>--color-primary: #e1dbcb</code> (Clockwork default)</li>
-              <li className="text text--sm">theme.js can override via App.jsx: <code>--color-primary: {theme.colors.primary}</code> (client brand)</li>
-              <li className="text text--sm">All utility classes use: <code>background: var(--color-primary)</code> (gets theme color)</li>
+              <li className="text text--sm">All colors, fonts, and spacing are defined in <code>/src/styles/global.css</code></li>
+              <li className="text text--sm">Utility classes use CSS variables: <code>background: var(--color-primary)</code></li>
+              <li className="text text--sm">Override in <code>/src/styles/client.css</code> for client-specific customizations</li>
             </ol>
           </div>
 
           <div style={{ marginTop: '20px', padding: '15px', background: 'white', borderRadius: '8px' }}>
             <p className="text text--bold">To customize brand colors:</p>
             <p className="text text--sm">❌ DON'T edit global.css :root variables directly</p>
-            <p className="text text--sm">✅ DO edit <code>/src/config/theme.js</code> colors object</p>
+            <p className="text text--sm">✅ DO override in <code>/src/styles/client.css</code> using CSS variable syntax</p>
           </div>
         </div>
       </section>
