@@ -189,45 +189,6 @@
 }
 
 /* =====================================================
-   TABLE STYLES
-   ===================================================== */
-
-.legal-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: var(--spacing-lg) 0;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-}
-
-.legal-table thead {
-  background-color: var(--color-primary);
-  color: var(--color-primary-text);
-}
-
-.legal-table th {
-  padding: var(--spacing-md);
-  text-align: left;
-  font-family: var(--font-family-heading);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.legal-table td {
-  padding: var(--spacing-md);
-  border-top: 1px solid var(--color-border);
-  font-size: var(--font-size-base);
-}
-
-.legal-table tbody tr:hover {
-  background-color: var(--color-surface-hover);
-}
-
-/* =====================================================
    FOOTER SECTION
    ===================================================== */
 
@@ -282,15 +243,6 @@
   .legal-content ol {
     padding-left: var(--spacing-lg);
   }
-
-  .legal-table {
-    font-size: var(--font-size-sm);
-  }
-
-  .legal-table th,
-  .legal-table td {
-    padding: var(--spacing-sm);
-  }
 }
 
 @media (max-width: 480px) {
@@ -310,13 +262,6 @@
   .legal-content p,
   .legal-content li {
     font-size: var(--font-size-sm);
-  }
-
-  /* Make table scrollable on very small screens */
-  .legal-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
   }
 }
 

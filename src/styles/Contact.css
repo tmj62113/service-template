@@ -184,25 +184,6 @@
   margin: 0;
 }
 
-.submit-btn {
-  padding: 0.875rem 2rem;
-  /* font-family and font-size inherited from global.css */
-  font-weight: 600;
-  background-color: #101014;
-  color: #f2f0ea;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  align-self: flex-start;
-}
-
-.submit-btn:hover {
-  background-color: #e1dbcb;
-  color: #101014;
-  transform: translateY(-0.125rem);
-}
-
 /* =====================================
    SUCCESS MESSAGE
    ===================================== */
@@ -284,9 +265,5 @@
 
   .info-icon .material-symbols-outlined {
     font-size: 1.25rem;
-  }
-
-  .submit-btn {
-    width: 100%;
   }
 }
