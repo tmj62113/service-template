@@ -165,7 +165,7 @@ function BookingReview() {
           </svg>
           <h2>Booking Not Available</h2>
           <p>{error}</p>
-          <button className="btn btn--primary" onClick={() => navigate('/services')}>
+          <button className="btn btn-primary" onClick={() => navigate('/services')}>
             Back to Services
           </button>
         </div>
@@ -226,7 +226,7 @@ function BookingReview() {
         {/* Actions */}
         <div className="review-actions">
           <button
-            className="btn btn--primary btn--lg"
+            className="btn btn-primary btn-lg"
             onClick={handleProceedToPayment}
             disabled={!isFormValid() || loading}
           >

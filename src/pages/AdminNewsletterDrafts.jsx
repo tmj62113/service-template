@@ -84,7 +84,7 @@ export default function AdminNewsletterDrafts() {
           <div className="header-actions">
             <button
               onClick={() => navigate('/admin/newsletter/create')}
-              className="btn-primary"
+              className="btn btn-primary"
             >
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
               New Newsletter
@@ -149,7 +149,7 @@ export default function AdminNewsletterDrafts() {
                     <td style={{ textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => handleDeleteDraft(draft._id)}
-                        className="btn-icon"
+                        className="btn btn-icon-only"
                         style={{ color: '#ef4444' }}
                         title="Delete draft"
                       >

@@ -486,8 +486,7 @@ export default function AdminMessages() {
             {selectedIds.length > 0 && (
               <button
                 onClick={handleBulkDelete}
-                className="btn-secondary"
-                style={{ backgroundColor: "#dc3545", borderColor: "#dc3545" }}
+                className="btn btn-danger"
               >
                 Delete Selected ({selectedIds.length})
               </button>
@@ -514,7 +513,7 @@ export default function AdminMessages() {
                 <th>
                   <button
                     onClick={() => handleSort("from")}
-                    className="sort-btn"
+                    className="btn btn-tertiary btn-sm"
                   >
                     From
                     <span className="material-symbols-outlined">swap_vert</span>
@@ -523,7 +522,7 @@ export default function AdminMessages() {
                 <th>
                   <button
                     onClick={() => handleSort("subject")}
-                    className="sort-btn"
+                    className="btn btn-tertiary btn-sm"
                   >
                     Subject
                     <span className="material-symbols-outlined">swap_vert</span>
@@ -532,7 +531,7 @@ export default function AdminMessages() {
                 <th>
                   <button
                     onClick={() => handleSort("createdAt")}
-                    className="sort-btn"
+                    className="btn btn-tertiary btn-sm"
                   >
                     Date
                     <span className="material-symbols-outlined">swap_vert</span>
@@ -607,7 +606,7 @@ export default function AdminMessages() {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="pagination-btn"
+                className="btn btn-secondary btn-sm"
               >
                 <span className="material-symbols-outlined">chevron_left</span>
                 Previous
@@ -620,7 +619,7 @@ export default function AdminMessages() {
                   setCurrentPage((prev) => Math.min(totalPages, prev + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="pagination-btn"
+                className="btn btn-secondary btn-sm"
               >
                 Next
                 <span className="material-symbols-outlined">chevron_right</span>
@@ -695,19 +694,18 @@ export default function AdminMessages() {
               </div>
 
               <div className="modal-actions">
-                <button className="btn-primary" onClick={handleReplyClick}>
+                <button className="btn btn-primary" onClick={handleReplyClick}>
                   Reply
                 </button>
                 <button
-                  className="btn-secondary"
+                  className="btn btn-secondary"
                   onClick={() => handleArchive(selectedMessage._id)}
                 >
                   Archive
                 </button>
                 <button
-                  className="btn-secondary"
+                  className="btn btn-danger"
                   onClick={() => handleDelete(selectedMessage._id)}
-                  style={{ backgroundColor: "#dc3545", borderColor: "#dc3545" }}
                 >
                   Delete
                 </button>
@@ -836,14 +834,14 @@ export default function AdminMessages() {
               </div>
               <div className="modal-actions" style={{ marginTop: "20px" }}>
                 <button
-                  className="btn-primary"
+                  className="btn btn-primary"
                   onClick={handleSendEmail}
                   disabled={sendingEmail}
                 >
                   {sendingEmail ? "Sending..." : "Send Email"}
                 </button>
                 <button
-                  className="btn-secondary"
+                  className="btn btn-secondary"
                   onClick={closeReplyModal}
                   disabled={sendingEmail}
                 >

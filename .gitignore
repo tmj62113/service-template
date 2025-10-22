@@ -34,6 +34,9 @@ screenshots/
 # References folder
 references/
 
+# Reference files (templates and examples)
+src/contexts/global.css
+
 # Security documentation (contains sensitive implementation details)
 SECURITY.md
 

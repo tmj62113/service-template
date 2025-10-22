@@ -122,10 +122,10 @@ export default function About() {
             chaos.
           </p>
           <div className="cta-buttons">
-            <a href="/services" className="btn btn--primary btn--lg">
+            <a href="/services" className="btn btn-primary btn-lg">
               Browse Services
             </a>
-            <a href="/contact" className="btn btn--outline btn--lg">
+            <a href="/contact" className="btn btn-secondary btn-lg">
               Contact Us
             </a>
           </div>

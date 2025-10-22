@@ -227,26 +227,26 @@ export default function TestUtilities() {
           Buttons
         </h2>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
-          <button className="btn btn--primary">Primary Button</button>
-          <button className="btn btn--secondary">Secondary Button</button>
-          <button className="btn btn--outline">Outline Button</button>
-          <button className="btn btn--success">Success Button</button>
-          <button className="btn btn--error">Error Button</button>
+          <button className="btn btn-primary">Primary Button</button>
+          <button className="btn btn-secondary">Secondary Button</button>
+          <button className="btn btn-secondary">Outline Button</button>
+          <button className="btn btn-success">Success Button</button>
+          <button className="btn btn-danger">Error Button</button>
         </div>
 
         <h3 className="heading heading--sm" style={{ marginBottom: '15px' }}>
           Button Sizes
         </h3>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '20px' }}>
-          <button className="btn btn--primary btn--sm">Small</button>
-          <button className="btn btn--primary">Default</button>
-          <button className="btn btn--primary btn--lg">Large</button>
+          <button className="btn btn-primary btn-sm">Small</button>
+          <button className="btn btn-primary">Default</button>
+          <button className="btn btn-primary btn-lg">Large</button>
         </div>
 
         <h3 className="heading heading--sm" style={{ marginBottom: '15px' }}>
           Disabled State
         </h3>
-        <button className="btn btn--primary" disabled>Disabled Button</button>
+        <button className="btn btn-primary" disabled>Disabled Button</button>
       </section>
 
       {/* Cards Section */}
@@ -393,7 +393,7 @@ export default function TestUtilities() {
           <div style={{ marginTop: '20px' }}>
             <p className="text text--bold">Available Utility Classes:</p>
             <ul style={{ marginTop: '10px', marginLeft: '20px' }}>
-              <li className="text text--sm">Buttons: .btn, .btn--primary, .btn--secondary, .btn--outline, .btn--sm, .btn--lg</li>
+              <li className="text text--sm">Buttons: .btn, .btn-primary, .btn-secondary, .btn-secondary, .btn-sm, .btn-lg</li>
               <li className="text text--sm">Cards: .card, .card--sm, .card--lg, .card--elevated, .card--bordered</li>
               <li className="text text--sm">Typography: .heading--xl/lg/md/sm, .text--muted/bold/uppercase/center/sm/xs</li>
               <li className="text text--sm">Badges: .badge--success/error/warning/primary</li>

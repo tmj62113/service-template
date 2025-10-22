@@ -75,7 +75,7 @@ class ErrorBoundary extends Component {
             <div className="error-boundary__actions">
               <button
                 onClick={this.handleTryAgain}
-                className="btn btn--primary btn--lg"
+                className="btn btn-primary btn-lg"
                 aria-label="Reload page and try again"
               >
                 <span className="material-symbols-outlined">refresh</span>
@@ -84,7 +84,7 @@ class ErrorBoundary extends Component {
 
               <Link
                 to="/"
-                className="btn btn--secondary btn--lg"
+                className="btn btn-secondary btn-lg"
                 aria-label="Go to homepage"
               >
                 <span className="material-symbols-outlined">home</span>

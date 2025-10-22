@@ -240,7 +240,7 @@ export default function Contact() {
                   aria-hidden="true"
                 />
 
-                <button type="submit" className="submit-btn">
+                <button type="submit" className="btn btn-primary">
                   Send Message
                 </button>
               </form>

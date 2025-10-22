@@ -149,7 +149,7 @@ export default function AdminAuditLogs() {
       <div className="admin-header">
         <h1>Audit Logs</h1>
         <div className="admin-actions">
-          <button onClick={fetchLogs} className="btn btn--secondary">
+          <button onClick={fetchLogs} className="btn btn-secondary">
             🔄 Refresh
           </button>
         </div>
@@ -248,7 +248,7 @@ export default function AdminAuditLogs() {
         </div>
 
         <div style={{ marginTop: '1rem' }}>
-          <button onClick={clearFilters} className="btn btn--secondary">
+          <button onClick={clearFilters} className="btn btn-secondary">
             Clear Filters
           </button>
         </div>
@@ -265,14 +265,14 @@ export default function AdminAuditLogs() {
             <button
               onClick={() => setPage(p => Math.max(0, p - 1))}
               disabled={page === 0}
-              className="btn btn--secondary btn--sm"
+              className="btn btn-secondary btn-sm"
             >
               ← Previous
             </button>
             <button
               onClick={() => setPage(p => p + 1)}
               disabled={logs.length < filters.limit}
-              className="btn btn--secondary btn--sm"
+              className="btn btn-secondary btn-sm"
             >
               Next →
             </button>
@@ -360,14 +360,14 @@ export default function AdminAuditLogs() {
             <button
               onClick={() => setPage(p => Math.max(0, p - 1))}
               disabled={page === 0}
-              className="btn btn--secondary"
+              className="btn btn-secondary"
             >
               ← Previous Page
             </button>
             <button
               onClick={() => setPage(p => p + 1)}
               disabled={logs.length < filters.limit}
-              className="btn btn--secondary"
+              className="btn btn-secondary"
             >
               Next Page →
             </button>

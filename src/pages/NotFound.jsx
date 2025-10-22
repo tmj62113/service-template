@@ -95,7 +95,7 @@ export default function NotFound() {
             </div>
             <button
               type="submit"
-              className="btn btn--primary"
+              className="btn btn-primary"
               disabled={!searchQuery.trim()}
             >
               Search
@@ -140,7 +140,7 @@ export default function NotFound() {
         <div className="not-found__back">
           <button
             onClick={() => navigate(-1)}
-            className="btn btn--secondary"
+            className="btn btn-secondary"
             aria-label="Go back to previous page"
           >
             <span className="material-symbols-outlined">arrow_back</span>

@@ -183,7 +183,7 @@ function BookingFlow() {
           </svg>
           <h2>Booking Not Available</h2>
           <p>{error}</p>
-          <button className="btn btn--primary" onClick={handleBack}>
+          <button className="btn btn-primary" onClick={handleBack}>
             Back to Services
           </button>
         </div>
@@ -288,7 +288,7 @@ function BookingFlow() {
         {selectedTimeSlot && (
           <div className="booking-actions">
             <button
-              className="btn btn--primary btn--lg"
+              className="btn btn-primary btn-lg"
               onClick={handleContinue}
               disabled={!canProceedToReview()}
             >

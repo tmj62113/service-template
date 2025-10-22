@@ -96,7 +96,7 @@ function ServiceDetail() {
         <div className="error-container">
           <h2>Error</h2>
           <p>{error}</p>
-          <Link to="/services" className="btn btn--primary">
+          <Link to="/services" className="btn btn-primary">
             Back to Services
           </Link>
         </div>
@@ -225,7 +225,7 @@ function ServiceDetail() {
             {/* Book Button */}
             <button
               onClick={handleBookNow}
-              className="btn btn--primary btn--lg book-now-button"
+              className="btn btn-primary btn-lg book-now-button"
             >
               Book This Service
             </button>

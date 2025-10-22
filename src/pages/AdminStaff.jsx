@@ -255,17 +255,17 @@ export default function AdminStaff() {
       </div>
 
       <div className="products-controls">
-        <button className="add-product-btn" onClick={handleAddStaff}>
+        <button className="btn btn-primary" onClick={handleAddStaff}>
           <span className="material-symbols-outlined">add</span>
           Add Staff Member
         </button>
         <div className="products-actions">
-          <button className="control-btn" onClick={handleExportData}>
+          <button className="btn btn-secondary" onClick={handleExportData}>
             <span className="material-symbols-outlined">download</span>
             Export data
           </button>
           <div className="sort-dropdown">
-            <button className="control-btn">
+            <button className="btn btn-secondary">
               Sort by: {getSortLabel()}
               <span className="material-symbols-outlined">
                 {sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'}

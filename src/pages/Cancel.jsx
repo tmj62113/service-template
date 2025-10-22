@@ -15,10 +15,10 @@ function Cancel() {
           No charges have been made. You can return to your cart to try again.
         </p>
         <div className="cancel-actions">
-          <button onClick={() => navigate('/checkout')} className="btn-primary">
+          <button onClick={() => navigate('/checkout')} className="btn btn-primary">
             Return to Checkout
           </button>
-          <button onClick={() => navigate('/')} className="btn-secondary">
+          <button onClick={() => navigate('/')} className="btn btn-secondary">
             Continue Shopping
           </button>
         </div>

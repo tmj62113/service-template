@@ -204,15 +204,15 @@ export default function CustomerDetail() {
             <h2>Customer Information</h2>
             {isEditing ? (
               <div className="edit-buttons">
-                <button onClick={handleSaveEdit} disabled={saving} className="save-btn">
+                <button onClick={handleSaveEdit} disabled={saving} className="btn btn-success">
                   {saving ? 'Saving...' : 'Save'}
                 </button>
-                <button onClick={handleCancelEdit} disabled={saving} className="cancel-btn">
+                <button onClick={handleCancelEdit} disabled={saving} className="btn btn-secondary">
                   Cancel
                 </button>
               </div>
             ) : (
-              <button onClick={handleEditClick} className="edit-btn">
+              <button onClick={handleEditClick} className="btn btn-secondary">
                 <span className="material-symbols-outlined">edit</span>
                 Edit
               </button>
@@ -380,7 +380,7 @@ export default function CustomerDetail() {
                     <td>{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</td>
                     <td>
                       <button
-                        className="view-order-btn"
+                        className="btn btn-secondary btn-sm"
                         onClick={() => navigate(`/admin/orders/${shortId}`)}
                       >
                         View

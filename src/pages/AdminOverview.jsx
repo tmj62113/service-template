@@ -100,8 +100,8 @@ export default function AdminOverview() {
           <div className="chart-header">
             <h3>Sales Performance</h3>
             <div className="chart-controls">
-              <button className="chart-control-btn">Export data</button>
-              <button className="chart-control-btn">Last 14 Days</button>
+              <button className="btn btn-secondary btn-sm">Export data</button>
+              <button className="btn btn-secondary btn-sm">Last 14 Days</button>
             </div>
           </div>
           <div className="chart-legend">

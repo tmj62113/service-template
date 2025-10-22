@@ -172,7 +172,7 @@ export default function AdminSecurity() {
               <option value="7d">Last 7 Days</option>
               <option value="30d">Last 30 Days</option>
             </select>
-            <button onClick={fetchSecurityData} className="btn btn--secondary">
+            <button onClick={fetchSecurityData} className="btn btn-secondary">
               🔄 Refresh
             </button>
           </div>

@@ -145,7 +145,7 @@ export default function AdminNewsletter() {
           <div className="header-actions">
             <button
               onClick={handleExportEmails}
-              className="btn-secondary"
+              className="btn btn-secondary"
             >
               <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>download</span>
               Export Emails
@@ -249,7 +249,7 @@ export default function AdminNewsletter() {
                     <td style={{ textAlign: 'right' }}>
                       <button
                         onClick={() => handleDeleteSubscriber(subscriber._id)}
-                        className="btn-icon"
+                        className="btn btn-icon-only"
                         style={{ color: '#ef4444' }}
                         title="Delete subscriber"
                       >
@@ -273,7 +273,7 @@ export default function AdminNewsletter() {
               <button
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="pagination-btn"
+                className="btn btn-secondary btn-sm"
               >
                 <span className="material-symbols-outlined">chevron_left</span>
                 Previous
@@ -284,7 +284,7 @@ export default function AdminNewsletter() {
               <button
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
-                className="pagination-btn"
+                className="btn btn-secondary btn-sm"
               >
                 Next
                 <span className="material-symbols-outlined">chevron_right</span>

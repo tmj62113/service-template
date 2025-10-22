@@ -83,7 +83,7 @@ export default function Footer() {
                 className="newsletter-input"
                 required
               />
-              <button type="submit" className="newsletter-btn">
+              <button type="submit" className="btn btn-primary">
                 Subscribe
               </button>
               {error && <p className="newsletter-error">{error}</p>}

@@ -199,7 +199,7 @@ export default function AdminIPBlocking() {
         <div className="admin-actions">
           <button
             onClick={() => setShowBlockForm(!showBlockForm)}
-            className="btn btn--primary"
+            className="btn btn-primary"
           >
             {showBlockForm ? '✕ Cancel' : '🚫 Block IP Address'}
           </button>
@@ -303,13 +303,13 @@ export default function AdminIPBlocking() {
             )}
 
             <div className="form-actions">
-              <button type="submit" className="btn btn--primary">
+              <button type="submit" className="btn btn-primary">
                 Block IP Address
               </button>
               <button
                 type="button"
                 onClick={() => setShowBlockForm(false)}
-                className="btn btn--secondary"
+                className="btn btn-secondary"
               >
                 Cancel
               </button>
@@ -355,7 +355,7 @@ export default function AdminIPBlocking() {
                     <td>
                       <button
                         onClick={() => handleUnblock(block._id)}
-                        className="btn btn--sm btn--secondary"
+                        className="btn btn-sm btn-secondary"
                       >
                         Unblock
                       </button>

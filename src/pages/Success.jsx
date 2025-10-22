@@ -9,7 +9,7 @@ function Success() {
     <div className="success-container" style={{ padding: '80px 20px', textAlign: 'center' }}>
       <h2>Success</h2>
       <p>Thank you! Your booking has been confirmed.</p>
-      <button onClick={() => navigate('/services')} className="btn btn--primary">
+      <button onClick={() => navigate('/services')} className="btn btn-primary">
         Browse Services
       </button>
     </div>

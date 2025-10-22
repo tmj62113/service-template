@@ -64,47 +64,47 @@ export default function StyleGuide() {
         <div className="card" style={{ marginBottom: '20px' }}>
           <h3 className="heading heading--sm" style={{ marginBottom: '15px' }}>Variants</h3>
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
-            <button className="btn btn--primary">Primary</button>
-            <button className="btn btn--secondary">Secondary</button>
-            <button className="btn btn--outline">Outline</button>
-            <button className="btn btn--success">Success</button>
-            <button className="btn btn--error">Error</button>
+            <button className="btn btn-primary">Primary</button>
+            <button className="btn btn-secondary">Secondary</button>
+            <button className="btn btn-secondary">Outline</button>
+            <button className="btn btn-success">Success</button>
+            <button className="btn btn-danger">Error</button>
           </div>
 
           <pre className="text text--xs" style={{ background: '#F3F4F6', padding: '12px', borderRadius: '6px', overflow: 'auto' }}>
-{`<button class="btn btn--primary">Primary</button>
-<button class="btn btn--secondary">Secondary</button>
-<button class="btn btn--outline">Outline</button>
-<button class="btn btn--success">Success</button>
-<button class="btn btn--error">Error</button>`}
+{`<button class="btn btn-primary">Primary</button>
+<button class="btn btn-secondary">Secondary</button>
+<button class="btn btn-secondary">Outline</button>
+<button class="btn btn-success">Success</button>
+<button class="btn btn-danger">Error</button>`}
           </pre>
         </div>
 
         <div className="card" style={{ marginBottom: '20px' }}>
           <h3 className="heading heading--sm" style={{ marginBottom: '15px' }}>Sizes</h3>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '20px' }}>
-            <button className="btn btn--primary btn--sm">Small</button>
-            <button className="btn btn--primary">Default</button>
-            <button className="btn btn--primary btn--lg">Large</button>
+            <button className="btn btn-primary btn-sm">Small</button>
+            <button className="btn btn-primary">Default</button>
+            <button className="btn btn-primary btn-lg">Large</button>
           </div>
 
           <pre className="text text--xs" style={{ background: '#F3F4F6', padding: '12px', borderRadius: '6px', overflow: 'auto' }}>
-{`<button class="btn btn--primary btn--sm">Small</button>
-<button class="btn btn--primary">Default</button>
-<button class="btn btn--primary btn--lg">Large</button>`}
+{`<button class="btn btn-primary btn-sm">Small</button>
+<button class="btn btn-primary">Default</button>
+<button class="btn btn-primary btn-lg">Large</button>`}
           </pre>
         </div>
 
         <div className="card">
           <h3 className="heading heading--sm" style={{ marginBottom: '15px' }}>States</h3>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <button className="btn btn--primary">Enabled</button>
-            <button className="btn btn--primary" disabled>Disabled</button>
+            <button className="btn btn-primary">Enabled</button>
+            <button className="btn btn-primary" disabled>Disabled</button>
           </div>
 
           <pre className="text text--xs" style={{ background: '#F3F4F6', padding: '12px', borderRadius: '6px', overflow: 'auto' }}>
-{`<button class="btn btn--primary">Enabled</button>
-<button class="btn btn--primary" disabled>Disabled</button>`}
+{`<button class="btn btn-primary">Enabled</button>
+<button class="btn btn-primary" disabled>Disabled</button>`}
           </pre>
         </div>
       </section>
@@ -347,9 +347,9 @@ export default function StyleGuide() {
 
         <div className="card card--bordered" style={{ marginBottom: '20px' }}>
           <h3 className="heading heading--sm" style={{ marginBottom: '15px' }}>1. Combine Classes</h3>
-          <button className="btn btn--primary btn--lg">Large Primary Button</button>
+          <button className="btn btn-primary btn-lg">Large Primary Button</button>
           <pre className="text text--xs" style={{ background: '#F3F4F6', padding: '12px', borderRadius: '6px', overflow: 'auto', marginTop: '15px' }}>
-{`<button class="btn btn--primary btn--lg">Large Primary Button</button>`}
+{`<button class="btn btn-primary btn-lg">Large Primary Button</button>`}
           </pre>
         </div>
 
@@ -367,7 +367,7 @@ export default function StyleGuide() {
         <div className="card card--bordered">
           <h3 className="heading heading--sm" style={{ marginBottom: '15px' }}>3. Override in client.css</h3>
           <pre className="text text--xs" style={{ background: '#F3F4F6', padding: '12px', borderRadius: '6px', overflow: 'auto' }}>
-{`.btn--primary {
+{`.btn-primary {
   background: linear-gradient(135deg, #FF6B6B, #4ECDC4);
   border-radius: var(--radius-full);
 }`}
@@ -412,7 +412,7 @@ export default function StyleGuide() {
           <div className="card" style={{ background: '#D1FAE5', border: '1px solid #10B981' }}>
             <h3 className="heading heading--sm" style={{ marginBottom: '10px', color: '#065F46' }}>✅ Extend existing</h3>
             <pre className="text text--xs" style={{ background: 'white', padding: '8px', borderRadius: '4px' }}>
-{`Use .btn--primary
+{`Use .btn-primary
 Override in client.css`}
             </pre>
           </div>

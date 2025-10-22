@@ -35,7 +35,7 @@ export default function Home() {
             Your business, always on time.
           </p>
           <button
-            className="btn btn--primary btn--lg"
+            className="btn btn-primary btn-lg"
             onClick={() => navigate("/services")}
           >
             Browse Services
@@ -76,7 +76,7 @@ export default function Home() {
 
           <div className="features-cta">
             <button
-              className="btn btn--primary btn--lg"
+              className="btn btn-primary btn-lg"
               onClick={() => navigate("/services")}
             >
               Start Your Free Trial
@@ -151,13 +151,13 @@ export default function Home() {
             </p>
             <div className="cta-buttons">
               <button
-                className="btn btn--primary btn--lg"
+                className="btn btn-primary btn-lg"
                 onClick={() => navigate("/services")}
               >
                 Browse Services
               </button>
               <button
-                className="btn btn--outline btn--lg"
+                className="btn btn-secondary btn-lg"
                 onClick={() => navigate("/contact")}
               >
                 Contact Us

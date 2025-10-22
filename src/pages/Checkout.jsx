@@ -9,7 +9,7 @@ function Checkout() {
     <div className="checkout-container" style={{ padding: '80px 20px', textAlign: 'center' }}>
       <h2>Checkout</h2>
       <p>This page is no longer used for service bookings.</p>
-      <button onClick={() => navigate('/services')} className="btn btn--primary">
+      <button onClick={() => navigate('/services')} className="btn btn-primary">
         Browse Services
       </button>
     </div>

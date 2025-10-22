@@ -170,7 +170,7 @@ function Services() {
                 setSearchTerm('');
                 fetchServices();
               }}
-              className="btn btn--secondary"
+              className="btn btn-secondary"
             >
               View All Services
             </button>
@@ -205,7 +205,7 @@ function Services() {
                 </div>
                 <Link
                   to={`/services/${service._id}`}
-                  className="service-book-button btn btn--primary"
+                  className="service-book-button btn btn-primary"
                 >
                   Book Now
                 </Link>

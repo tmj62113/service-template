@@ -223,14 +223,14 @@ export default function AdminNewsletterCreate() {
           <div className="header-actions">
             <button
               onClick={handleCancel}
-              className="btn-secondary"
+              className="btn btn-secondary"
               disabled={saving || sending}
             >
               Cancel
             </button>
             <button
               onClick={handleSaveDraft}
-              className="btn-secondary"
+              className="btn btn-secondary"
               disabled={saving || sending || !subject || !message}
               style={{ marginLeft: '10px' }}
             >
@@ -238,7 +238,7 @@ export default function AdminNewsletterCreate() {
             </button>
             <button
               onClick={handleSendNewsletter}
-              className="btn-primary"
+              className="btn btn-primary"
               disabled={saving || sending || !subject || !message}
               style={{ marginLeft: '10px' }}
             >

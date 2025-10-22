@@ -114,7 +114,7 @@ function BookingConfirmation() {
           <p className="error-hint">
             Don't worry! You should receive a confirmation email shortly.
           </p>
-          <Link to="/services" className="btn btn--primary">
+          <Link to="/services" className="btn btn-primary">
             Back to Services
           </Link>
         </div>
@@ -246,16 +246,16 @@ function BookingConfirmation() {
 
         {/* Actions */}
         <div className="confirmation-actions">
-          <button className="btn btn--primary" onClick={handleAddToCalendar}>
+          <button className="btn btn-primary" onClick={handleAddToCalendar}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M3.5 0a.5.5 0 01.5.5V1h8V.5a.5.5 0 011 0V1h1a2 2 0 012 2v11a2 2 0 01-2 2H2a2 2 0 01-2-2V3a2 2 0 012-2h1V.5a.5.5 0 01.5-.5zM1 4v10a1 1 0 001 1h12a1 1 0 001-1V4H1z"/>
             </svg>
             Add to Calendar
           </button>
-          <Link to="/services" className="btn btn--secondary">
+          <Link to="/services" className="btn btn-secondary">
             Book Another Service
           </Link>
-          <Link to="/" className="btn btn--outline">
+          <Link to="/" className="btn btn-secondary">
             Return to Home
           </Link>
         </div>
