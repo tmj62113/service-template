@@ -5,10 +5,17 @@
 
 /* Header Container */
 .header {
-  position: sticky;
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: var(--z-sticky);
-  background-color: #1a1a1a; /* Dark background matching Casewell */
+  background: linear-gradient(
+    to bottom,
+    rgba(26, 26, 26, 0.9) 0%,
+    rgba(26, 26, 26, 0.7) 70%,
+    rgba(26, 26, 26, 0) 100%
+  ); /* Gradient fade for transparency over slider */
   height: 3.5rem; /* 56px */
   display: flex;
   justify-content: center;
@@ -46,6 +53,7 @@
   align-items: center;
   text-decoration: none;
   transition: opacity var(--transition-base);
+  filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.8)); /* Shadow for readability over images */
 }
 
 .logo:hover {
@@ -99,6 +107,7 @@
   text-decoration: none;
   transition: opacity var(--transition-base);
   white-space: nowrap;
+  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8); /* Shadow for readability over images */
 }
 
 .nav-content a:hover {
@@ -129,6 +138,7 @@
   gap: var(--spacing-sm);
   font-size: var(--font-size-xs);
   color: #ffffff;
+  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8); /* Shadow for readability over images */
 }
 
 .user-menu button {
