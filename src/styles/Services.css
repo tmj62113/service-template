@@ -29,7 +29,7 @@
 .search-input {
   flex: 1;
   padding: var(--spacing-sm) var(--spacing-md);
-  border: 0.0625rem solid var(--color-gray-300);
+  border: 0.0625rem solid var(--color-primary-dark);
   border-radius: var(--radius-md);
 }
 
@@ -56,11 +56,11 @@
 }
 
 .search-clear {
-  background: var(--color-gray-200);
+  background: var(--color-primary);
 }
 
 .search-clear:hover {
-  background: var(--color-gray-300);
+  background: var(--color-primary-dark);
 }
 
 .services-filters {
@@ -72,7 +72,7 @@
 
 .filter-button {
   padding: var(--spacing-sm) var(--spacing-lg);
-  border: 0.0625rem solid var(--color-gray-300);
+  border: 0.0625rem solid var(--color-primary-dark);
   background: var(--color-primary-light);
   border-radius: var(--radius-full);
   cursor: pointer;
@@ -96,7 +96,7 @@
 }
 
 .services-error {
-  background: var(--color-error-light);
+  background: var(--color-danger);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-lg);
 }
@@ -111,7 +111,7 @@
   background: var(--color-primary-light);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 0.0625rem solid var(--color-gray-200);
+  border: 0.0625rem solid var(--color-primary);
   transition: transform 0.2s, border-color 0.2s;
   display: flex;
   flex-direction: column;
@@ -126,7 +126,7 @@
   width: 100%;
   height: 12.5rem;
   overflow: hidden;
-  background: var(--color-gray-100);
+  background: var(--color-primary-light);
 }
 
 .service-image img {
@@ -168,7 +168,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-md) 0;
-  border-top: 0.0625rem solid var(--color-gray-200);
+  border-top: 0.0625rem solid var(--color-primary);
   margin-bottom: var(--spacing-md);
 }
 

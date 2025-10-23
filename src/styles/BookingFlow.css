@@ -1,6 +1,6 @@
 .booking-flow {
   min-height: 100vh;
-  background: var(--color-gray-50);
+  background: var(--color-background);
   /* Container properties now handled by global .section-container */
 }
 
@@ -16,7 +16,7 @@
 }
 
 .booking-loading .spinner {
-  border: 0.1875rem solid var(--color-gray-200);
+  border: 0.1875rem solid var(--color-primary);
   border-top: 0.1875rem solid var(--color-primary);
   border-radius: 50%;
   width: 2.5rem;
@@ -53,7 +53,7 @@
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--color-primary-light);
-  border: 0.0625rem solid var(--color-gray-300);
+  border: 0.0625rem solid var(--color-primary-dark);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s;
@@ -61,15 +61,15 @@
 }
 
 .back-button:hover {
-  background: var(--color-gray-50);
-  border-color: var(--color-gray-400);
+  background: var(--color-background);
+  border-color: var(--color-border-dark);
 }
 
 .booking-service-summary {
   background: var(--color-primary-light);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  border: 0.0625rem solid var(--color-gray-200);
+  border: 0.0625rem solid var(--color-primary);
 }
 
 .booking-service-summary h1 {
@@ -101,7 +101,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding-top: var(--spacing-md);
-  border-top: 0.0625rem solid var(--color-gray-200);
+  border-top: 0.0625rem solid var(--color-primary);
 }
 
 .staff-name {
@@ -134,7 +134,7 @@
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
-  background: var(--color-gray-300);
+  background: var(--color-primary-dark);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -179,8 +179,8 @@
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-error-light);
-  border: 0.0625rem solid var(--color-error);
+  background: var(--color-danger);
+  border: 0.0625rem solid var(--color-danger);
   border-radius: var(--radius-md);
   margin-top: var(--spacing-lg);
 }
@@ -195,7 +195,7 @@
   justify-content: center;
   margin-top: var(--spacing-2xl);
   padding-top: var(--spacing-2xl);
-  border-top: 0.0625rem solid var(--color-gray-200);
+  border-top: 0.0625rem solid var(--color-primary);
 }
 
 .booking-actions .btn {

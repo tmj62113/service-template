@@ -1,6 +1,6 @@
 .booking-confirmation {
   min-height: 100vh;
-  background: var(--color-gray-50);
+  background: var(--color-background);
   /* Container properties now handled by global .section-container--narrow */
 }
 
@@ -13,13 +13,13 @@
   justify-content: center;
   padding: var(--spacing-3xl);
   text-align: center;
-  background: white;
+  background: var(--color-surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
 
 .confirmation-loading .spinner {
-  border: 0.1875rem solid var(--color-gray-200);
+  border: 0.1875rem solid var(--color-primary);
   border-top: 0.1875rem solid var(--color-primary);
   border-radius: 50%;
   width: 2.5rem;
@@ -91,7 +91,7 @@
 
 /* Details Section */
 .confirmation-details {
-  background: white;
+  background: var(--color-surface);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   box-shadow: var(--shadow-sm);
@@ -101,11 +101,11 @@
 .confirmation-details h2 {
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
-  border-bottom: 0.125rem solid var(--color-gray-200);
+  border-bottom: 0.125rem solid var(--color-primary);
 }
 
 .detail-card {
-  background: var(--color-gray-50);
+  background: var(--color-background);
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
@@ -124,7 +124,7 @@
   flex-shrink: 0;
   width: 3rem;
   height: 3rem;
-  background: white;
+  background: var(--color-surface);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -196,7 +196,7 @@
   justify-content: space-between;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
-  background: var(--color-gray-100);
+  background: var(--color-primary-light);
   border-radius: var(--radius-md);
   margin-top: var(--spacing-lg);
 }
@@ -207,7 +207,7 @@
 
 .confirmation-number .value {
   font-family: 'Courier New', monospace;
-  background: white;
+  background: var(--color-surface);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
 }

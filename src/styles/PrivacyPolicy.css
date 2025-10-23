@@ -2,7 +2,7 @@
 
 .privacy-policy-page {
   min-height: 100vh;
-  background: var(--color-background, #F7F6EF);
+  background: var(--color-background);
   /* Container properties now handled by global .section-container--narrow */
 }
 
@@ -10,7 +10,7 @@
   text-align: center;
   margin-bottom: var(--spacing-3xl, 4rem);
   padding-bottom: var(--spacing-xl, 2rem);
-  border-bottom: 0.125rem solid var(--color-border, rgba(180, 154, 104, 0.2));
+  border-bottom: 0.125rem solid var(--color-border);
 }
 
 .privacy-policy-header h1 {
@@ -71,7 +71,7 @@
   top: 0.625rem;
   width: 0.5rem;
   height: 0.5rem;
-  background: var(--color-accent, #C0A679);
+  background: var(--color-primary);
   border-radius: 50%;
 }
 
@@ -80,10 +80,10 @@
 }
 
 .contact-list {
-  background: rgba(180, 154, 104, 0.05);
+  background: var(--color-primary-light);
   padding: var(--spacing-lg, 1.5rem);
   border-radius: var(--border-radius, 0.5rem);
-  border: 0.0625rem solid var(--color-border-light, rgba(180, 154, 104, 0.1));
+  border: 0.0625rem solid var(--color-border);
 }
 
 .contact-list li::before {
@@ -97,16 +97,16 @@
 }
 
 .privacy-section a:focus {
-  outline: 0.125rem solid var(--color-accent, #C0A679);
+  outline: 0.125rem solid var(--color-primary);
   outline-offset: 0.125rem;
   border-radius: 0.125rem;
 }
 
 .gdpr-notice {
-  background: rgba(192, 166, 121, 0.1);
+  background: var(--color-primary-light);
   padding: var(--spacing-xl, 2rem);
   border-radius: var(--border-radius, 0.5rem);
-  border-left: 0.25rem solid var(--color-accent, #C0A679);
+  border-left: 0.25rem solid var(--color-primary);
 }
 
 /* Responsive Design */
@@ -142,7 +142,7 @@
 /* Print Styles */
 @media print {
   .privacy-policy-page {
-    background: white;
+    background: var(--color-surface);
   }
 
   .privacy-section a {
@@ -152,6 +152,6 @@
 
   .gdpr-notice {
     border: 0.125rem solid black;
-    background: white;
+    background: var(--color-surface);
   }
 }
