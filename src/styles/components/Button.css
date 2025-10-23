@@ -44,7 +44,7 @@
 }
 
 .btn-primary::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 0.6875rem;
   height: 0.625rem;
@@ -52,18 +52,14 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  transform-origin: 50% 50%;
+  will-change: transform;
   transition: transform var(--transition-base);
 }
 
 .btn-primary:hover::after,
 .btn-primary:active::after {
-  transform: translateX(0.125rem);
-}
-
-.btn-primary:hover,
-.btn-primary:active {
-  background-color: var(--color-primary-light);
-  font-weight: var(--font-weight-medium);
+  transform: translateX(0.375rem);
 }
 
 /* Secondary Button */
