@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import SEO, { generateOrganizationStructuredData } from "../components/SEO";
+import HeroSlider from "../components/HeroSlider/HeroSlider";
 import "../styles/components/FeatureCard.css";
 import "../styles/Home.css";
 
@@ -24,6 +25,9 @@ export default function Home() {
         ]}
         structuredData={generateOrganizationStructuredData()}
       />
+
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Hero Section */}
       <section className="hero-section section-container--hero">
