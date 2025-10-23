@@ -16,8 +16,15 @@ export default function Header() {
     <>
       <header className="header" role="banner">
         <div className="header-content">
-          {/* Left Section: Navigation */}
+          {/* Left Section: Logo (Casewell Style) */}
           <div className="header-left">
+            <a href="/" className="logo" aria-label="Home page">
+              <img src="/clockwork_logo_inverse.png" alt="Clockwork" className="logo-img" />
+            </a>
+          </div>
+
+          {/* Right Section: Navigation, Social Icons & User Menu (Casewell Style) */}
+          <div className="header-right">
             <nav className="nav-bar desktop-nav" role="navigation" aria-label="Main navigation">
               <ul className="nav-content">
                 <li><a href="/services">Services</a></li>
@@ -33,17 +40,6 @@ export default function Header() {
                 )}
               </ul>
             </nav>
-          </div>
-
-          {/* Center Section: Logo */}
-          <div className="header-center">
-            <a href="/" className="logo" aria-label="Home page">
-              <img src="/clockwork_logo.png" alt="Clockwork" className="logo-img" />
-            </a>
-          </div>
-
-          {/* Right Section: Social Icons & User Menu */}
-          <div className="header-right">
             <div className="header-social desktop-only">
               {theme.social.facebook && (
                 <a href={theme.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">

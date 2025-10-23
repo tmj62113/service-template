@@ -1,6 +1,6 @@
 /* ==========================================================================
    HEADER & NAVIGATION COMPONENT STYLES
-   Inspired by Casewell Supply - Clean, minimal navigation
+   Based on Casewell Supply - Logo left, Navigation right
    ========================================================================== */
 
 /* Header Container */
@@ -8,38 +8,39 @@
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  background-color: var(--color-background);
-  border-bottom: 0.0625rem solid var(--color-border);
-  transition: box-shadow var(--transition-base);
+  background-color: var(--color-primary-dark);
+  height: 3.5rem; /* 56px */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 90rem; /* 1440px */
-  margin: 0 auto;
-  padding: var(--spacing-md) var(--spacing-xl);
+  width: 100%;
+  max-width: 75rem; /* 1200px */
+  padding: 0 var(--spacing-xl);
 }
 
-/* Header Sections - Left, Center, Right */
+/* Header Sections - Logo left, Navigation right */
 .header-left {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
 }
 
 .header-center {
-  flex: 0 0 auto;
+  display: none; /* Logo is on left in Casewell style */
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
-/* Logo */
+/* Logo - Left side */
 .logo {
   display: flex;
   align-items: center;
@@ -52,20 +53,30 @@
 }
 
 .logo-img {
-  height: 2rem;
+  height: 1.125rem; /* 18px to match Casewell logo height */
   width: auto;
 }
 
-/* Navigation Bar */
+/* Navigation Bar - Right side */
 .nav-bar {
   display: flex;
   align-items: center;
 }
 
+.desktop-nav {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+  }
+}
+
 .nav-content {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: 0; /* No gap - padding on links provides spacing */
   list-style: none;
   margin: 0;
   padding: 0;
@@ -81,21 +92,21 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: 0.625rem; /* 10px - matches Casewell exactly */
   font-size: var(--font-size-xs); /* 12px */
   font-weight: var(--font-weight-normal); /* 400 */
-  color: var(--color-text);
+  color: var(--color-surface); /* White/light text on dark background */
   text-decoration: none;
-  transition: var(--transition-base);
+  transition: opacity var(--transition-base);
   white-space: nowrap;
 }
 
 .nav-content a:hover {
-  color: var(--color-primary);
+  opacity: 0.7;
 }
 
 .nav-content a:focus-visible {
-  outline: 0.125rem solid var(--color-primary);
+  outline: 0.125rem solid var(--color-surface);
   outline-offset: 0.125rem;
   border-radius: var(--radius-sm);
 }
@@ -108,25 +119,7 @@
 }
 
 .admin-nav-link .material-symbols-outlined {
-  font-size: 1.125rem;
-}
-
-/* Header Social Icons */
-.header-social {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.header-social a {
-  display: flex;
-  align-items: center;
-  color: var(--color-text);
-  transition: color var(--transition-base);
-}
-
-.header-social a:hover {
-  color: var(--color-primary);
+  font-size: 1rem;
 }
 
 /* User Menu */
@@ -135,40 +128,45 @@
   align-items: center;
   gap: var(--spacing-sm);
   font-size: var(--font-size-xs);
-  color: var(--color-text);
+  color: var(--color-surface);
 }
 
 .user-menu button {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
-  color: var(--color-text);
+  color: var(--color-surface);
   background: none;
   border: none;
   cursor: pointer;
-  transition: color var(--transition-base);
+  transition: opacity var(--transition-base);
 }
 
 .user-menu button:hover {
-  color: var(--color-primary);
+  opacity: 0.7;
 }
 
-/* Desktop/Mobile Visibility */
-.desktop-nav {
-  display: none;
+/* Header Social Icons */
+.header-social {
+  display: none; /* Hide on Casewell-style minimal header */
 }
 
-.desktop-only {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .desktop-nav {
+@media (min-width: 1024px) {
+  .header-social {
     display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
   }
 
-  .desktop-only {
+  .header-social a {
     display: flex;
+    align-items: center;
+    color: var(--color-surface);
+    transition: opacity var(--transition-base);
+  }
+
+  .header-social a:hover {
+    opacity: 0.7;
   }
 }
 
@@ -181,7 +179,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-text);
+  color: var(--color-surface);
 }
 
 @media (min-width: 768px) {
@@ -190,34 +188,48 @@
   }
 }
 
-/* Scrolled State - Add subtle shadow */
-.header.scrolled {
-  box-shadow: var(--shadow-sm);
+/* Desktop-only visibility */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-only {
+    display: flex;
+  }
 }
 
 /* Responsive - Tablet */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .nav-content {
-    gap: var(--spacing-md);
+@media (min-width: 768px) and (max-width: 1023px) {
+  .header-content {
+    padding: 0 var(--spacing-lg);
   }
 
   .nav-content a {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 0.5rem; /* 8px on tablet */
+    font-size: 0.6875rem; /* 11px on tablet */
   }
 }
 
 /* Responsive - Mobile */
 @media (max-width: 767px) {
-  .header-content {
-    padding: var(--spacing-sm) var(--spacing-md);
+  .header {
+    height: 3rem; /* 48px on mobile */
   }
 
-  .header-left,
-  .header-right {
-    gap: var(--spacing-sm);
+  .header-content {
+    padding: 0 var(--spacing-md);
   }
 
   .logo-img {
-    height: 1.5rem;
+    height: 1rem; /* 16px on mobile */
+  }
+
+  .header-left {
+    flex: 1;
+  }
+
+  .header-right {
+    gap: var(--spacing-sm);
   }
 }
