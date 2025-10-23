@@ -131,23 +131,7 @@
 }
 
 @media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2rem;
-  }
-
   /* .hero-content p - inherits base styles from global.css */
-
-  .hero-tagline {
-    font-size: 1.25rem;
-  }
-
-  .services-section h2,
-  .benefits-section h2,
-  .features-section h2,
-  .detailed-features-section h2 {
-    font-size: 1.5rem;
-    line-height: 1.875rem;
-  }
 
   .services-grid,
   .benefits-grid,
@@ -155,12 +139,6 @@
   .detailed-features-grid {
     grid-template-columns: 1fr;
   }
-
-  .cta-content h2 {
-    font-size: 1.75rem;
-  }
-
-  /* .cta-content p - inherits base styles from global.css */
 
   .cta-buttons {
     flex-direction: column;
@@ -174,16 +152,8 @@
 }
 
 @media (max-width: 480px) {
-  .hero-content h1 {
-    font-size: 1.75rem;
-  }
-
   .hero-content p {
     margin-bottom: 1.5rem; /* Override default margin only */
-  }
-
-  .hero-tagline {
-    font-size: 1.125rem;
   }
 
   .service-category-card,

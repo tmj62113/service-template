@@ -174,11 +174,17 @@ ul, ol {
 
 body {
   font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm); /* 14px on mobile */
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
   color: var(--color-text);
   background-color: var(--color-background);
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: var(--font-size-base); /* 16px on tablet+ */
+  }
 }
 
 #root {
@@ -199,28 +205,62 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-2xl); /* 24px on mobile */
   font-weight: var(--font-weight-bold);
 }
 
 h2 {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-xl); /* 20px on mobile */
 }
 
 h3 {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-lg); /* 18px on mobile */
 }
 
 h4 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-base); /* 16px on mobile */
 }
 
 h5 {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-sm); /* 14px on mobile */
 }
 
 h6 {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm); /* 14px on mobile */
+}
+
+/* Responsive heading sizes for tablet and up */
+@media (min-width: 768px) {
+  h1 {
+    font-size: var(--font-size-3xl); /* 30px on tablet */
+  }
+
+  h2 {
+    font-size: var(--font-size-2xl); /* 24px on tablet */
+  }
+
+  h3 {
+    font-size: var(--font-size-xl); /* 20px on tablet */
+  }
+
+  h4 {
+    font-size: var(--font-size-lg); /* 18px on tablet */
+  }
+}
+
+/* Responsive heading sizes for desktop */
+@media (min-width: 1024px) {
+  h1 {
+    font-size: var(--font-size-4xl); /* 36px on desktop */
+  }
+
+  h2 {
+    font-size: var(--font-size-3xl); /* 30px on desktop */
+  }
+
+  h3 {
+    font-size: var(--font-size-2xl); /* 24px on desktop */
+  }
 }
 
 p {
@@ -493,6 +533,146 @@ label {
   background-color: #059669;
   box-shadow: var(--shadow-sm);
   transform: translateY(0);
+}
+
+/* ==========================================================================
+   Section Styles
+   ========================================================================== */
+
+/* Base Section */
+.section {
+  width: 100%;
+  padding-top: var(--spacing-3xl);
+  padding-bottom: var(--spacing-3xl);
+}
+
+/* Section Spacing Variants */
+.section-sm {
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+.section-lg {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.section-xl {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+/* Remove top padding (for first section) */
+.section-no-top {
+  padding-top: 0;
+}
+
+/* Remove bottom padding (for last section) */
+.section-no-bottom {
+  padding-bottom: 0;
+}
+
+/* Section with background color */
+.section-bg {
+  background-color: var(--color-surface);
+}
+
+.section-bg-dark {
+  background-color: var(--color-text);
+  color: var(--color-background);
+}
+
+/* Section Container (combines section + container) */
+.section-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--spacing-3xl) var(--spacing-md);
+}
+
+/* Section Header */
+.section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.section-header h2 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.section-header p {
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Section Grid Layouts */
+.section-grid {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.section-grid-2 {
+  grid-template-columns: 1fr;
+}
+
+.section-grid-3 {
+  grid-template-columns: 1fr;
+}
+
+.section-grid-4 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .section-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .section-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .section-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .section-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Section Flex Layouts */
+.section-flex {
+  display: flex;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.section-flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.section-flex-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Divider between sections */
+.section-divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: var(--spacing-3xl) 0;
 }
 
 /* ==========================================================================
