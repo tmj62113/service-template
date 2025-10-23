@@ -43,7 +43,6 @@
 
 .confirmation-error p {
   margin-bottom: var(--spacing-sm);
-  line-height: 1.6;
 }
 
 .error-hint {
@@ -163,7 +162,6 @@
 
 .detail-value {
   font-weight: 600;
-  line-height: 1.4;
   margin-bottom: var(--spacing-xs);
 }
 
@@ -248,7 +246,6 @@
 }
 
 .confirmation-help li {
-  line-height: 1.6;
   margin-bottom: var(--spacing-sm);
   padding-left: var(--spacing-lg);
   position: relative;

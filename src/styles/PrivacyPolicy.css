@@ -26,11 +26,6 @@
   margin: 0;
 }
 
-.privacy-policy-content {
-  /* font-family inherited from global.css */
-  line-height: 1.8;
-}
-
 .privacy-section {
   margin-bottom: var(--spacing-3xl, 4rem);
 }

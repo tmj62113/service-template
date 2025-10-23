@@ -56,7 +56,6 @@
 
 .service-detail-title {
   margin-bottom: var(--spacing-lg);
-  line-height: 1.2;
 }
 
 .service-detail-meta {
@@ -92,10 +91,6 @@
   margin-bottom: var(--spacing-md);
 }
 
-.service-detail-description p {
-  line-height: 1.8;
-}
-
 .service-detail-policy,
 .service-detail-info {
   padding: var(--spacing-lg);
@@ -111,7 +106,6 @@
 
 .service-detail-policy p,
 .service-detail-info .info-text {
-  line-height: 1.6;
   margin: 0;
 }
 

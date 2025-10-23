@@ -19,13 +19,11 @@
 .contact-hero h1 {
   /* font-family inherited from global.css */
   font-weight: 700;
-  line-height: 1.2;
   margin-bottom: 1rem;
 }
 
 .contact-lead {
   /* font-family inherited from global.css */
-  line-height: 1.6;
   max-width: 43.75rem;
   margin: 0 auto;
 }
@@ -53,7 +51,6 @@
 
 .contact-info > p {
   /* font-family and font-size inherited from global.css */
-  line-height: 1.6;
   margin-bottom: 2rem;
 }
 
@@ -88,7 +85,6 @@
 
 .info-item p {
   /* font-family and font-size inherited from global.css */
-  line-height: 1.6;
   margin: 0;
 }
 

@@ -87,7 +87,6 @@
 
 .detailed-feature-card p {
   /* font-family and font-size inherited from global.css */
-  line-height: 1.6;
   margin: 0;
 }
 

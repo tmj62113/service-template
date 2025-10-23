@@ -159,7 +159,6 @@
 }
 
 .service-description {
-  line-height: 1.6;
   margin-bottom: var(--spacing-md);
   flex: 1;
 }
