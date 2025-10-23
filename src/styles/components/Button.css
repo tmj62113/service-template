@@ -34,32 +34,31 @@
 /* Primary Button */
 .btn-primary {
   color: var(--color-text);
-  background-color: var(--color-primary);
-  border: 0.1rem solid var(--color-secondary);
-  box-shadow: var(--shadow-sm);
+  background-color: var(--color-surface);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
 }
 
 .btn-primary:hover,
 .btn-primary:active {
-  background-color: var(--color-primary-dark);
-  box-shadow: var(--shadow-md);
-  border: 0.15rem solid var(--color-secondary);
+  background-color: var(--color-primary-light);
   font-weight: var(--font-weight-medium);
-  transform: translateY(-0.0625rem);
 }
 
 /* Secondary Button */
 .btn-secondary {
   color: var(--color-primary);
-  background-color: transparent;
-  border: 0.0625rem solid var(--color-primary);
+  background-color: var(--color-secondary-light);
+  border: 0.0625rem solid var(--color-secondary-light);
+  border-radius: var(--radius-full);
 }
 
 .btn-secondary:hover,
 .btn-secondary:active {
-  color: #ffffff;
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 /* Tertiary Button (Ghost/Text Button) */
