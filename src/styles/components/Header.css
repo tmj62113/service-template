@@ -8,7 +8,7 @@
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  background-color: var(--color-primary-dark);
+  background-color: #1a1a1a; /* Dark background matching Casewell */
   height: 3.5rem; /* 56px */
   display: flex;
   justify-content: center;
@@ -95,7 +95,7 @@
   padding: 0.625rem; /* 10px - matches Casewell exactly */
   font-size: var(--font-size-xs); /* 12px */
   font-weight: var(--font-weight-normal); /* 400 */
-  color: var(--color-surface); /* White/light text on dark background */
+  color: #ffffff; /* White text on dark background */
   text-decoration: none;
   transition: opacity var(--transition-base);
   white-space: nowrap;
@@ -106,7 +106,7 @@
 }
 
 .nav-content a:focus-visible {
-  outline: 0.125rem solid var(--color-surface);
+  outline: 0.125rem solid #ffffff;
   outline-offset: 0.125rem;
   border-radius: var(--radius-sm);
 }
@@ -128,14 +128,14 @@
   align-items: center;
   gap: var(--spacing-sm);
   font-size: var(--font-size-xs);
-  color: var(--color-surface);
+  color: #ffffff;
 }
 
 .user-menu button {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
-  color: var(--color-surface);
+  color: #ffffff;
   background: none;
   border: none;
   cursor: pointer;
@@ -161,7 +161,7 @@
   .header-social a {
     display: flex;
     align-items: center;
-    color: var(--color-surface);
+    color: #ffffff;
     transition: opacity var(--transition-base);
   }
 
@@ -179,7 +179,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-surface);
+  color: #ffffff;
 }
 
 @media (min-width: 768px) {
