@@ -418,6 +418,36 @@ a:focus-visible {
   outline-offset: 0.125rem;
 }
 
+/* Skip to Content Link (Accessibility) */
+.skip-link {
+  position: absolute;
+  top: -999px;
+  left: -999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: var(--spacing-md);
+  left: var(--spacing-md);
+  width: auto;
+  height: auto;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-secondary);
+  color: var(--color-surface);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  z-index: 9999;
+  box-shadow: var(--shadow-lg);
+}
+
 /* ==========================================================================
    Utility Classes
    ========================================================================== */
