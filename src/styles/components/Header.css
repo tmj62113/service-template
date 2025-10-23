@@ -1,0 +1,223 @@
+/* ==========================================================================
+   HEADER & NAVIGATION COMPONENT STYLES
+   Inspired by Casewell Supply - Clean, minimal navigation
+   ========================================================================== */
+
+/* Header Container */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--color-background);
+  border-bottom: 0.0625rem solid var(--color-border);
+  transition: box-shadow var(--transition-base);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 90rem; /* 1440px */
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-xl);
+}
+
+/* Header Sections - Left, Center, Right */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.header-center {
+  flex: 0 0 auto;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity var(--transition-base);
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logo-img {
+  height: 2rem;
+  width: auto;
+}
+
+/* Navigation Bar */
+.nav-bar {
+  display: flex;
+  align-items: center;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-content li {
+  display: flex;
+  align-items: center;
+}
+
+/* Navigation Links - Casewell Style */
+.nav-content a {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-xs); /* 12px */
+  font-weight: var(--font-weight-normal); /* 400 */
+  color: var(--color-text);
+  text-decoration: none;
+  transition: var(--transition-base);
+  white-space: nowrap;
+}
+
+.nav-content a:hover {
+  color: var(--color-primary);
+}
+
+.nav-content a:focus-visible {
+  outline: 0.125rem solid var(--color-primary);
+  outline-offset: 0.125rem;
+  border-radius: var(--radius-sm);
+}
+
+/* Admin Nav Link with Icon */
+.admin-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.admin-nav-link .material-symbols-outlined {
+  font-size: 1.125rem;
+}
+
+/* Header Social Icons */
+.header-social {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header-social a {
+  display: flex;
+  align-items: center;
+  color: var(--color-text);
+  transition: color var(--transition-base);
+}
+
+.header-social a:hover {
+  color: var(--color-primary);
+}
+
+/* User Menu */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+.user-menu button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-base);
+}
+
+.user-menu button:hover {
+  color: var(--color-primary);
+}
+
+/* Desktop/Mobile Visibility */
+.desktop-nav {
+  display: none;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+  }
+
+  .desktop-only {
+    display: flex;
+  }
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-toggle {
+    display: none;
+  }
+}
+
+/* Scrolled State - Add subtle shadow */
+.header.scrolled {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Responsive - Tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .nav-content {
+    gap: var(--spacing-md);
+  }
+
+  .nav-content a {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 767px) {
+  .header-content {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .header-left,
+  .header-right {
+    gap: var(--spacing-sm);
+  }
+
+  .logo-img {
+    height: 1.5rem;
+  }
+}

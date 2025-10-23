@@ -3,11 +3,13 @@
    =====================================================
    Import order:
    1. global.css - CSS reset, variables, base styles, typography, utility classes
-   2. components/Button.css - Button component styles
+   2. components/Header.css - Header & navigation component styles
+   3. components/Button.css - Button component styles
 
    Page-specific styles are imported directly in their respective
    page components (e.g., Home.jsx imports Home.css)
    ===================================================== */
 
 @import './styles/global.css';
+@import './styles/components/Header.css';
 @import './styles/components/Button.css';
