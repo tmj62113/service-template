@@ -15,7 +15,6 @@
 
 .privacy-policy-header h1 {
   /* font-family inherited from global.css */
-  color: var(--color-text, #122D38);
   margin: 0 0 var(--spacing-md, 1rem) 0;
   text-transform: uppercase;
   letter-spacing: 0.0625rem;
@@ -23,14 +22,12 @@
 
 .last-updated {
   /* font-family inherited from global.css */
-  color: var(--color-text-secondary, #0C3A4B);
   font-style: italic;
   margin: 0;
 }
 
 .privacy-policy-content {
   /* font-family inherited from global.css */
-  color: var(--color-text, #122D38);
   line-height: 1.8;
 }
 
@@ -44,7 +41,6 @@
 
 .privacy-section h2 {
   /* font-family inherited from global.css */
-  color: var(--color-text, #122D38);
   margin: 0 0 var(--spacing-lg, 1.5rem) 0;
   text-transform: uppercase;
   letter-spacing: 0.03125rem;
@@ -52,14 +48,12 @@
 
 .privacy-section h3 {
   /* font-family inherited from global.css */
-  color: var(--color-text-secondary, #0C3A4B);
   margin: var(--spacing-xl, 2rem) 0 var(--spacing-md, 1rem) 0;
   text-transform: uppercase;
   letter-spacing: 0.01875rem;
 }
 
 .privacy-section p {
-  color: var(--color-text-secondary, #0C3A4B);
   margin: 0 0 var(--spacing-md, 1rem) 0;
 }
 
@@ -73,7 +67,6 @@
   position: relative;
   padding-left: var(--spacing-xl, 2rem);
   margin-bottom: var(--spacing-md, 1rem);
-  color: var(--color-text-secondary, #0C3A4B);
 }
 
 .privacy-section ul li::before {
@@ -88,7 +81,6 @@
 }
 
 .privacy-section ul li strong {
-  color: var(--color-text, #122D38);
   font-weight: var(--font-weight-semibold, 600);
 }
 
@@ -104,14 +96,9 @@
 }
 
 .privacy-section a {
-  color: var(--color-accent, #C0A679);
   text-decoration: underline;
   font-weight: var(--font-weight-semibold, 600);
   transition: color var(--transition-fast, 0.15s);
-}
-
-.privacy-section a:hover {
-  color: var(--color-accent-hover, #B49A68);
 }
 
 .privacy-section a:focus {

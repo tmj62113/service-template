@@ -8,20 +8,14 @@
   align-items: center;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-xl);
-  color: var(--color-gray-600);
 }
 
 .breadcrumb a {
-  color: var(--color-primary);
   text-decoration: none;
 }
 
 .breadcrumb a:hover {
   text-decoration: underline;
-}
-
-.breadcrumb-separator {
-  color: var(--color-gray-400);
 }
 
 .service-detail-grid {
@@ -53,7 +47,6 @@
   display: inline-block;
   padding: var(--spacing-xs) var(--spacing-md);
   background: var(--color-primary-light);
-  color: var(--color-primary);
   border-radius: var(--radius-full);
   font-weight: 600;
   text-transform: uppercase;
@@ -62,7 +55,6 @@
 }
 
 .service-detail-title {
-  color: var(--color-text);
   margin-bottom: var(--spacing-lg);
   line-height: 1.2;
 }
@@ -81,7 +73,6 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  color: var(--color-gray-600);
 }
 
 .meta-item svg {
@@ -90,7 +81,6 @@
 
 .meta-item.price {
   font-weight: 700;
-  color: var(--color-primary);
   margin-left: auto;
 }
 
@@ -99,12 +89,10 @@
 }
 
 .service-detail-description h2 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
 
 .service-detail-description p {
-  color: var(--color-gray-700);
   line-height: 1.8;
 }
 
@@ -118,13 +106,11 @@
 }
 
 .service-detail-policy h3 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
 .service-detail-policy p,
 .service-detail-info .info-text {
-  color: var(--color-gray-700);
   line-height: 1.6;
   margin: 0;
 }
@@ -134,7 +120,6 @@
 }
 
 .staff-selection h3 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-lg);
 }
 
@@ -187,7 +172,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-gray-500);
 }
 
 .staff-info {
@@ -196,17 +180,14 @@
 
 .staff-name {
   font-weight: 600;
-  color: var(--color-text);
   margin-bottom: var(--spacing-xs);
 }
 
 .staff-title {
-  color: var(--color-gray-600);
   margin-bottom: var(--spacing-xs);
 }
 
 .staff-specialties {
-  color: var(--color-gray-500);
   font-style: italic;
 }
 
@@ -230,12 +211,10 @@
 }
 
 .error-container h2 {
-  color: var(--color-error);
   margin-bottom: var(--spacing-md);
 }
 
 .error-container p {
-  color: var(--color-gray-700);
   margin-bottom: var(--spacing-xl);
 }
 

@@ -13,7 +13,6 @@
   justify-content: center;
   padding: var(--spacing-3xl);
   text-align: center;
-  color: var(--color-gray-600);
 }
 
 .booking-loading .spinner {
@@ -32,17 +31,14 @@
 }
 
 .booking-error svg {
-  color: var(--color-error);
   margin-bottom: var(--spacing-md);
 }
 
 .booking-error h2 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
 .booking-error p {
-  color: var(--color-gray-600);
   margin-bottom: var(--spacing-lg);
 }
 
@@ -59,7 +55,6 @@
   background: #f2f0ea;
   border: 0.0625rem solid var(--color-gray-300);
   border-radius: var(--radius-md);
-  color: var(--color-gray-700);
   cursor: pointer;
   transition: all 0.2s;
   margin-bottom: var(--spacing-lg);
@@ -78,12 +73,10 @@
 }
 
 .booking-service-summary h1 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
 
 .service-info h2 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -97,11 +90,9 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  color: var(--color-gray-700);
 }
 
 .meta-item svg {
-  color: var(--color-primary);
   opacity: 0.8;
 }
 
@@ -113,17 +104,8 @@
   border-top: 0.0625rem solid var(--color-gray-200);
 }
 
-.staff-label {
-  color: var(--color-gray-600);
-}
-
 .staff-name {
-  color: var(--color-text);
   font-weight: 600;
-}
-
-.staff-title {
-  color: var(--color-gray-600);
 }
 
 /* Progress Indicator */
@@ -153,7 +135,6 @@
   height: 2.5rem;
   border-radius: 50%;
   background: var(--color-gray-300);
-  color: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,7 +148,6 @@
 }
 
 .progress-step span {
-  color: var(--color-gray-700);
   font-weight: 500;
 }
 
@@ -202,7 +182,6 @@
   background: var(--color-error-light);
   border: 0.0625rem solid var(--color-error);
   border-radius: var(--radius-md);
-  color: var(--color-error-dark);
   margin-top: var(--spacing-lg);
 }
 

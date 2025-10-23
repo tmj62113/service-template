@@ -21,14 +21,12 @@
 .legal-header h1 {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
   margin: 0 0 var(--spacing-md) 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .legal-last-updated {
-  color: var(--color-text-secondary);
   font-style: italic;
   margin: 0;
 }
@@ -48,7 +46,6 @@
 .legal-toc h2 {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
   margin: 0 0 var(--spacing-md) 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -65,14 +62,12 @@
 }
 
 .legal-toc a {
-  color: var(--color-text);
   text-decoration: none;
   transition: color 0.2s ease, padding-left 0.2s ease;
   display: inline-block;
 }
 
 .legal-toc a:hover {
-  color: var(--color-accent);
   padding-left: var(--spacing-xs);
 }
 
@@ -82,7 +77,6 @@
 
 .legal-content {
   line-height: 1.8;
-  color: var(--color-text);
 }
 
 .legal-content section {
@@ -93,7 +87,6 @@
 .legal-content h2 {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
   margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
   padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid var(--color-border);
@@ -108,7 +101,6 @@
 .legal-content h3 {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-secondary);
   margin: var(--spacing-xl) 0 var(--spacing-md) 0;
   text-transform: uppercase;
   letter-spacing: 0.3px;
@@ -134,17 +126,11 @@
 
 .legal-content strong {
   font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
 }
 
 .legal-content a {
-  color: var(--color-accent);
   text-decoration: underline;
   transition: color 0.2s ease;
-}
-
-.legal-content a:hover {
-  color: var(--color-accent-hover);
 }
 
 /* =====================================================
@@ -163,18 +149,12 @@
   margin: var(--spacing-xs) 0;
 }
 
-.legal-contact strong {
-  color: var(--color-primary);
-}
-
 .legal-contact a {
-  color: var(--color-accent);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .legal-contact a:hover {
-  color: var(--color-accent-hover);
   text-decoration: underline;
 }
 
@@ -190,7 +170,6 @@
 }
 
 .legal-footer p {
-  color: var(--color-text-secondary);
   font-style: italic;
   margin: 0;
 }

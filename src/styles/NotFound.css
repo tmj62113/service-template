@@ -24,14 +24,12 @@
 .not-found__number {
   font-weight: var(--font-weight-bold);
   /* font-family inherited from global.css */
-  color: var(--color-border);
   line-height: 1;
   user-select: none;
 }
 
 .not-found__icon {
   position: absolute;
-  color: var(--color-accent);
   animation: float 3s ease-in-out infinite;
 }
 
@@ -48,12 +46,10 @@
 .not-found__title {
   font-weight: var(--font-weight-bold);
   /* font-family inherited from global.css */
-  color: var(--color-text);
   margin: 0 0 var(--spacing-md);
 }
 
 .not-found__description {
-  color: var(--color-text-secondary);
   line-height: 1.6;
   margin: 0 0 var(--spacing-2xl);
   max-width: 31.25rem;
@@ -73,7 +69,6 @@
 .not-found__search-title {
   font-weight: var(--font-weight-semibold);
   /* font-family inherited from global.css */
-  color: var(--color-text);
   margin: 0 0 var(--spacing-lg);
 }
 
@@ -93,7 +88,6 @@
   left: var(--spacing-md);
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-text-secondary);
   pointer-events: none;
 }
 
@@ -114,10 +108,6 @@
   background: var(--color-white);
 }
 
-.not-found__search-input::placeholder {
-  color: var(--color-text-secondary);
-}
-
 .not-found__search-form .btn {
   min-width: 7.5rem;
   white-space: nowrap;
@@ -131,7 +121,6 @@
 .not-found__suggestions-title {
   font-weight: var(--font-weight-semibold);
   /* font-family inherited from global.css */
-  color: var(--color-text);
   margin: 0 0 var(--spacing-lg);
 }
 
@@ -186,13 +175,11 @@
   justify-content: center;
   background: var(--color-background);
   border-radius: var(--radius-md);
-  color: var(--color-accent);
   transition: all var(--transition-base);
 }
 
 .not-found__suggestion-card:hover .not-found__suggestion-icon {
   background: var(--color-accent);
-  color: var(--color-white);
 }
 
 .not-found__suggestion-content {
@@ -202,24 +189,20 @@
 .not-found__suggestion-label {
   font-weight: var(--font-weight-semibold);
   /* font-family inherited from global.css */
-  color: var(--color-text);
   margin: 0 0 var(--spacing-xs);
 }
 
 .not-found__suggestion-description {
-  color: var(--color-text-secondary);
   margin: 0;
   line-height: 1.4;
 }
 
 .not-found__suggestion-arrow {
   flex-shrink: 0;
-  color: var(--color-text-secondary);
   transition: all var(--transition-base);
 }
 
 .not-found__suggestion-card:hover .not-found__suggestion-arrow {
-  color: var(--color-accent);
   transform: translateX(0.25rem);
 }
 

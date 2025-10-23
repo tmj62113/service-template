@@ -34,17 +34,14 @@
 }
 
 .confirmation-error svg {
-  color: var(--color-error);
   margin-bottom: var(--spacing-md);
 }
 
 .confirmation-error h2 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
 .confirmation-error p {
-  color: var(--color-gray-600);
   margin-bottom: var(--spacing-sm);
   line-height: 1.6;
 }
@@ -59,10 +56,6 @@
   justify-content: center;
   margin-bottom: var(--spacing-xl);
   animation: scaleIn 0.5s ease-out;
-}
-
-.confirmation-success-icon svg {
-  color: var(--color-success);
 }
 
 @keyframes scaleIn {
@@ -86,21 +79,14 @@
 }
 
 .confirmation-header h1 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
 .confirmation-subtitle {
-  color: var(--color-gray-700);
   margin-bottom: var(--spacing-md);
 }
 
-.confirmation-email-notice {
-  color: var(--color-gray-600);
-}
-
 .confirmation-email-notice strong {
-  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -114,7 +100,6 @@
 }
 
 .confirmation-details h2 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
   border-bottom: 0.125rem solid var(--color-gray-200);
@@ -145,7 +130,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);
 }
 
 .staff-photo {
@@ -162,7 +146,6 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: var(--color-primary);
   background: var(--color-primary-light);
   border-radius: var(--radius-md);
 }
@@ -172,7 +155,6 @@
 }
 
 .detail-label {
-  color: var(--color-gray-600);
   margin-bottom: var(--spacing-xs);
   text-transform: uppercase;
   font-weight: 600;
@@ -180,7 +162,6 @@
 }
 
 .detail-value {
-  color: var(--color-text);
   font-weight: 600;
   line-height: 1.4;
   margin-bottom: var(--spacing-xs);
@@ -190,15 +171,10 @@
   margin-bottom: 0;
 }
 
-.detail-meta {
-  color: var(--color-gray-600);
-}
-
 .service-badge {
   display: inline-block;
   padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--color-primary-light);
-  color: var(--color-primary);
   border-radius: var(--radius-sm);
   font-weight: 600;
   margin-top: var(--spacing-xs);
@@ -208,7 +184,6 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  color: var(--color-success);
   font-weight: 600;
 }
 
@@ -229,12 +204,10 @@
 }
 
 .confirmation-number .label {
-  color: var(--color-gray-600);
   font-weight: 600;
 }
 
 .confirmation-number .value {
-  color: var(--color-text);
   font-family: 'Courier New', monospace;
   background: white;
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -265,7 +238,6 @@
 }
 
 .confirmation-help h3 {
-  color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
 
@@ -276,7 +248,6 @@
 }
 
 .confirmation-help li {
-  color: var(--color-gray-700);
   line-height: 1.6;
   margin-bottom: var(--spacing-sm);
   padding-left: var(--spacing-lg);
@@ -291,7 +262,6 @@
   content: '✓';
   position: absolute;
   left: 0;
-  color: var(--color-primary);
   font-weight: 700;
 }
 
