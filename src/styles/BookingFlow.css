@@ -37,7 +37,6 @@
 }
 
 .booking-error h2 {
-  font-size: 1.5rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
@@ -61,7 +60,6 @@
   border: 0.0625rem solid var(--color-gray-300);
   border-radius: var(--radius-md);
   color: var(--color-gray-700);
-  font-size: 0.9375rem;
   cursor: pointer;
   transition: all 0.2s;
   margin-bottom: var(--spacing-lg);
@@ -80,13 +78,11 @@
 }
 
 .booking-service-summary h1 {
-  font-size: 1.75rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
 
 .service-info h2 {
-  font-size: 1.25rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
@@ -102,7 +98,6 @@
   align-items: center;
   gap: var(--spacing-xs);
   color: var(--color-gray-700);
-  font-size: 0.9375rem;
 }
 
 .meta-item svg {
@@ -116,7 +111,6 @@
   gap: var(--spacing-xs);
   padding-top: var(--spacing-md);
   border-top: 0.0625rem solid var(--color-gray-200);
-  font-size: 0.9375rem;
 }
 
 .staff-label {
@@ -164,7 +158,6 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 1rem;
   transition: all 0.3s;
 }
 
@@ -174,7 +167,6 @@
 }
 
 .progress-step span {
-  font-size: 0.875rem;
   color: var(--color-gray-700);
   font-weight: 500;
 }
@@ -211,7 +203,6 @@
   border: 0.0625rem solid var(--color-error);
   border-radius: var(--radius-md);
   color: var(--color-error-dark);
-  font-size: 0.9375rem;
   margin-top: var(--spacing-lg);
 }
 
@@ -247,10 +238,6 @@
     padding: var(--spacing-lg);
   }
 
-  .booking-service-summary h1 {
-    font-size: 1.5rem;
-  }
-
   .service-meta {
     flex-direction: column;
     gap: var(--spacing-sm);
@@ -264,14 +251,9 @@
     gap: var(--spacing-md);
   }
 
-  .progress-step span {
-    font-size: 0.75rem;
-  }
-
   .step-number {
     width: 2.25rem;
     height: 2.25rem;
-    font-size: 0.875rem;
   }
 
   .booking-actions .btn {

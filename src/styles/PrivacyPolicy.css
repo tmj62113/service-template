@@ -15,7 +15,6 @@
 
 .privacy-policy-header h1 {
   /* font-family inherited from global.css */
-  font-size: var(--font-size-5xl, 3rem);
   color: var(--color-text, #122D38);
   margin: 0 0 var(--spacing-md, 1rem) 0;
   text-transform: uppercase;
@@ -24,7 +23,6 @@
 
 .last-updated {
   /* font-family inherited from global.css */
-  font-size: var(--font-size-sm, 0.875rem);
   color: var(--color-text-secondary, #0C3A4B);
   font-style: italic;
   margin: 0;
@@ -46,7 +44,6 @@
 
 .privacy-section h2 {
   /* font-family inherited from global.css */
-  font-size: var(--font-size-3xl, 1.875rem);
   color: var(--color-text, #122D38);
   margin: 0 0 var(--spacing-lg, 1.5rem) 0;
   text-transform: uppercase;
@@ -55,7 +52,6 @@
 
 .privacy-section h3 {
   /* font-family inherited from global.css */
-  font-size: var(--font-size-xl, 1.25rem);
   color: var(--color-text-secondary, #0C3A4B);
   margin: var(--spacing-xl, 2rem) 0 var(--spacing-md, 1rem) 0;
   text-transform: uppercase;
@@ -63,7 +59,6 @@
 }
 
 .privacy-section p {
-  font-size: var(--font-size-base, 1rem);
   color: var(--color-text-secondary, #0C3A4B);
   margin: 0 0 var(--spacing-md, 1rem) 0;
 }
@@ -78,7 +73,6 @@
   position: relative;
   padding-left: var(--spacing-xl, 2rem);
   margin-bottom: var(--spacing-md, 1rem);
-  font-size: var(--font-size-base, 1rem);
   color: var(--color-text-secondary, #0C3A4B);
 }
 
@@ -135,9 +129,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .privacy-policy-header h1 {
-    font-size: var(--font-size-4xl, 2.25rem);
-  }
 
   .privacy-policy-header {
     margin-bottom: var(--spacing-2xl, 3rem);
@@ -148,18 +139,7 @@
     margin-bottom: var(--spacing-2xl, 3rem);
   }
 
-  .privacy-section h2 {
-    font-size: var(--font-size-2xl, 1.5rem);
-  }
-
-  .privacy-section h3 {
-    font-size: var(--font-size-lg, 1.125rem);
-  }
-
   .privacy-section p,
-  .privacy-section ul li {
-    font-size: var(--font-size-sm, 0.875rem);
-  }
 
   .privacy-section ul li {
     padding-left: var(--spacing-lg, 1.5rem);
@@ -175,9 +155,6 @@
 }
 
 @media (max-width: 480px) {
-  .privacy-policy-header h1 {
-    font-size: var(--font-size-3xl, 1.875rem);
-  }
 }
 
 /* Print Styles */

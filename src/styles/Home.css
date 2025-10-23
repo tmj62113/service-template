@@ -21,7 +21,6 @@
   font-family: var(
     --font-family-heading
   ); /* Intentional override - p element styled as heading */
-  font-size: 1.5rem;
   font-weight: var(--font-weight-semibold);
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -152,9 +151,6 @@
 }
 
 @media (max-width: 480px) {
-  .hero-content p {
-    margin-bottom: 1.5rem; /* Override default margin only */
-  }
 
   .service-category-card,
   .benefit-card,

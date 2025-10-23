@@ -37,7 +37,6 @@
 }
 
 .review-error h2 {
-  font-size: 1.5rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
@@ -61,7 +60,6 @@
   border: 0.0625rem solid var(--color-gray-300);
   border-radius: var(--radius-md);
   color: var(--color-gray-700);
-  font-size: 0.9375rem;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -104,7 +102,6 @@
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 1rem;
   transition: all 0.3s;
 }
 
@@ -119,7 +116,6 @@
 }
 
 .progress-step span {
-  font-size: 0.875rem;
   color: var(--color-gray-700);
   font-weight: 500;
 }
@@ -162,7 +158,6 @@
   align-items: center;
   gap: var(--spacing-xs);
   color: var(--color-gray-600);
-  font-size: 0.875rem;
   margin: 0;
 }
 
@@ -177,14 +172,9 @@
     gap: var(--spacing-md);
   }
 
-  .progress-step span {
-    font-size: 0.75rem;
-  }
-
   .step-number {
     width: 2.25rem;
     height: 2.25rem;
-    font-size: 0.875rem;
   }
 
   .review-actions .btn {

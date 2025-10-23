@@ -39,7 +39,6 @@
 }
 
 .confirmation-error h2 {
-  font-size: 1.5rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
@@ -51,7 +50,6 @@
 }
 
 .error-hint {
-  font-size: 0.9375rem;
   margin-bottom: var(--spacing-lg) !important;
 }
 
@@ -88,19 +86,16 @@
 }
 
 .confirmation-header h1 {
-  font-size: 2rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-sm);
 }
 
 .confirmation-subtitle {
-  font-size: 1.125rem;
   color: var(--color-gray-700);
   margin-bottom: var(--spacing-md);
 }
 
 .confirmation-email-notice {
-  font-size: 0.9375rem;
   color: var(--color-gray-600);
 }
 
@@ -119,7 +114,6 @@
 }
 
 .confirmation-details h2 {
-  font-size: 1.25rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-md);
@@ -167,7 +161,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
   font-weight: 600;
   color: var(--color-primary);
   background: var(--color-primary-light);
@@ -179,7 +172,6 @@
 }
 
 .detail-label {
-  font-size: 0.875rem;
   color: var(--color-gray-600);
   margin-bottom: var(--spacing-xs);
   text-transform: uppercase;
@@ -188,7 +180,6 @@
 }
 
 .detail-value {
-  font-size: 1.0625rem;
   color: var(--color-text);
   font-weight: 600;
   line-height: 1.4;
@@ -200,7 +191,6 @@
 }
 
 .detail-meta {
-  font-size: 0.875rem;
   color: var(--color-gray-600);
 }
 
@@ -210,7 +200,6 @@
   background: var(--color-primary-light);
   color: var(--color-primary);
   border-radius: var(--radius-sm);
-  font-size: 0.8125rem;
   font-weight: 600;
   margin-top: var(--spacing-xs);
 }
@@ -240,13 +229,11 @@
 }
 
 .confirmation-number .label {
-  font-size: 0.875rem;
   color: var(--color-gray-600);
   font-weight: 600;
 }
 
 .confirmation-number .value {
-  font-size: 0.875rem;
   color: var(--color-text);
   font-family: 'Courier New', monospace;
   background: white;
@@ -278,7 +265,6 @@
 }
 
 .confirmation-help h3 {
-  font-size: 1.125rem;
   color: var(--color-text);
   margin-bottom: var(--spacing-md);
 }
@@ -290,7 +276,6 @@
 }
 
 .confirmation-help li {
-  font-size: 0.9375rem;
   color: var(--color-gray-700);
   line-height: 1.6;
   margin-bottom: var(--spacing-sm);
@@ -312,13 +297,6 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .confirmation-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .confirmation-subtitle {
-    font-size: 1rem;
-  }
 
   .confirmation-details {
     padding: var(--spacing-lg);
@@ -344,10 +322,6 @@
   .confirmation-success-icon svg {
     width: 3rem;
     height: 3rem;
-  }
-
-  .confirmation-header h1 {
-    font-size: 1.25rem;
   }
 
   .confirmation-help {

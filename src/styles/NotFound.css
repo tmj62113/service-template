@@ -22,7 +22,6 @@
 }
 
 .not-found__number {
-  font-size: 7.5rem;
   font-weight: var(--font-weight-bold);
   /* font-family inherited from global.css */
   color: var(--color-border);
@@ -32,7 +31,6 @@
 
 .not-found__icon {
   position: absolute;
-  font-size: 4rem;
   color: var(--color-accent);
   animation: float 3s ease-in-out infinite;
 }
@@ -48,7 +46,6 @@
 
 /* Heading and description */
 .not-found__title {
-  font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
   /* font-family inherited from global.css */
   color: var(--color-text);
@@ -56,7 +53,6 @@
 }
 
 .not-found__description {
-  font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
   line-height: 1.6;
   margin: 0 0 var(--spacing-2xl);
@@ -75,7 +71,6 @@
 }
 
 .not-found__search-title {
-  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   /* font-family inherited from global.css */
   color: var(--color-text);
@@ -100,7 +95,6 @@
   transform: translateY(-50%);
   color: var(--color-text-secondary);
   pointer-events: none;
-  font-size: 1.25rem;
 }
 
 .not-found__search-input {
@@ -135,7 +129,6 @@
 }
 
 .not-found__suggestions-title {
-  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   /* font-family inherited from global.css */
   color: var(--color-text);
@@ -194,7 +187,6 @@
   background: var(--color-background);
   border-radius: var(--radius-md);
   color: var(--color-accent);
-  font-size: 1.75rem;
   transition: all var(--transition-base);
 }
 
@@ -208,7 +200,6 @@
 }
 
 .not-found__suggestion-label {
-  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   /* font-family inherited from global.css */
   color: var(--color-text);
@@ -216,7 +207,6 @@
 }
 
 .not-found__suggestion-description {
-  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   margin: 0;
   line-height: 1.4;
@@ -225,7 +215,6 @@
 .not-found__suggestion-arrow {
   flex-shrink: 0;
   color: var(--color-text-secondary);
-  font-size: 1.25rem;
   transition: all var(--transition-base);
 }
 
@@ -240,27 +229,8 @@
   border-top: 0.0625rem solid var(--color-border);
 }
 
-.not-found__back .btn .material-symbols-outlined {
-  font-size: 1.125rem;
-}
-
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .not-found__number {
-    font-size: 5rem;
-  }
-
-  .not-found__icon {
-    font-size: 3rem;
-  }
-
-  .not-found__title {
-    font-size: var(--font-size-3xl);
-  }
-
-  .not-found__description {
-    font-size: var(--font-size-base);
-  }
 
   .not-found__search {
     padding: var(--spacing-lg);
@@ -285,12 +255,8 @@
   .not-found__suggestion-icon {
     width: 2.5rem;
     height: 2.5rem;
-    font-size: 1.5rem;
   }
 
-  .not-found__suggestion-label {
-    font-size: var(--font-size-base);
-  }
 }
 
 /* Tablet responsiveness */
