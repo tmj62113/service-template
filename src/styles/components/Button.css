@@ -64,17 +64,30 @@
 
 /* Secondary Button */
 .btn-secondary {
-  color: var(--color-primary);
-  background-color: var(--color-secondary-light);
-  border: 0.0625rem solid var(--color-secondary-light);
+  color: var(--color-text);
+  background-color: var(--color-primary-dark);
+  border: 0.0625rem solid var(--color-primary-dark);
   border-radius: var(--radius-full);
 }
 
-.btn-secondary:hover,
-.btn-secondary:active {
-  font-weight: var(--font-weight-medium);
+.btn-secondary::after {
+  content: "";
+  display: inline-block;
+  width: 0.6875rem;
+  height: 0.625rem;
+  background-image: url("data:image/svg+xml,%3Csvg width='11' height='10' viewBox='0 0 11 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.69999 7.66499L0.859985 6.82499L4.62499 3.05999C4.92499 2.75999 5.19999 2.49499 5.44999 2.26499C5.70999 2.02499 5.94999 1.80999 6.16999 1.61999C6.39999 1.42999 6.60999 1.25499 6.79999 1.09499L7.74499 0.779994L7.42999 1.72499C7.26999 1.91499 7.09499 2.12499 6.90499 2.35499C6.71499 2.57499 6.49999 2.81499 6.25999 3.07499C6.02999 3.32499 5.76499 3.59999 5.46499 3.89999L1.69999 7.66499ZM7.11498 7.39499C7.05499 7.01499 7.00999 6.62499 6.97999 6.22499C6.94999 5.81499 6.93499 5.40499 6.93499 4.99499C6.93499 4.40499 6.95999 3.82999 7.00999 3.26999C7.06999 2.70999 7.14999 2.19499 7.24999 1.72499C7.35999 1.24499 7.48999 0.844994 7.63999 0.524994L7.99999 0.884994C7.67999 1.03499 7.27999 1.16499 6.79999 1.27499C6.32999 1.37499 5.81499 1.45499 5.25499 1.51499C4.69499 1.56499 4.11999 1.58999 3.52999 1.58999C3.11999 1.58999 2.70999 1.57499 2.29999 1.54499C1.89999 1.51499 1.50999 1.46999 1.12999 1.40999L1.24999 0.239994C1.77999 0.329994 2.29999 0.394994 2.80999 0.434994C3.31999 0.474994 3.82999 0.494994 4.33999 0.494994C4.99999 0.494994 5.65499 0.464994 6.30499 0.404994C6.96499 0.334994 7.62999 0.249994 8.29999 0.149994L8.37499 0.224994C8.27499 0.894994 8.18999 1.55999 8.11999 2.21999C8.05999 2.86999 8.02999 3.52499 8.02999 4.18499C8.02999 4.69499 8.04999 5.20499 8.08999 5.71499C8.12999 6.22499 8.19499 6.74499 8.28499 7.27499L7.11498 7.39499Z' fill='%23101014'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  transition: transform var(--transition-base);
 }
 
+.btn-secondary:hover::after,
+.btn-secondary:active::after {
+  transform: translateY(-0.1875rem);
+}
 /* Tertiary Button (Ghost/Text Button) */
 .btn-tertiary {
   color: var(--color-primary);
