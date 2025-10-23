@@ -86,7 +86,7 @@
 }
 
 .confirmation-email-notice strong {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Details Section */
@@ -144,7 +144,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   background: var(--color-primary-light);
   border-radius: var(--radius-md);
 }
@@ -156,12 +156,12 @@
 .detail-label {
   margin-bottom: var(--spacing-xs);
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.03125rem;
 }
 
 .detail-value {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: var(--spacing-xs);
 }
 
@@ -174,7 +174,7 @@
   padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--color-primary-light);
   border-radius: var(--radius-sm);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-top: var(--spacing-xs);
 }
 
@@ -182,7 +182,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .payment-status svg {
@@ -202,7 +202,7 @@
 }
 
 .confirmation-number .label {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .confirmation-number .value {
@@ -259,7 +259,7 @@
   content: '✓';
   position: absolute;
   left: 0;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
 }
 
 /* Responsive */

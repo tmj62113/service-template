@@ -105,7 +105,7 @@
 }
 
 .staff-name {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Progress Indicator */
@@ -138,7 +138,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   transition: all 0.3s;
 }
 
@@ -148,7 +148,7 @@
 }
 
 .progress-step span {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 /* Booking Steps */

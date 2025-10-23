@@ -48,7 +48,7 @@
   padding: var(--spacing-xs) var(--spacing-md);
   background: var(--color-primary-light);
   border-radius: var(--radius-full);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.03125rem;
   margin-bottom: var(--spacing-md);
@@ -79,7 +79,7 @@
 }
 
 .meta-item.price {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   margin-left: auto;
 }
 
@@ -173,7 +173,7 @@
 }
 
 .staff-name {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: var(--spacing-xs);
 }
 

@@ -18,7 +18,7 @@
 
 .about-hero h1 {
   /* font-family inherited from global.css */
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 2rem;
   max-width: 56.25rem;
   margin-left: auto;
@@ -33,7 +33,7 @@
 
 .hero-emphasis {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   max-width: 50rem;
   margin: 2rem auto;
 }
@@ -52,7 +52,7 @@
 
 .about-section h2 {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   text-align: center;
   margin-bottom: 3rem;
 }
@@ -117,7 +117,7 @@
 
 .service-type-card h3 {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.75rem;
 }
 
@@ -128,7 +128,7 @@
 
 .section-closing {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   text-align: center;
   max-width: 50rem;
   margin: 0 auto;
@@ -146,7 +146,7 @@
 
 .about-cta h2 {
   /* font-family inherited from global.css */
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 1rem;
 }
 

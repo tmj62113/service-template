@@ -18,7 +18,7 @@
 
 .contact-hero h1 {
   /* font-family inherited from global.css */
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   margin-bottom: 1rem;
 }
 
@@ -45,7 +45,7 @@
 
 .contact-info h2 {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 1rem;
 }
 
@@ -79,7 +79,7 @@
 
 .info-item h3 {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.25rem;
 }
 
@@ -94,7 +94,7 @@
 
 .contact-form-section h2 {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 1.5rem;
 }
 
@@ -112,7 +112,7 @@
 
 .form-group label {
   /* font-family and font-size inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .form-group input,
@@ -152,7 +152,7 @@
 
 .form-checkbox label {
   /* font-family and font-size inherited from global.css */
-  font-weight: 400;
+  font-weight: var(--font-weight-normal);
   cursor: pointer;
   margin: 0;
 }
@@ -171,7 +171,7 @@
 
 .success-message h3 {
   /* font-family inherited from global.css */
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 0.75rem;
 }
 
