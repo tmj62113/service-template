@@ -59,7 +59,7 @@
 
 .btn-primary:hover::after,
 .btn-primary:active::after {
-  transform: translateX(0.375rem);
+  transform: translateY(-0.1875rem);
 }
 
 /* Secondary Button */
