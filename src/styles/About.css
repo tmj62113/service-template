@@ -12,7 +12,7 @@
    ===================================== */
 
 .about-hero {
-  background: #f2f0ea;
+  background: var(--color-primary-light);
   text-align: center;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .about-section.alt-bg {
-  background-color: #e1dbcb;
+  background-color: var(--color-primary);
 }
 
 .about-section h2 {
@@ -81,7 +81,7 @@
 }
 
 .about-section .feature-card:hover {
-  border-color: #101014;
+  border-color: var(--color-secondary);
   transform: translateY(-0.25rem);
 }
 
@@ -113,8 +113,8 @@
 }
 
 .service-type-card {
-  background: #f2f0ea;
-  border: 0.0625rem solid #e1dbcb;
+  background: var(--color-primary-light);
+  border: 0.0625rem solid var(--color-primary);
   border-radius: var(--radius-md);
   padding: 1.5rem;
   text-align: left;
@@ -147,7 +147,7 @@
    ===================================== */
 
 .about-cta {
-  background: #e1dbcb;
+  background: var(--color-primary);
   text-align: center;
 }
 

@@ -37,7 +37,7 @@
 }
 
 .service-detail-content {
-  background: #f2f0ea;
+  background: var(--color-primary-light);
   padding: var(--spacing-2xl);
   border-radius: var(--radius-lg);
   border: 0.0625rem solid var(--color-gray-200);
@@ -137,7 +137,7 @@
   padding: var(--spacing-lg);
   border: 0.125rem solid var(--color-gray-200);
   border-radius: var(--radius-md);
-  background: #f2f0ea;
+  background: var(--color-primary-light);
   cursor: pointer;
   transition: all 0.2s;
   text-align: center;
@@ -203,7 +203,7 @@
 }
 
 .error-container {
-  background: #f2f0ea;
+  background: var(--color-primary-light);
   border-radius: var(--radius-lg);
   border: 0.0625rem solid var(--color-gray-200);
   max-width: 31.25rem;

@@ -31,7 +31,7 @@
    ===================================== */
 
 .features-section {
-  background-color: #f2f0ea;
+  background-color: var(--color-primary-light);
   text-align: center;
 }
 
@@ -62,7 +62,7 @@
    ===================================== */
 
 .detailed-features-section {
-  background-color: #e1dbcb;
+  background-color: var(--color-primary);
   text-align: center;
 }
 
@@ -78,8 +78,8 @@
 }
 
 .detailed-feature-card {
-  background: #f2f0ea;
-  border: 0.0625rem solid #e1dbcb;
+  background: var(--color-primary-light);
+  border: 0.0625rem solid var(--color-primary);
   border-radius: var(--radius-md);
   padding: 1.5rem 1.25rem;
   text-align: left;

@@ -12,7 +12,7 @@
    ===================================== */
 
 .contact-hero {
-  background: #f2f0ea;
+  background: var(--color-primary-light);
   text-align: center;
 }
 
@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #e1dbcb;
+  background: var(--color-primary);
   border-radius: var(--radius-full);
   flex-shrink: 0;
 }
@@ -123,16 +123,16 @@
 .form-group textarea {
   /* font-family and font-size inherited from global.css */
   padding: 0.75rem 1rem;
-  border: 0.0625rem solid #e1dbcb;
+  border: 0.0625rem solid var(--color-primary);
   border-radius: var(--radius-sm);
-  background-color: #f2f0ea;
+  background-color: var(--color-primary-light);
   transition: all 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #101014;
+  border-color: var(--color-secondary);
   box-shadow: none;
 }
 
@@ -168,8 +168,8 @@
 .success-message {
   padding: 3rem 2rem;
   text-align: center;
-  background-color: #e1dbcb;
-  border: 0.125rem solid #101014;
+  background-color: var(--color-primary);
+  border: 0.125rem solid var(--color-secondary);
   border-radius: var(--radius-md);
 }
 

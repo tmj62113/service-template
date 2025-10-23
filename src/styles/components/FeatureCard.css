@@ -4,8 +4,8 @@
 
 /* Base feature card styles shared across pages */
 .feature-card {
-  background: #f2f0ea;
-  border: 0.0625rem solid #e1dbcb;
+  background: var(--color-primary-light);
+  border: 0.0625rem solid var(--color-primary);
   border-radius: var(--radius-md);
 }
 
