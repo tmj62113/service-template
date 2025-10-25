@@ -5,6 +5,9 @@
 .about-page {
   min-height: 100vh;
   background-color: var(--color-background);
+  /* Remove any default margin to allow slider to be at top */
+  margin: 0;
+  padding: 0;
 }
 
 /* =====================================

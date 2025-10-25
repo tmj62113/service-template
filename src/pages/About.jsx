@@ -1,4 +1,5 @@
 import SEO from "../components/SEO";
+import HeroSlider from "../components/HeroSlider/HeroSlider";
 import "../styles/components/FeatureCard.css";
 import "../styles/About.css";
 
@@ -19,6 +20,9 @@ export default function About() {
           "business automation",
         ]}
       />
+
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Hero Section */}
       <section className="about-hero section-container--hero">
