@@ -19,19 +19,14 @@
 }
 
 .hero-image {
-  width: 100%;
-  height: auto;
   display: block;
-  object-fit: cover;
-  object-position: center 30%; /* Show more of the model, less sky */
 }
 
 .hero-content {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  bottom: var(--spacing-xl); /* Position at bottom */
+  left: var(--spacing-xl); /* Position at left */
+  text-align: left; /* Left-align text */
   z-index: 2;
   padding: var(--spacing-xl);
   background: rgba(
@@ -42,7 +37,7 @@
   ); /* Semi-transparent overlay for readability */
   border-radius: var(--radius-lg);
   max-width: 56.25rem; /* 900px */
-  width: 90%; /* Responsive width */
+  width: auto; /* Auto width for bottom-left positioning */
 }
 
 .hero-content h1 {
@@ -170,6 +165,12 @@
 
 @media (max-width: 768px) {
   /* .hero-content p - inherits base styles from global.css */
+
+  .hero-content {
+    bottom: var(--spacing-md); /* Reduce spacing on mobile */
+    left: var(--spacing-md);
+    max-width: calc(100% - calc(var(--spacing-md) * 2)); /* Account for left positioning */
+  }
 
   .services-grid,
   .benefits-grid,
