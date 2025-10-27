@@ -213,12 +213,12 @@ h6 {
 
 h1 {
   font-size: var(--font-size-3xl); /* 30px on mobile */
-  font-weight: var(--font-weight-normal); /* Lighter weight for elegance */
-  margin-bottom: var(--spacing-lg); /* More space below h1 */
 }
 
 h2 {
   font-size: var(--font-size-2xl); /* 24px on mobile */
+  font-weight: var(--font-weight-normal); /* Lighter weight for elegance */
+  margin-bottom: var(--spacing-lg); /* More space below h2 */
 }
 
 h3 {
