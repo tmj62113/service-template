@@ -49,12 +49,6 @@ export default function Home() {
       {/* Features Section - Casewell Style */}
       <section className="features-full-section">
         <div className="features-full-intro">
-          <div className="features-full-intro-image">
-            <img
-              src="/images/hero/home_hero.png"
-              alt="Platform features"
-            />
-          </div>
           <div className="features-full-intro-content">
             <h2>Why Choose Clockwork?</h2>
             <p>
@@ -120,13 +114,7 @@ export default function Home() {
             </button>
           </div>
 
-          <div className="features-full-card features-full-card--with-image">
-            <div className="features-full-card-image">
-              <img
-                src="/images/hero/home_hero.png"
-                alt="Partnership"
-              />
-            </div>
+          <div className="features-full-card">
             <div className="features-full-card-content">
               <h3>True Partnership Pricing</h3>
               <p>Earn a real margin on cabinetry — no games, no retail markup.</p>
