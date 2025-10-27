@@ -45,6 +45,102 @@ export default function Home() {
           </button>
         </div>
       </section>
+
+      {/* Features Section - Casewell Style */}
+      <section className="features-full-section">
+        <div className="features-full-intro">
+          <div className="features-full-intro-image">
+            <img
+              src="/images/hero/home_hero.png"
+              alt="Platform features"
+            />
+          </div>
+          <div className="features-full-intro-content">
+            <h2>Why Choose Clockwork?</h2>
+            <p>
+              We built the booking platform that should've existed all along, one that supports your success without getting in your way.
+            </p>
+          </div>
+        </div>
+
+        <div className="features-full-grid">
+          <div className="features-full-card">
+            <div className="features-full-card-content">
+              <h3>Complete Project Support</h3>
+              <p>Design help, showroom access, and fulfillment — all included.</p>
+            </div>
+            <button
+              className="features-full-link"
+              onClick={() => navigate("/services")}
+            >
+              Read more
+              <span className="arrow">→</span>
+            </button>
+          </div>
+
+          <div className="features-full-card">
+            <div className="features-full-card-content">
+              <h3>Streamlined Operations</h3>
+              <p>Fast quoting, accurate deliveries, and less back-and-forth.</p>
+            </div>
+            <button
+              className="features-full-link"
+              onClick={() => navigate("/services")}
+            >
+              Read more
+              <span className="arrow">→</span>
+            </button>
+          </div>
+
+          <div className="features-full-card">
+            <div className="features-full-card-content">
+              <h3>Professional-Grade Range</h3>
+              <p>From fast flat-pack to bespoke millwork, we've got your project covered.</p>
+            </div>
+            <button
+              className="features-full-link"
+              onClick={() => navigate("/services")}
+            >
+              Read more
+              <span className="arrow">→</span>
+            </button>
+          </div>
+
+          <div className="features-full-card">
+            <div className="features-full-card-content">
+              <h3>Your Clients Stay Yours</h3>
+              <p>We support you, not compete with you. Relationships stay yours.</p>
+            </div>
+            <button
+              className="features-full-link"
+              onClick={() => navigate("/services")}
+            >
+              Read more
+              <span className="arrow">→</span>
+            </button>
+          </div>
+
+          <div className="features-full-card features-full-card--with-image">
+            <div className="features-full-card-image">
+              <img
+                src="/images/hero/home_hero.png"
+                alt="Partnership"
+              />
+            </div>
+            <div className="features-full-card-content">
+              <h3>True Partnership Pricing</h3>
+              <p>Earn a real margin on cabinetry — no games, no retail markup.</p>
+            </div>
+            <button
+              className="features-full-link"
+              onClick={() => navigate("/services")}
+            >
+              Read more
+              <span className="arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
