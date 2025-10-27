@@ -1,0 +1,196 @@
+/* ==========================================================================
+   FOOTER COMPONENT STYLES - Casewell Inspired
+   ========================================================================== */
+
+.footer {
+  background-color: var(--color-background); /* Light gray background */
+  padding: 3.75rem 1.25rem; /* 60px top/bottom, 20px sides */
+}
+
+.footer-container {
+  position: relative;
+  max-width: 90rem; /* 1440px */
+  margin: 0 auto;
+  background-color: var(--color-primary-light); /* Light beige */
+  border-radius: 3.75rem; /* 60px - large rounded corners */
+  padding: 3.75rem; /* 60px */
+  overflow: hidden;
+}
+
+/* Main Content Area */
+.footer-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3.75rem; /* 60px */
+  position: relative;
+  z-index: 2;
+  margin-bottom: 5rem; /* 80px - space before bottom section */
+}
+
+/* CTA Section - Left Side */
+.footer-cta {
+  flex: 1;
+  max-width: 37.5rem; /* 600px */
+}
+
+.footer-cta h2 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.footer-cta .btn {
+  margin-top: var(--spacing-md);
+}
+
+/* Navigation Columns - Right Side */
+.footer-nav-columns {
+  display: flex;
+  gap: 3.75rem; /* 60px between columns */
+}
+
+.footer-nav-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.footer-nav-column a,
+.footer-link-button {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: opacity var(--transition-base);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-family-base);
+}
+
+.footer-nav-column a:hover,
+.footer-link-button:hover {
+  opacity: 0.7;
+}
+
+/* Watermark Background Text */
+.footer-watermark {
+  position: absolute;
+  bottom: 5rem; /* 80px from bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12rem; /* 192px - very large */
+  font-weight: var(--font-weight-bold);
+  color: rgba(0, 0, 0, 0.03); /* Very subtle */
+  text-transform: lowercase;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* Bottom Section - Logo & Copyright */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-logo {
+  height: 2rem; /* 32px */
+  width: auto;
+}
+
+.footer-bottom p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-lighter);
+  margin: 0;
+}
+
+/* =====================================
+   RESPONSIVE
+   ===================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .footer-container {
+    padding: 2.5rem; /* 40px */
+    border-radius: 2.5rem; /* 40px */
+  }
+
+  .footer-main {
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-nav-columns {
+    gap: 2.5rem;
+  }
+
+  .footer-watermark {
+    font-size: 8rem; /* 128px */
+    bottom: 3rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.25rem; /* 20px */
+  }
+
+  .footer-container {
+    padding: 1.25rem; /* 20px */
+    border-radius: 1.25rem; /* 20px */
+  }
+
+  .footer-main {
+    flex-direction: column;
+    gap: 1.875rem; /* 30px */
+    margin-bottom: 2.5rem;
+  }
+
+  .footer-cta h2 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .footer-nav-columns {
+    gap: 1.875rem;
+  }
+
+  .footer-watermark {
+    font-size: 4rem; /* 64px */
+    bottom: 2rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-start;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .footer-cta h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .footer-nav-columns {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .footer-watermark {
+    display: none; /* Hide watermark on very small screens */
+  }
+}
