@@ -13,6 +13,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 16, 20, 0.8) 0%,
+    rgba(16, 16, 20, 0.4) 50%,
+    rgba(16, 16, 20, 0) 100%
+  );
 }
 
 .header-content {
@@ -20,8 +26,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 75rem; /* 1200px */
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
 }
 
 /* Header Sections - Logo left, Navigation right */
@@ -46,9 +51,6 @@
   align-items: center;
   text-decoration: none;
   transition: opacity var(--transition-base);
-  filter: drop-shadow(
-    0 0.125rem 0.25rem rgba(0, 0, 0, 0.8)
-  ); /* Shadow for readability over images */
 }
 
 .logo:hover {
@@ -56,7 +58,7 @@
 }
 
 .logo-img {
-  height: 2.5rem; /* 18px to match Casewell logo height */
+  height: 3rem;
   width: auto;
 }
 
