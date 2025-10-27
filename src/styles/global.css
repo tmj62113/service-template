@@ -483,6 +483,10 @@ a:focus-visible {
   max-width: 80rem; /* 1280px */
 }
 
+.container--full {
+  max-width: none; /* No max-width constraint - spans full viewport width */
+}
+
 /* Responsive Container Widths */
 @media (min-width: 40rem) {
   /* 640px */
@@ -656,25 +660,6 @@ a:focus-visible {
 /* Danger Background - Red tint */
 .bg-danger {
   background-color: rgba(239, 68, 68, 0.1); /* 10% opacity danger color */
-}
-
-/* ==========================================================================
-   Logo Sizing - Clockwork Brand
-   ========================================================================== */
-
-.logo img,
-.footer-logo,
-.logo-img {
-  height: 5rem; /* 80px */
-  width: auto;
-}
-
-@media (max-width: 48rem) {
-  .logo img,
-  .footer-logo,
-  .logo-img {
-    height: 3.75rem; /* 60px */
-  }
 }
 
 /* ==========================================================================
