@@ -7,9 +7,13 @@
    ===================================== */
 
 .home-container {
-  /* Remove any default margin to allow slider to be at top */
+  /* Remove any default margin/padding to allow full-bleed hero */
   margin: 0;
   padding: 0;
+}
+
+.home-container .hero-section {
+  margin-top: 0; /* Ensure hero starts at top, showing through header */
 }
 
 /* =====================================
@@ -22,6 +26,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0;
+  padding: 0; /* Override section-container--full padding for full bleed */
 }
 
 .hero-image {
