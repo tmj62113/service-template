@@ -18,6 +18,23 @@
   justify-content: center;
 }
 
+/* Gradient overlay for entire hero image */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  z-index: 1;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
 .hero-image {
   display: block;
 }
@@ -28,14 +45,7 @@
   left: var(--spacing-xl); /* Position at left */
   text-align: left; /* Left-align text */
   z-index: 2;
-  padding: var(--spacing-xl);
-  background: rgba(
-    26,
-    26,
-    26,
-    0.7
-  ); /* Semi-transparent overlay for readability */
-  border-radius: var(--radius-lg);
+  padding: 0; /* Remove padding since no background box */
   max-width: 56.25rem; /* 900px */
   width: auto; /* Auto width for bottom-left positioning */
 }
