@@ -560,8 +560,10 @@ a:focus-visible {
 .section-container--full {
   width: 100%;
   max-width: none; /* No constraint - spans full viewport width */
+  max-height: 100vh; /* Limit section to viewport height */
   margin: 0 auto;
   padding: 2.5rem 1.25rem; /* Mobile: 40px top/bottom, 20px sides */
+  overflow: hidden; /* Clip content beyond viewport height */
 }
 
 /* Responsive Section Container Padding - Tablet */
