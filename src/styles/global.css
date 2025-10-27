@@ -560,10 +560,10 @@ a:focus-visible {
 .section-container--full {
   width: 100%;
   max-width: none; /* No constraint - spans full viewport width */
-  max-height: 100vh; /* Limit section to viewport height */
-  margin: 0 auto;
-  padding: 2.5rem 1.25rem; /* Mobile: 40px top/bottom, 20px sides */
+  max-height: 90vh; /* Limit section to viewport height */
   overflow: hidden; /* Clip content beyond viewport height */
+  margin: 0;
+  padding: 0;
 }
 
 /* Responsive Section Container Padding - Tablet */
@@ -588,10 +588,6 @@ a:focus-visible {
   .section-container--narrow {
     padding: 3.75rem 1.25rem; /* Tablet: 60px top/bottom */
   }
-
-  .section-container--full {
-    padding: 3.75rem 1.25rem; /* Tablet: 60px top/bottom */
-  }
 }
 
 /* Responsive Section Container Padding - Desktop */
@@ -614,10 +610,6 @@ a:focus-visible {
   }
 
   .section-container--narrow {
-    padding: 5rem 1.25rem; /* Desktop: 80px top/bottom */
-  }
-
-  .section-container--full {
     padding: 5rem 1.25rem; /* Desktop: 80px top/bottom */
   }
 }
