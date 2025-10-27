@@ -88,14 +88,7 @@
   flex: 1;
 }
 
-.features-full-intro-content h2 {
-  font-size: var(--font-size-3xl);
-  margin-bottom: var(--spacing-md);
-  color: var(--color-text);
-}
-
 .features-full-intro-content p {
-  font-size: var(--font-size-lg);
   color: var(--color-text-lighter);
   max-width: 40rem; /* 640px */
 }

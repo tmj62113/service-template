@@ -212,27 +212,29 @@ h6 {
 }
 
 h1 {
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-3xl); /* 30px on mobile */
+  font-weight: var(--font-weight-normal); /* Lighter weight for elegance */
+  margin-bottom: var(--spacing-lg); /* More space below h1 */
 }
 
 h2 {
-  font-size: var(--font-size-xl); /* 20px on mobile */
+  font-size: var(--font-size-2xl); /* 24px on mobile */
 }
 
 h3 {
-  font-size: var(--font-size-lg); /* 18px on mobile */
+  font-size: var(--font-size-xl); /* 20px on mobile */
 }
 
 h4 {
-  font-size: var(--font-size-base); /* 16px on mobile */
+  font-size: var(--font-size-lg); /* 18px on mobile */
 }
 
 h5 {
-  font-size: var(--font-size-sm); /* 14px on mobile */
+  font-size: var(--font-size-base); /* 16px on mobile */
 }
 
 h6 {
-  font-size: var(--font-size-sm); /* 14px on mobile */
+  font-size: var(--font-size-sm); /* 12px on mobile */
 }
 
 /* Responsive heading sizes for tablet and up */
