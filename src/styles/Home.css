@@ -18,24 +18,30 @@
 
 .hero-section {
   position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('/images/hero/home_hero.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-height: 100vh; /* Fill entire viewport height */
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
-  position: relative;
   z-index: 2;
   padding: var(--spacing-xl);
   background: rgba(26, 26, 26, 0.7); /* Semi-transparent overlay for readability */
   border-radius: var(--radius-lg);
   max-width: 56.25rem; /* 900px */
+  width: 90%; /* Responsive width */
 }
 
 .hero-content h1 {

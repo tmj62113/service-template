@@ -27,13 +27,17 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero-section section-container--hero">
+        <img
+          src="/images/hero/home_hero.png"
+          alt="Professional workspace"
+          className="hero-image"
+        />
         <div className="hero-content">
-          <h1>The scheduling platform that never misses a beat.</h1>
+          <h1>Website. Bookings. Payments.</h1>
           <p>
-            Clockwork brings your appointments, payments, and client relationships together in one elegant system that bends to your brand. Customize everything—colors, layout, features—to create a booking experience that's unmistakably yours. Spend less time managing your calendar and more time doing what you love.
-          </p>
-          <p className="hero-tagline">
-            Your business, always on time.
+            One platform that doesn't break the bank. One platform. Fully
+            customizable. Works for every service industry. Everything you need
+            to launch and grow.
           </p>
           <button
             className="btn btn-primary btn-lg"
@@ -49,29 +53,29 @@ export default function Home() {
         <h2>Everything You Need. Nothing You Don't.</h2>
 
         <div className="features-grid">
-            <div className="feature-card">
-              <h3>📅 Smart Scheduling</h3>
-              <p>
-                Clients book online anytime. Your calendar updates in real-time.
-                Double-bookings? Impossible. Conflicts? Gone.
-              </p>
-            </div>
+          <div className="feature-card">
+            <h3>📅 Smart Scheduling</h3>
+            <p>
+              Clients book online anytime. Your calendar updates in real-time.
+              Double-bookings? Impossible. Conflicts? Gone.
+            </p>
+          </div>
 
-            <div className="feature-card">
-              <h3>💰 Get Paid Faster</h3>
-              <p>
-                Accept payments at booking. Process cards, track invoices,
-                collect deposits—all automated. No more payment follow-ups.
-              </p>
-            </div>
+          <div className="feature-card">
+            <h3>💰 Get Paid Faster</h3>
+            <p>
+              Accept payments at booking. Process cards, track invoices, collect
+              deposits—all automated. No more payment follow-ups.
+            </p>
+          </div>
 
-            <div className="feature-card">
-              <h3>✨ Your Brand, Your Way</h3>
-              <p>
-                Choose your colors. Upload your logo. Customize everything.
-                Clients see your brand, not ours.
-              </p>
-            </div>
+          <div className="feature-card">
+            <h3>✨ Your Brand, Your Way</h3>
+            <p>
+              Choose your colors. Upload your logo. Customize everything.
+              Clients see your brand, not ours.
+            </p>
+          </div>
         </div>
 
         <div className="features-cta">
@@ -89,50 +93,46 @@ export default function Home() {
         <h2>Built for Service Professionals</h2>
 
         <div className="detailed-features-grid">
-            <div className="detailed-feature-card">
-              <h3>📆 Online Booking</h3>
-              <p>
-                Let clients book 24/7 from any device. No phone tag required.
-              </p>
-            </div>
+          <div className="detailed-feature-card">
+            <h3>📆 Online Booking</h3>
+            <p>Let clients book 24/7 from any device. No phone tag required.</p>
+          </div>
 
-            <div className="detailed-feature-card">
-              <h3>💳 Payment Processing</h3>
-              <p>
-                Accept deposits or full payments. Stripe, Square, PayPal—all
-                integrated.
-              </p>
-            </div>
+          <div className="detailed-feature-card">
+            <h3>💳 Payment Processing</h3>
+            <p>
+              Accept deposits or full payments. Stripe, Square, PayPal—all
+              integrated.
+            </p>
+          </div>
 
-            <div className="detailed-feature-card">
-              <h3>📧 Smart Reminders</h3>
-              <p>
-                Automatic email and SMS reminders reduce no-shows by up to 70%.
-              </p>
-            </div>
+          <div className="detailed-feature-card">
+            <h3>📧 Smart Reminders</h3>
+            <p>
+              Automatic email and SMS reminders reduce no-shows by up to 70%.
+            </p>
+          </div>
 
-            <div className="detailed-feature-card">
-              <h3>👥 Client Management</h3>
-              <p>
-                Store contacts, history, preferences, and notes—all in one
-                place.
-              </p>
-            </div>
+          <div className="detailed-feature-card">
+            <h3>👥 Client Management</h3>
+            <p>
+              Store contacts, history, preferences, and notes—all in one place.
+            </p>
+          </div>
 
-            <div className="detailed-feature-card">
-              <h3>📄 Professional Invoicing</h3>
-              <p>
-                Generate branded invoices automatically. Track what's paid and
-                what's pending.
-              </p>
-            </div>
+          <div className="detailed-feature-card">
+            <h3>📄 Professional Invoicing</h3>
+            <p>
+              Generate branded invoices automatically. Track what's paid and
+              what's pending.
+            </p>
+          </div>
 
-            <div className="detailed-feature-card">
-              <h3>🎨 Full Customization</h3>
-              <p>
-                Make it yours. Custom colors, branding, forms, and booking
-                flows.
-              </p>
+          <div className="detailed-feature-card">
+            <h3>🎨 Full Customization</h3>
+            <p>
+              Make it yours. Custom colors, branding, forms, and booking flows.
+            </p>
           </div>
         </div>
       </section>
@@ -140,24 +140,24 @@ export default function Home() {
       {/* Call to Action Section */}
       <section className="cta-section section-container--narrow">
         <div className="cta-content">
-            <h2>Ready to Get Started?</h2>
-            <p>
-              Book your first session today and take the first step towards
-              achieving your goals.
-            </p>
-            <div className="cta-buttons">
-              <button
-                className="btn btn-primary btn-lg"
-                onClick={() => navigate("/services")}
-              >
-                Browse Services
-              </button>
-              <button
-                className="btn btn-secondary btn-lg"
-                onClick={() => navigate("/contact")}
-              >
-                Contact Us
-              </button>
+          <h2>Ready to Get Started?</h2>
+          <p>
+            Book your first session today and take the first step towards
+            achieving your goals.
+          </p>
+          <div className="cta-buttons">
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={() => navigate("/services")}
+            >
+              Browse Services
+            </button>
+            <button
+              className="btn btn-secondary btn-lg"
+              onClick={() => navigate("/contact")}
+            >
+              Contact Us
+            </button>
           </div>
         </div>
       </section>
