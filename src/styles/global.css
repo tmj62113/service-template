@@ -212,8 +212,7 @@ h6 {
 }
 
 h1 {
-  font-size: var(--font-size-2xl); /* 24px on mobile */
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-5xl); /* 36px on mobile */
 }
 
 h2 {
@@ -666,6 +665,15 @@ a:focus-visible {
 /* Danger Background - Red tint */
 .bg-danger {
   background-color: rgba(239, 68, 68, 0.1); /* 10% opacity danger color */
+}
+
+/* ==========================================================================
+   Text Utility Classes
+   ========================================================================== */
+
+/* Prevent text from wrapping to a new line */
+.no-wrap {
+  white-space: nowrap;
 }
 
 /* ==========================================================================

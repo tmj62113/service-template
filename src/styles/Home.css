@@ -20,7 +20,7 @@
 
 /* Gradient overlay for entire hero image */
 .hero-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -46,19 +46,20 @@
   text-align: left; /* Left-align text */
   z-index: 2;
   padding: 0; /* Remove padding since no background box */
-  max-width: 56.25rem; /* 900px */
   width: auto; /* Auto width for bottom-left positioning */
 }
 
 .hero-content h1 {
   color: #ffffff;
   text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8);
+  max-width: 25rem;
   margin-bottom: var(--spacing-md);
 }
 
 .hero-content p {
   color: #ffffff;
   text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8);
+  max-width: 16rem;
   margin-bottom: var(--spacing-lg);
 }
 
@@ -179,7 +180,9 @@
   .hero-content {
     bottom: var(--spacing-md); /* Reduce spacing on mobile */
     left: var(--spacing-md);
-    max-width: calc(100% - calc(var(--spacing-md) * 2)); /* Account for left positioning */
+    max-width: calc(
+      100% - calc(var(--spacing-md) * 2)
+    ); /* Account for left positioning */
   }
 
   .services-grid,

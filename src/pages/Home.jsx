@@ -33,17 +33,16 @@ export default function Home() {
           className="hero-image"
         />
         <div className="hero-content">
-          <h1>Website. Bookings. Payments.</h1>
+          <h1>Everything you need to launch and grow</h1>
           <p>
-            One platform that doesn't break the bank. One platform. Fully
-            customizable. Works for every service industry. Everything you need
-            to launch and grow.
+            Clockwork gives you a fully customizable website with booking and
+            payment processing built in. <span className="no-wrap">One platform.</span> Any service business.
           </p>
           <button
             className="btn btn-primary btn-lg"
             onClick={() => navigate("/services")}
           >
-            Browse Services
+            Work with us
           </button>
         </div>
       </section>
