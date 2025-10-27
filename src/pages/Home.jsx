@@ -26,7 +26,7 @@ export default function Home() {
       />
 
       {/* Hero Section */}
-      <section className="hero-section section-container--hero">
+      <section className="hero-section section-container--full">
         <img
           src="/images/hero/home_hero.png"
           alt="Professional workspace"
