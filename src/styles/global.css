@@ -483,10 +483,6 @@ a:focus-visible {
   max-width: 80rem; /* 1280px */
 }
 
-.container--full {
-  max-width: none; /* No max-width constraint - spans full viewport width */
-}
-
 /* Responsive Container Widths */
 @media (min-width: 40rem) {
   /* 640px */
@@ -560,6 +556,14 @@ a:focus-visible {
   padding: 2.5rem 1.25rem; /* Mobile: 40px top/bottom, 20px sides */
 }
 
+/* Full Width Section Container - No max-width constraint */
+.section-container--full {
+  width: 100%;
+  max-width: none; /* No constraint - spans full viewport width */
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem; /* Mobile: 40px top/bottom, 20px sides */
+}
+
 /* Responsive Section Container Padding - Tablet */
 @media (min-width: 48rem) {
   /* 768px */
@@ -580,6 +584,10 @@ a:focus-visible {
   }
 
   .section-container--narrow {
+    padding: 3.75rem 1.25rem; /* Tablet: 60px top/bottom */
+  }
+
+  .section-container--full {
     padding: 3.75rem 1.25rem; /* Tablet: 60px top/bottom */
   }
 }
@@ -604,6 +612,10 @@ a:focus-visible {
   }
 
   .section-container--narrow {
+    padding: 5rem 1.25rem; /* Desktop: 80px top/bottom */
+  }
+
+  .section-container--full {
     padding: 5rem 1.25rem; /* Desktop: 80px top/bottom */
   }
 }
