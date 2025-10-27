@@ -19,7 +19,7 @@ export default function Header() {
           {/* Left Section: Logo (Casewell Style) */}
           <div className="header-left">
             <a href="/" className="logo" aria-label="Home page">
-              <img src="/clockwork_logo.png" alt="Clockwork" className="logo-img" />
+              <img src="/clockwork_logo_inverse.png" alt="Clockwork" className="logo-img" />
             </a>
           </div>
 
