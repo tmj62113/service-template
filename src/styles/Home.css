@@ -25,7 +25,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 31.25rem; /* 500px - ensure adequate height for image */
+  min-height: 100vh; /* Fill entire viewport height */
 }
 
 .hero-content {
