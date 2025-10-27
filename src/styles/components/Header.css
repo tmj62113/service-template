@@ -10,13 +10,6 @@
   left: 0;
   right: 0;
   z-index: var(--z-sticky);
-  background: linear-gradient(
-    to bottom,
-    rgba(26, 26, 26, 0.9) 0%,
-    rgba(26, 26, 26, 0.7) 70%,
-    rgba(26, 26, 26, 0) 100%
-  ); /* Gradient fade for transparency over slider */
-  height: 3.5rem; /* 56px */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +21,8 @@
   justify-content: space-between;
   width: 100%;
   max-width: 75rem; /* 1200px */
-  padding: 0 var(--spacing-xl);
+  padding: var(--spacing-sm);
+  border: 2px solid red;
 }
 
 /* Header Sections - Logo left, Navigation right */
@@ -53,7 +47,6 @@
   align-items: center;
   text-decoration: none;
   transition: opacity var(--transition-base);
-  filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.8)); /* Shadow for readability over images */
 }
 
 .logo:hover {
@@ -61,7 +54,7 @@
 }
 
 .logo-img {
-  height: 1.125rem; /* 18px to match Casewell logo height */
+  height: 2.5rem; /* 18px to match Casewell logo height */
   width: auto;
 }
 
@@ -101,13 +94,14 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: 0.625rem; /* 10px - matches Casewell exactly */
-  font-size: var(--font-size-xs); /* 12px */
+  font-size: var(--font-size-base); /* 16px */
   font-weight: var(--font-weight-normal); /* 400 */
-  color: #ffffff; /* White text on dark background */
+  color: var(--color-secondary); /* Dark charcoal text */
   text-decoration: none;
+  text-transform: uppercase;
   transition: opacity var(--transition-base);
   white-space: nowrap;
-  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8); /* Shadow for readability over images */
+  text-shadow: none; /* Removed shadow for dark text */
 }
 
 .nav-content a:hover {
@@ -115,7 +109,7 @@
 }
 
 .nav-content a:focus-visible {
-  outline: 0.125rem solid #ffffff;
+  outline: 0.125rem solid var(--color-secondary);
   outline-offset: 0.125rem;
   border-radius: var(--radius-sm);
 }
@@ -137,15 +131,14 @@
   align-items: center;
   gap: var(--spacing-sm);
   font-size: var(--font-size-xs);
-  color: #ffffff;
-  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8); /* Shadow for readability over images */
+  color: var(--color-secondary);
 }
 
 .user-menu button {
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
-  color: #ffffff;
+  color: var(--color-secondary);
   background: none;
   border: none;
   cursor: pointer;
@@ -171,7 +164,7 @@
   .header-social a {
     display: flex;
     align-items: center;
-    color: #ffffff;
+    color: var(--color-secondary);
     transition: opacity var(--transition-base);
   }
 
@@ -189,7 +182,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #ffffff;
+  color: var(--color-secondary);
 }
 
 @media (min-width: 768px) {
@@ -261,7 +254,7 @@
   display: block;
   width: 100%;
   height: 0.125rem;
-  background-color: #ffffff;
+  background-color: var(--color-secondary);
   transition: all 0.3s ease;
 }
 
