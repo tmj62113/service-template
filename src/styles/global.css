@@ -212,7 +212,7 @@ h6 {
 }
 
 h1 {
-  font-size: var(--font-size-5xl); /* 36px on mobile */
+  font-size: var(--font-size-5xl);
 }
 
 h2 {
@@ -259,7 +259,7 @@ h6 {
 @media (min-width: 64rem) {
   /* 1024px */
   h1 {
-    font-size: var(--font-size-4xl); /* 36px on desktop */
+    font-size: var(--font-size-5xl); /* 48px on desktop */
   }
 
   h2 {

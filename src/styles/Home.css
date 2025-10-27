@@ -52,24 +52,15 @@
 .hero-content h1 {
   color: #ffffff;
   text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8);
-  max-width: 25rem;
+  max-width: 30rem;
   margin-bottom: var(--spacing-md);
 }
 
 .hero-content p {
   color: #ffffff;
   text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8);
-  max-width: 16rem;
+  max-width: 20rem;
   margin-bottom: var(--spacing-lg);
-}
-
-.hero-tagline {
-  font-family: var(
-    --font-family-heading
-  ); /* Intentional override - p element styled as heading */
-  font-weight: var(--font-weight-semibold);
-  margin-top: 1rem;
-  margin-bottom: 2rem;
 }
 
 /* =====================================
