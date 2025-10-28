@@ -57,6 +57,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  transform: rotate(-45deg);
   transform-origin: 50% 50%;
   will-change: transform;
   transition: transform var(--transition-base);
@@ -64,7 +65,7 @@
 
 .btn-primary:hover::after,
 .btn-primary:active::after {
-  transform: translateY(-0.1875rem);
+  transform: rotate(0deg);
 }
 
 /* Secondary Button */
