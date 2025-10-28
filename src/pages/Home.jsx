@@ -49,12 +49,10 @@ export default function Home() {
       {/* Features Section - Casewell Style */}
       <section className="section-container--full features-section">
         <div className="features-full-intro">
-          <div className="features-full-intro-content">
-            <h2>Why Choose Clockwork?</h2>
-            <p>
-              We built the booking platform that should've existed all along, one that supports your success without getting in your way.
-            </p>
-          </div>
+          <h2>Why Choose Clockwork?</h2>
+          <p>
+            We built the booking platform that should've existed all along, one that supports your success without getting in your way.
+          </p>
         </div>
 
         <div className="features-full-grid">
