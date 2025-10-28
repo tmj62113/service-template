@@ -51,7 +51,7 @@
 .btn-primary::after {
   content: "arrow_forward";
   font-family: 'Material Symbols Outlined';
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: normal;
   font-style: normal;
   line-height: 1;
