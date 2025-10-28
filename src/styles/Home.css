@@ -95,6 +95,7 @@
   flex-direction: column;
   align-items: center; /* Center text content */
   text-align: center; /* Center text */
+  justify-content: space-between; /* Match Casewell framer-18ydwqq */
   max-width: 100%;
 }
 
