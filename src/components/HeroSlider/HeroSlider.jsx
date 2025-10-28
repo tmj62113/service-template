@@ -145,6 +145,9 @@ export default function HeroSlider() {
                 alt={slide.title}
                 className="hero-slider__image"
               />
+              {index === currentSlide && (
+                <h3 className="hero-slider__title">{slide.title}</h3>
+              )}
             </div>
           );
         })}
@@ -158,12 +161,6 @@ export default function HeroSlider() {
       >
         <span className="hero-slider__arrow-number">{getNextIndex() + 1}</span>
       </button>
-
-      {/* Current Slide Info (Below Slider) */}
-      <div className="hero-slider__info">
-        <h3 className="hero-slider__title">{slides[currentSlide].title}</h3>
-        <p className="hero-slider__description">{slides[currentSlide].description}</p>
-      </div>
     </div>
   );
 }

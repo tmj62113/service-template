@@ -164,6 +164,23 @@
 }
 
 /* =====================================
+   SLIDER SECTION
+   ===================================== */
+
+.slider-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh; /* Full viewport height to maximize spacing */
+  padding: 3rem;
+}
+
+.slider-section h2 {
+  text-align: center;
+  margin: 0;
+}
+
+/* =====================================
    FEATURES SECTION
    ===================================== */
 
@@ -289,6 +306,12 @@
   .features-full-grid {
     flex-direction: column; /* Stack cards vertically on mobile */
     gap: 1.25rem;
+  }
+
+  /* Slider Section - Mobile */
+  .slider-section {
+    min-height: auto; /* Remove min-height constraint on mobile */
+    padding: 2rem 1.25rem;
   }
 
   .services-grid,
