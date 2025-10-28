@@ -35,12 +35,17 @@
 .btn-primary {
   color: var(--color-text);
   background-color: var(--color-surface);
-  border: none;
+  border: 0.0625rem solid transparent;
   border-radius: var(--radius-full);
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
   gap: var(--spacing-sm);
+}
+
+.btn-primary:hover,
+.btn-primary:active {
+  border-color: var(--color-text);
 }
 
 .btn-primary::after {

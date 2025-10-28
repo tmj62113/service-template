@@ -155,7 +155,7 @@ export default function Home() {
 
       {/* Slider Section */}
       <section className="section-container--full slider-section">
-        <h2>You are in the right place if you are a ...</h2>
+        <h2>You are in the right place if you're a ...</h2>
         <HeroSlider />
       </section>
     </div>
