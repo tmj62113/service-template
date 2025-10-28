@@ -47,7 +47,7 @@ export default function Home() {
       </section>
 
       {/* Features Section - Casewell Style */}
-      <section className="features-full-section">
+      <section className="section-container--full features-section">
         <div className="features-full-intro">
           <div className="features-full-intro-content">
             <h2>Why Choose Clockwork?</h2>
