@@ -1,150 +1,200 @@
 /* =====================================================
-   HERO SLIDER COMPONENT - Clockwork
+   HERO SLIDER COMPONENT
    ===================================================== */
 
 /* Container */
 .hero-slider {
   position: relative;
   width: 100%;
-  height: 18.75rem; /* 300px mobile */
-  overflow: hidden;
-  background-color: var(--color-surface);
+  padding: 3.75rem 0; /* 60px top/bottom */
+  background-color: var(--color-background);
 }
 
 /* Track - holds all slides */
 .hero-slider__track {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 60vh; /* 60% of viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0 auto;
 }
 
 /* Individual Slide */
 .hero-slider__slide {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
   height: 100%;
+  width: 50%; /* Reduced width to allow spacing */
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
-  transition: opacity var(--transition-slow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  pointer-events: none;
+  padding: 0 1rem; /* Add padding for spacing between slides */
 }
 
+/* Active slide - center */
 .hero-slider__slide--active {
   opacity: 1;
+  z-index: 2;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Previous slide - left peek */
+.hero-slider__slide--prev {
+  opacity: 0.4;
   z-index: 1;
+  transform: translateX(-102%) scale(1); /* Same size as active slide */
+  pointer-events: none;
 }
 
-/* Image Container */
-.hero-slider__image-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+/* Next slide - right peek */
+.hero-slider__slide--next {
+  opacity: 0.4;
+  z-index: 1;
+  transform: translateX(102%) scale(1); /* Same size as active slide */
+  pointer-events: none;
 }
 
+/* Image */
 .hero-slider__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
+  display: block;
 }
 
-/* Content Overlay */
-.hero-slider__content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  max-width: 50rem; /* 800px */
-  padding: var(--spacing-md);
-}
-
-/* Title */
-.hero-slider__title {
-  color: var(--color-surface);
-  text-shadow: 0 0.125rem 0.25rem rgba(16, 16, 20, 0.8);
-  margin-bottom: 0;
-  /* font-size, font-family, font-weight, line-height inherited from global.css h2 */
-}
-
-.hero-slider__highlight {
-  font-weight: var(--font-weight-bold);
-  /* color inherited from parent */
-}
-
-/* Navigation Dots */
-.hero-slider__dots {
+/* Arrow Navigation */
+.hero-slider__arrow {
   position: absolute;
-  bottom: var(--spacing-md);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 3;
-}
-
-.hero-slider__dot {
-  width: 0.625rem; /* 10px */
-  height: 0.625rem; /* 10px */
-  border-radius: var(--radius-full);
-  background-color: rgba(255, 255, 255, 0.5);
+  background: none;
   border: none;
   cursor: pointer;
-  transition: background-color var(--transition-fast), transform var(--transition-fast);
   padding: 0;
+  color: var(--color-text);
+  transition: opacity var(--transition-base);
 }
 
-.hero-slider__dot:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-  transform: scale(1.2);
+.hero-slider__arrow:hover {
+  opacity: 0.7;
 }
 
-.hero-slider__dot--active {
-  background-color: var(--color-surface);
+.hero-slider__arrow:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 0.25rem;
 }
 
-.hero-slider__dot:focus-visible {
-  outline: 2px solid var(--color-surface);
-  outline-offset: 0.125rem;
+.hero-slider__arrow--prev {
+  left: 2rem; /* 32px */
+}
+
+.hero-slider__arrow--next {
+  right: 2rem; /* 32px */
+}
+
+.hero-slider__arrow-number {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-normal);
+  font-family: var(--font-family-base);
+}
+
+/* Slide Info - Below Slider */
+.hero-slider__info {
+  text-align: center;
+  margin-top: 2rem; /* 32px */
+  padding: 0 var(--spacing-md);
+}
+
+.hero-slider__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+.hero-slider__description {
+  font-size: var(--font-size-base);
+  color: var(--color-text-lighter);
+  margin: 0;
 }
 
 /* Tablet breakpoint */
-@media (min-width: 48rem) {
-  /* 768px */
-  .hero-slider {
-    height: 25rem; /* 400px tablet */
+@media (max-width: 1024px) {
+  .hero-slider__track {
+    height: 25rem; /* 400px */
   }
 
-  .hero-slider__content {
-    padding: var(--spacing-xl);
+  .hero-slider__slide {
+    width: 60%;
   }
 
-  .hero-slider__dots {
-    bottom: var(--spacing-lg);
+  .hero-slider__slide--prev,
+  .hero-slider__slide--next {
+    transform: translateX(-102%) scale(1);
   }
 
-  .hero-slider__dot {
-    width: 0.75rem; /* 12px */
-    height: 0.75rem; /* 12px */
+  .hero-slider__slide--next {
+    transform: translateX(102%) scale(1);
+  }
+
+  .hero-slider__arrow--prev {
+    left: 1rem;
+  }
+
+  .hero-slider__arrow--next {
+    right: 1rem;
   }
 }
 
-/* Desktop breakpoint */
-@media (min-width: 64rem) {
-  /* 1024px */
+/* Mobile breakpoint */
+@media (max-width: 768px) {
   .hero-slider {
-    height: 31.25rem; /* 500px desktop */
+    padding: 2rem 0; /* 32px */
   }
 
-  .hero-slider__content {
-    padding: var(--spacing-2xl);
+  .hero-slider__track {
+    height: 18.75rem; /* 300px */
   }
 
-  .hero-slider__dots {
-    bottom: var(--spacing-xl);
+  .hero-slider__slide {
+    width: 80%;
+    padding: 0 0.5rem; /* Less padding on mobile */
+  }
+
+  /* Hide peek slides on mobile */
+  .hero-slider__slide--prev,
+  .hero-slider__slide--next {
+    opacity: 0;
+    transform: translateX(-102%) scale(1);
+  }
+
+  .hero-slider__slide--next {
+    transform: translateX(102%) scale(1);
+  }
+
+  .hero-slider__arrow--prev {
+    left: 0.5rem;
+  }
+
+  .hero-slider__arrow--next {
+    right: 0.5rem;
+  }
+
+  .hero-slider__arrow-number {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero-slider__title {
+    font-size: var(--font-size-xl);
+  }
+
+  .hero-slider__description {
+    font-size: var(--font-size-sm);
   }
 }

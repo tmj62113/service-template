@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import SEO, { generateOrganizationStructuredData } from "../components/SEO";
+import HeroSlider from "../components/HeroSlider/HeroSlider";
 import "../styles/Home.css";
 
 export default function Home() {
@@ -35,7 +36,8 @@ export default function Home() {
           <h1>Everything you need to launch and grow</h1>
           <p>
             Clockwork gives you a fully customizable website with booking and
-            payment processing built in. <span className="no-wrap">One platform.</span> Any service business.
+            payment processing built in.{" "}
+            <span className="no-wrap">One platform.</span> Any service business.
           </p>
           <button
             className="btn btn-primary btn-lg"
@@ -46,20 +48,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section - Casewell Style */}
+      {/* Features Section */}
       <section className="section-container--full features-section">
         <div className="features-full-intro">
           <h2>Why Choose Clockwork?</h2>
           <p>
-            We built the booking platform that should've existed all along, one that supports your success without getting in your way.
+            We built the booking platform that should've existed all along, one
+            that supports your success without getting in your way.
           </p>
         </div>
 
         <div className="features-full-grid">
           <div className="features-full-card">
+            <span className="material-symbols-outlined feature-icon">
+              engineering
+            </span>
             <div className="features-full-card-content">
               <h3>Complete Project Support</h3>
-              <p>Design help, showroom access, and fulfillment — all included.</p>
+              <p>
+                Design help, showroom access, and fulfillment — all included.
+              </p>
             </div>
             <button
               className="features-full-link"
@@ -71,6 +79,7 @@ export default function Home() {
           </div>
 
           <div className="features-full-card">
+            <span className="material-symbols-outlined feature-icon">bolt</span>
             <div className="features-full-card-content">
               <h3>Streamlined Operations</h3>
               <p>Fast quoting, accurate deliveries, and less back-and-forth.</p>
@@ -85,9 +94,15 @@ export default function Home() {
           </div>
 
           <div className="features-full-card">
+            <span className="material-symbols-outlined feature-icon">
+              workspace_premium
+            </span>
             <div className="features-full-card-content">
               <h3>Professional-Grade Range</h3>
-              <p>From fast flat-pack to bespoke millwork, we've got your project covered.</p>
+              <p>
+                From fast flat-pack to bespoke millwork, we've got your project
+                covered.
+              </p>
             </div>
             <button
               className="features-full-link"
@@ -99,9 +114,14 @@ export default function Home() {
           </div>
 
           <div className="features-full-card">
+            <span className="material-symbols-outlined feature-icon">
+              handshake
+            </span>
             <div className="features-full-card-content">
               <h3>Your Clients Stay Yours</h3>
-              <p>We support you, not compete with you. Relationships stay yours.</p>
+              <p>
+                We support you, not compete with you. Relationships stay yours.
+              </p>
             </div>
             <button
               className="features-full-link"
@@ -113,9 +133,14 @@ export default function Home() {
           </div>
 
           <div className="features-full-card">
+            <span className="material-symbols-outlined feature-icon">
+              savings
+            </span>
             <div className="features-full-card-content">
               <h3>True Partnership Pricing</h3>
-              <p>Earn a real margin on cabinetry — no games, no retail markup.</p>
+              <p>
+                Earn a real margin on cabinetry — no games, no retail markup.
+              </p>
             </div>
             <button
               className="features-full-link"
@@ -126,6 +151,11 @@ export default function Home() {
             </button>
           </div>
         </div>
+      </section>
+
+      {/* Slider Section */}
+      <section className="section-container--full slider-section">
+        <HeroSlider />
       </section>
     </div>
   );

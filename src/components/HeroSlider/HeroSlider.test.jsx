@@ -4,166 +4,321 @@ import userEvent from "@testing-library/user-event";
 import HeroSlider from "./HeroSlider";
 
 describe("HeroSlider", () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.useRealTimers();
+    vi.clearAllTimers();
   });
 
   describe("Rendering", () => {
     it("renders the hero slider component", () => {
       render(<HeroSlider />);
       const slider = screen.getByLabelText(
-        /hero slider showcasing different professions/i
+        /Gallery slider showcasing different professions/i
       );
       expect(slider).toBeInTheDocument();
     });
 
-    it("renders all slide images", () => {
+    it("renders only 3 slides at a time (active, prev, next)", () => {
       render(<HeroSlider />);
       const images = screen.getAllByRole("img");
-      // All 9 images are rendered (even if not visible due to absolute positioning)
-      expect(images.length).toBeGreaterThanOrEqual(1);
-      expect(images.length).toBeLessThanOrEqual(9);
+      // Only 3 slides should be rendered (active, previous, next)
+      expect(images).toHaveLength(3);
     });
 
-    it("renders navigation dots", () => {
+    it("renders previous and next arrow buttons", () => {
       render(<HeroSlider />);
-      const dots = screen.getAllByRole("tab");
-      expect(dots).toHaveLength(9);
+      const prevButton = screen.getByLabelText(/Previous slide/i);
+      const nextButton = screen.getByLabelText(/Next slide/i);
+      expect(prevButton).toBeInTheDocument();
+      expect(nextButton).toBeInTheDocument();
     });
 
-    it("renders slide titles with profession highlights", () => {
+    it("displays slide numbers on arrow buttons", () => {
       render(<HeroSlider />);
-      // Check for slide titles (all slides are rendered, so multiple matches)
-      const titles = screen.getAllByText(/The scheduling platform that never misses a beat for/i);
-      expect(titles.length).toBeGreaterThan(0);
+      const prevButton = screen.getByLabelText(/Previous slide/i);
+      const nextButton = screen.getByLabelText(/Next slide/i);
+
+      // Initial state: prev = 9, next = 2
+      expect(prevButton).toHaveTextContent("9");
+      expect(nextButton).toHaveTextContent("2");
+    });
+
+    it("renders slide info section with title and description", () => {
+      render(<HeroSlider />);
+      expect(screen.getByText("Life Coaches")).toBeInTheDocument();
+      expect(
+        screen.getByText("The scheduling platform that never misses a beat")
+      ).toBeInTheDocument();
     });
   });
 
   describe("Initial State", () => {
-    it("shows the first slide as active initially", () => {
+    it("shows the first slide (Life Coaches) as active initially", () => {
       render(<HeroSlider />);
-      const firstSlide = screen.getByAltText(
-        /Life Coaches using Clockwork scheduling platform/i
-      ).parentElement.parentElement;
-      expect(firstSlide).toHaveClass("hero-slider__slide--active");
+      const firstSlide = screen.getByAltText("Life Coaches");
+      expect(firstSlide).toBeInTheDocument();
+      expect(firstSlide.parentElement).toHaveClass("hero-slider__slide--active");
     });
 
-    it("marks the first navigation dot as active", () => {
+    it("renders previous slide (Barbers - slide 9) on the left", () => {
       render(<HeroSlider />);
-      const dots = screen.getAllByRole("tab");
-      expect(dots[0]).toHaveClass("hero-slider__dot--active");
-      expect(dots[0]).toHaveAttribute("aria-selected", "true");
+      const barbersSlide = screen.getByAltText("Barbers");
+      expect(barbersSlide).toBeInTheDocument();
+      expect(barbersSlide.parentElement).toHaveClass("hero-slider__slide--prev");
     });
 
-    it("hides non-active slides with aria-hidden", () => {
+    it("renders next slide (Personal Trainers - slide 2) on the right", () => {
       render(<HeroSlider />);
-      const slides = screen.getAllByRole("img").map((img) =>
-        img.parentElement.parentElement
-      );
+      const trainersSlide = screen.getByAltText("Personal Trainers");
+      expect(trainersSlide).toBeInTheDocument();
+      expect(trainersSlide.parentElement).toHaveClass("hero-slider__slide--next");
+    });
+  });
 
-      // First slide should not be hidden
-      expect(slides[0]).toHaveAttribute("aria-hidden", "false");
+  describe("Arrow Navigation", () => {
+    it("advances to next slide when next button is clicked", async () => {
+      const user = userEvent.setup();
+      render(<HeroSlider />);
 
-      // Other slides should be hidden
-      slides.slice(1).forEach((slide) => {
-        expect(slide).toHaveAttribute("aria-hidden", "true");
+      const nextButton = screen.getByLabelText(/Next slide/i);
+      await user.click(nextButton);
+
+      // Should now show Personal Trainers (slide 2) as active
+      await waitFor(() => {
+        expect(screen.getByText("Personal Trainers")).toBeInTheDocument();
+      });
+      const trainersSlide = screen.getByAltText("Personal Trainers");
+      expect(trainersSlide.parentElement).toHaveClass("hero-slider__slide--active");
+    });
+
+    it("goes to previous slide when previous button is clicked", async () => {
+      const user = userEvent.setup();
+      render(<HeroSlider />);
+
+      const prevButton = screen.getByLabelText(/Previous slide/i);
+      await user.click(prevButton);
+
+      // Should now show Barbers (slide 9) as active
+      await waitFor(() => {
+        expect(screen.getByText("Barbers")).toBeInTheDocument();
+      });
+      const barbersSlide = screen.getByAltText("Barbers");
+      expect(barbersSlide.parentElement).toHaveClass("hero-slider__slide--active");
+    });
+
+    it("wraps from last slide to first when clicking next", async () => {
+      const user = userEvent.setup();
+      render(<HeroSlider />);
+
+      const prevButton = screen.getByLabelText(/Previous slide/i);
+      // Click previous to go to slide 9 (Barbers)
+      await user.click(prevButton);
+
+      await waitFor(() => {
+        expect(screen.getByText("Barbers")).toBeInTheDocument();
+      });
+
+      const nextButton = screen.getByLabelText(/Next slide/i);
+      // Click next to wrap to slide 1 (Life Coaches)
+      await user.click(nextButton);
+
+      await waitFor(() => {
+        expect(screen.getByText("Life Coaches")).toBeInTheDocument();
+      });
+      const lifecoachSlide = screen.getByAltText("Life Coaches");
+      expect(lifecoachSlide.parentElement).toHaveClass("hero-slider__slide--active");
+    });
+
+    it("wraps from first slide to last when clicking previous", async () => {
+      const user = userEvent.setup();
+      render(<HeroSlider />);
+
+      const prevButton = screen.getByLabelText(/Previous slide/i);
+      await user.click(prevButton);
+
+      // Should wrap to slide 9 (Barbers)
+      await waitFor(() => {
+        expect(screen.getByText("Barbers")).toBeInTheDocument();
+      });
+    });
+
+    it("updates arrow numbers after navigation", async () => {
+      const user = userEvent.setup();
+      render(<HeroSlider />);
+
+      const nextButton = screen.getByLabelText(/Next slide/i);
+      await user.click(nextButton);
+
+      // After clicking next, we're on slide 2
+      // prev should show 1, next should show 3
+      await waitFor(() => {
+        const prevButton = screen.getByLabelText(/Previous slide/i);
+        expect(prevButton).toHaveTextContent("1");
+        expect(nextButton).toHaveTextContent("3");
       });
     });
   });
 
-  describe("Auto-rotation", () => {
-    it("uses timers for auto-rotation", () => {
-      render(<HeroSlider />);
+  describe("Auto-advance", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
 
-      // Component should render with timing functionality
-      const dots = screen.getAllByRole("tab");
-      expect(dots[0]).toHaveAttribute("aria-selected", "true");
+    afterEach(() => {
+      vi.useRealTimers();
+    });
 
-      // Verify component has the structure needed for rotation
-      expect(dots.length).toBe(9);
+    it("automatically advances to next slide after 6 seconds", async () => {
+      const { rerender } = render(<HeroSlider />);
+
+      // Initially on slide 1 (Life Coaches)
+      expect(screen.getByText("Life Coaches")).toBeInTheDocument();
+
+      // Fast-forward 6 seconds
+      await vi.advanceTimersByTimeAsync(6000);
+      rerender(<HeroSlider />);
+
+      // Should now be on slide 2 (Personal Trainers)
+      expect(screen.getByText("Personal Trainers")).toBeInTheDocument();
+    });
+
+    it("continues auto-advancing through multiple slides", async () => {
+      const { rerender } = render(<HeroSlider />);
+
+      // Advance through 3 slides (18 seconds total)
+      await vi.advanceTimersByTimeAsync(18000);
+      rerender(<HeroSlider />);
+
+      // Should be on slide 4 (Massage Therapists)
+      expect(screen.getByText("Massage Therapists")).toBeInTheDocument();
+    });
+
+    it("wraps around from last slide to first during auto-advance", async () => {
+      const { rerender } = render(<HeroSlider />);
+
+      // Advance through all 9 slides to test wrap-around
+      await vi.advanceTimersByTimeAsync(54000); // 9 slides × 6 seconds
+      rerender(<HeroSlider />);
+
+      // Should wrap back to slide 1 (Life Coaches)
+      expect(screen.getByText("Life Coaches")).toBeInTheDocument();
     });
   });
 
   describe("Pause on Hover", () => {
-    it("has hover event listeners", () => {
+    it("has mouse enter and leave event handlers", () => {
       render(<HeroSlider />);
 
       const slider = screen.getByLabelText(
-        /hero slider showcasing different professions/i
+        /Gallery slider showcasing different professions/i
       );
 
-      // Component should be present and hoverable
+      // Component should be present and capable of receiving mouse events
+      expect(slider).toBeInTheDocument();
+      expect(slider).toHaveAttribute("aria-label");
+    });
+
+    it("slider is interactive and responds to mouse events", async () => {
+      const user = userEvent.setup();
+      render(<HeroSlider />);
+
+      const slider = screen.getByLabelText(
+        /Gallery slider showcasing different professions/i
+      );
+
+      // Verify slider can receive hover events
+      await user.hover(slider);
+      expect(slider).toBeInTheDocument();
+
+      await user.unhover(slider);
       expect(slider).toBeInTheDocument();
     });
   });
 
-  describe("Navigation Dots", () => {
-    it("renders clickable navigation dots", () => {
+  describe("Slide Info Display", () => {
+    it("updates title when slide changes", async () => {
+      const user = userEvent.setup();
       render(<HeroSlider />);
 
-      const dots = screen.getAllByRole("tab");
+      // Initially shows Life Coaches
+      expect(screen.getByText("Life Coaches")).toBeInTheDocument();
 
-      // All dots should be buttons
-      dots.forEach((dot) => {
-        expect(dot).toBeInTheDocument();
-        expect(dot.tagName).toBe("BUTTON");
+      const nextButton = screen.getByLabelText(/Next slide/i);
+      await user.click(nextButton);
+
+      // Should now show Personal Trainers
+      await waitFor(() => {
+        expect(screen.getByText("Personal Trainers")).toBeInTheDocument();
       });
+    });
+
+    it("displays the same description for all slides", () => {
+      render(<HeroSlider />);
+      expect(
+        screen.getByText("The scheduling platform that never misses a beat")
+      ).toBeInTheDocument();
     });
   });
 
   describe("Accessibility", () => {
-    it("has proper ARIA labels on slider", () => {
+    it("has proper ARIA label on slider container", () => {
       render(<HeroSlider />);
       const slider = screen.getByLabelText(
-        /hero slider showcasing different professions/i
+        /Gallery slider showcasing different professions/i
       );
-      expect(slider).toHaveAttribute("aria-live", "polite");
+      expect(slider).toHaveAttribute("aria-label");
     });
 
-    it("has proper ARIA labels on navigation dots", () => {
+    it("has proper ARIA labels on navigation buttons", () => {
       render(<HeroSlider />);
-      const dotsContainer = screen.getByRole("tablist");
-      expect(dotsContainer).toHaveAttribute("aria-label", "Slide navigation");
-    });
-
-    it("each dot has descriptive aria-label", () => {
-      render(<HeroSlider />);
-      const firstDot = screen.getByLabelText(/Go to slide 1: Life Coaches/i);
-      const secondDot = screen.getByLabelText(/Go to slide 2: Personal Trainers/i);
-
-      expect(firstDot).toBeInTheDocument();
-      expect(secondDot).toBeInTheDocument();
+      const prevButton = screen.getByLabelText(/Previous slide/i);
+      const nextButton = screen.getByLabelText(/Next slide/i);
+      expect(prevButton).toHaveAttribute("aria-label", "Previous slide");
+      expect(nextButton).toHaveAttribute("aria-label", "Next slide");
     });
 
     it("images have descriptive alt text", () => {
       render(<HeroSlider />);
-      expect(
-        screen.getByAltText(/Life Coaches using Clockwork scheduling platform/i)
-      ).toBeInTheDocument();
-      expect(
-        screen.getByAltText(/Personal Trainers using Clockwork scheduling platform/i)
-      ).toBeInTheDocument();
+      expect(screen.getByAltText("Life Coaches")).toBeInTheDocument();
+      expect(screen.getByAltText("Personal Trainers")).toBeInTheDocument();
+      expect(screen.getByAltText("Barbers")).toBeInTheDocument();
     });
   });
 
   describe("Content", () => {
-    it("displays profession-specific titles", () => {
+    it("displays all 9 profession titles through navigation", async () => {
+      const user = userEvent.setup();
       render(<HeroSlider />);
 
-      // Life coaches (first slide)
-      expect(screen.getByText(/life coaches/i)).toBeInTheDocument();
+      const professions = [
+        "Life Coaches",
+        "Personal Trainers",
+        "Yoga Teachers",
+        "Massage Therapists",
+        "Hair Stylists",
+        "Photographers",
+        "Art Teachers",
+        "Babysitters",
+        "Barbers",
+      ];
+
+      const nextButton = screen.getByLabelText(/Next slide/i);
+
+      // Check each profession
+      for (let i = 0; i < professions.length; i++) {
+        await waitFor(() => {
+          expect(screen.getByText(professions[i])).toBeInTheDocument();
+        });
+        if (i < professions.length - 1) {
+          await user.click(nextButton);
+        }
+      }
     });
 
-    it("highlights the profession name in title", () => {
+    it("renders images with correct paths", () => {
       render(<HeroSlider />);
-
-      const highlights = document.querySelectorAll(".hero-slider__highlight");
-      expect(highlights.length).toBeGreaterThan(0);
+      const lifecoachImage = screen.getByAltText("Life Coaches");
+      expect(lifecoachImage).toHaveAttribute("src", "/images/slider/lifecoach.png");
     });
   });
 });

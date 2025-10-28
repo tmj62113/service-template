@@ -63,12 +63,16 @@
   margin-bottom: var(--spacing-lg);
 }
 
+.hero-content .btn {
+  display: inline-block;
+  margin: 0;
+}
+
 /* =====================================
    FEATURES SECTION (Casewell Style)
    ===================================== */
 
 .features-section {
-  min-height: 100vh;
   background-color: var(--color-primary-light);
   padding: 3rem;
   display: flex;
@@ -79,7 +83,7 @@
 
 .features-full-intro {
   display: flex;
-  gap: 3.75rem; /* 60px */
+  gap: 2rem;
   align-items: center;
   justify-content: space-between;
 }
@@ -94,7 +98,7 @@
 .features-full-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 3.75rem; /* 60px */
+  gap: 2rem;
   width: 100%;
 }
 
@@ -103,7 +107,18 @@
   flex-direction: column;
   gap: var(--spacing-md);
   flex: 1;
-  min-width: 23.4375rem; /* 375px */
+  min-width: 14.68rem; /* 235px */
+  max-width: 25.9rem; /* 415px */
+  text-align: left;
+}
+
+/* Feature Icon */
+.feature-icon {
+  font-size: 4rem; /* 64px */
+  width: 4rem; /* 64px */
+  height: 4rem; /* 64px */
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
 }
 
 .features-full-card-content h3 {
@@ -133,6 +148,7 @@
   cursor: pointer;
   transition: opacity var(--transition-base);
   text-align: left;
+  align-self: flex-start;
 }
 
 .features-full-link:hover {

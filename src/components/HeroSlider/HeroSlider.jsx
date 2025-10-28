@@ -5,56 +5,56 @@ const slides = [
   {
     id: 1,
     image: "/images/slider/lifecoach.png",
-    title: "The scheduling platform that never misses a beat for life coaches",
-    profession: "Life Coaches",
+    title: "Life Coaches",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 2,
     image: "/images/slider/personal_trainer.png",
-    title: "The scheduling platform that never misses a beat for personal trainers",
-    profession: "Personal Trainers",
+    title: "Personal Trainers",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 3,
     image: "/images/slider/yoga_teacher.png",
-    title: "The scheduling platform that never misses a beat for yoga teachers",
-    profession: "Yoga Teachers",
+    title: "Yoga Teachers",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 4,
     image: "/images/slider/massage_therapist.png",
-    title: "The scheduling platform that never misses a beat for massage therapists",
-    profession: "Massage Therapists",
+    title: "Massage Therapists",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 5,
     image: "/images/slider/hair_stylist.png",
-    title: "The scheduling platform that never misses a beat for hair stylists",
-    profession: "Hair Stylists",
+    title: "Hair Stylists",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 6,
     image: "/images/slider/photographer.png",
-    title: "The scheduling platform that never misses a beat for photographers",
-    profession: "Photographers",
+    title: "Photographers",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 7,
     image: "/images/slider/artist_teaching.png",
-    title: "The scheduling platform that never misses a beat for art teachers",
-    profession: "Art Teachers",
+    title: "Art Teachers",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 8,
     image: "/images/slider/babysitter.png",
-    title: "The scheduling platform that never misses a beat for babysitters",
-    profession: "Babysitters",
+    title: "Babysitters",
+    description: "The scheduling platform that never misses a beat",
   },
   {
     id: 9,
     image: "/images/slider/barber.png",
-    title: "The scheduling platform that never misses a beat for barbers",
-    profession: "Barbers",
+    title: "Barbers",
+    description: "The scheduling platform that never misses a beat",
   },
 ];
 
@@ -62,15 +62,32 @@ export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  // Auto-advance slides
   useEffect(() => {
     if (isPaused) return;
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4000); // 4 seconds per slide
+    }, 6000); // 6 seconds per slide
 
     return () => clearInterval(interval);
   }, [isPaused]);
+
+  const goToPrevious = () => {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const getPreviousIndex = () => {
+    return currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
+  };
+
+  const getNextIndex = () => {
+    return (currentSlide + 1) % slides.length;
+  };
 
   const handleMouseEnter = () => {
     setIsPaused(true);
@@ -80,60 +97,72 @@ export default function HeroSlider() {
     setIsPaused(false);
   };
 
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-  };
-
   return (
     <div
       className="hero-slider"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      aria-label="Hero slider showcasing different professions"
-      aria-live="polite"
+      aria-label="Gallery slider showcasing different professions"
     >
+      {/* Previous Arrow */}
+      <button
+        className="hero-slider__arrow hero-slider__arrow--prev"
+        onClick={goToPrevious}
+        aria-label="Previous slide"
+      >
+        <span className="hero-slider__arrow-number">{getPreviousIndex() + 1}</span>
+      </button>
+
+      {/* Slider Track */}
       <div className="hero-slider__track">
-        {slides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`hero-slider__slide ${
-              index === currentSlide ? "hero-slider__slide--active" : ""
-            }`}
-            aria-hidden={index !== currentSlide}
-          >
-            <div className="hero-slider__image-container">
+        {slides.map((slide, index) => {
+          let className = "hero-slider__slide";
+          let shouldRender = false;
+
+          if (index === currentSlide) {
+            className += " hero-slider__slide--active";
+            shouldRender = true;
+          } else if (index === getPreviousIndex()) {
+            className += " hero-slider__slide--prev";
+            shouldRender = true;
+          } else if (index === getNextIndex()) {
+            className += " hero-slider__slide--next";
+            shouldRender = true;
+          }
+
+          // Only render visible slides (active, prev, next)
+          if (!shouldRender) {
+            return null;
+          }
+
+          return (
+            <div
+              key={slide.id}
+              className={className}
+            >
               <img
                 src={slide.image}
-                alt={`${slide.profession} using Clockwork scheduling platform`}
+                alt={slide.title}
                 className="hero-slider__image"
               />
             </div>
-            <div className="hero-slider__content">
-              <h2 className="hero-slider__title">
-                The scheduling platform that never misses a beat for{" "}
-                <span className="hero-slider__highlight">
-                  {slide.profession.toLowerCase()}
-                </span>
-              </h2>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Navigation Dots */}
-      <div className="hero-slider__dots" role="tablist" aria-label="Slide navigation">
-        {slides.map((slide, index) => (
-          <button
-            key={slide.id}
-            className={`hero-slider__dot ${
-              index === currentSlide ? "hero-slider__dot--active" : ""
-            }`}
-            onClick={() => goToSlide(index)}
-            role="tab"
-            aria-selected={index === currentSlide}
-            aria-label={`Go to slide ${index + 1}: ${slide.profession}`}
-          />
-        ))}
+      {/* Next Arrow */}
+      <button
+        className="hero-slider__arrow hero-slider__arrow--next"
+        onClick={goToNext}
+        aria-label="Next slide"
+      >
+        <span className="hero-slider__arrow-number">{getNextIndex() + 1}</span>
+      </button>
+
+      {/* Current Slide Info (Below Slider) */}
+      <div className="hero-slider__info">
+        <h3 className="hero-slider__title">{slides[currentSlide].title}</h3>
+        <p className="hero-slider__description">{slides[currentSlide].description}</p>
       </div>
     </div>
   );
