@@ -111,11 +111,12 @@
 
 /* Features Grid */
 .features-full-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: row;
   gap: 3.75rem; /* 60px */
   width: 100%;
-  max-width: 90rem; /* 1440px - constrain grid width */
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 /* Feature Card */
@@ -125,6 +126,8 @@
   gap: var(--spacing-md);
   border-top: 0.1875rem solid var(--color-border-dark); /* 3px divider */
   padding-top: var(--spacing-lg);
+  flex: 1; /* Equal width for all cards */
+  min-width: 0; /* Allow cards to shrink if needed */
 }
 
 .features-full-card-content h3 {
@@ -296,7 +299,7 @@
   }
 
   .features-full-grid {
-    grid-template-columns: 1fr; /* Single column on mobile */
+    flex-direction: column; /* Stack cards vertically on mobile */
     gap: 1.25rem;
   }
 
