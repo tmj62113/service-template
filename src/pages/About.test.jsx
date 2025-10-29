@@ -12,50 +12,73 @@ const renderAbout = () => {
 };
 
 describe('About', () => {
-  it('renders page title', () => {
+  it('renders page title with Clockwork brand', () => {
     renderAbout();
-    expect(screen.getByText(/About Mark J Peterson Art/i)).toBeInTheDocument();
+    expect(screen.getByText(/About Clockwork/i)).toBeInTheDocument();
   });
 
-  it('renders lead paragraph', () => {
+  it('renders hero section heading', () => {
     renderAbout();
     expect(
-      screen.getByText(
-        /We're passionate about bringing you the finest products with exceptional service/i
-      )
+      screen.getByText(/We believe running a service business shouldn't feel like juggling chaos/i)
     ).toBeInTheDocument();
   });
 
-  it('renders Our Story section', () => {
+  it('renders hero body paragraph', () => {
     renderAbout();
-    expect(screen.getByText('Our Story')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Every service professional knows the frustration/i)
+    ).toBeInTheDocument();
   });
 
-  it('renders Our Mission section', () => {
+  it('mentions Clockwork by name', () => {
     renderAbout();
-    expect(screen.getByText('Our Mission')).toBeInTheDocument();
+    expect(screen.getByText(/That's why we built Clockwork/i)).toBeInTheDocument();
   });
 
-  it('renders Why Choose Us section', () => {
+  it('renders What Makes Us Different section', () => {
     renderAbout();
-    expect(screen.getByText('Why Choose Us')).toBeInTheDocument();
+    expect(screen.getByText('What Makes Us Different')).toBeInTheDocument();
   });
 
-  it('renders all value items', () => {
+  it('renders all feature cards', () => {
     renderAbout();
-    expect(screen.getByText('Quality First')).toBeInTheDocument();
-    expect(screen.getByText('Customer Focused')).toBeInTheDocument();
-    expect(screen.getByText('Fast Shipping')).toBeInTheDocument();
-    expect(screen.getByText('Secure Shopping')).toBeInTheDocument();
+    expect(screen.getByText('Built for How You Actually Work')).toBeInTheDocument();
+    expect(screen.getByText('Simple by Design')).toBeInTheDocument();
+    expect(screen.getByText('Reliable as Time')).toBeInTheDocument();
+    expect(screen.getByText('Made for Growth')).toBeInTheDocument();
   });
 
-  it('renders Our Commitment section', () => {
+  it('renders Who We Serve section', () => {
     renderAbout();
-    expect(screen.getByText('Our Commitment')).toBeInTheDocument();
+    expect(screen.getByText('Who We Serve')).toBeInTheDocument();
   });
 
-  it('mentions sustainability', () => {
+  it('renders service type categories', () => {
     renderAbout();
-    expect(screen.getByText(/sustainability/i)).toBeInTheDocument();
+    expect(screen.getByText('Beauty & Wellness')).toBeInTheDocument();
+    expect(screen.getByText('Health & Fitness')).toBeInTheDocument();
+    expect(screen.getByText('Professional Services')).toBeInTheDocument();
+    expect(screen.getByText('Home Services')).toBeInTheDocument();
+    expect(screen.getByText('Creative Services')).toBeInTheDocument();
+  });
+
+  it('renders CTA section', () => {
+    renderAbout();
+    expect(screen.getByText(/Ready to reclaim your time/i)).toBeInTheDocument();
+  });
+
+  it('renders Browse Services link', () => {
+    renderAbout();
+    const servicesLink = screen.getByText('Browse Services');
+    expect(servicesLink).toBeInTheDocument();
+    expect(servicesLink.closest('a')).toHaveAttribute('href', '/services');
+  });
+
+  it('renders Contact Us link', () => {
+    renderAbout();
+    const contactLink = screen.getByText('Contact Us');
+    expect(contactLink).toBeInTheDocument();
+    expect(contactLink.closest('a')).toHaveAttribute('href', '/contact');
   });
 });

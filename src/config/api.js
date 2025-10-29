@@ -29,8 +29,23 @@ export const API_ENDPOINTS = {
   AUTH_LOGIN: '/api/auth/login',
   AUTH_LOGOUT: '/api/auth/logout',
 
-  // Products
-  PRODUCTS: '/api/products',
+  // Services
+  SERVICES: '/api/services',
+  SERVICES_BY_ID: (id) => `/api/services/${id}`,
+
+  // Staff
+  STAFF: '/api/staff',
+  STAFF_BY_ID: (id) => `/api/staff/${id}`,
+
+  // Bookings
+  BOOKINGS: '/api/bookings',
+  BOOKINGS_BY_ID: (id) => `/api/bookings/${id}`,
+  RECURRING_BOOKINGS: '/api/bookings/recurring',
+
+  // Availability
+  AVAILABILITY: '/api/availability',
+  AVAILABILITY_SLOTS: '/api/availability/slots',
+  AVAILABILITY_STAFF: (staffId) => `/api/availability/staff/${staffId}`,
 
   // Messages
   MESSAGES: '/api/messages',
@@ -46,7 +61,7 @@ export const API_ENDPOINTS = {
   AUDIT_LOGS_STATS: '/api/audit-logs/stats',
   AUDIT_LOGS_SECURITY: '/api/audit-logs/security-events',
 
-  // Checkout
+  // Checkout & Payment
   CREATE_CHECKOUT: '/api/create-checkout-session',
 };
 

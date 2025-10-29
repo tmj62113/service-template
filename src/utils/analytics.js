@@ -98,7 +98,7 @@ export function trackEvent(category, action, label = null, value = null) {
 }
 
 /**
- * Track an e-commerce transaction
+ * Track a booking transaction
  * Only tracks if user has consented and analytics is initialized
  * @param {Object} transaction - Transaction data
  */
@@ -120,25 +120,49 @@ export function trackPurchase(transaction) {
 }
 
 /**
- * Track when a user adds an item to cart
- * @param {Object} item - Item data (name, price, etc.)
+ * Track when a user starts booking a service
+ * @param {Object} service - Service data (name, price, etc.)
  */
-export function trackAddToCart(item) {
+export function trackServiceBooking(service) {
   if (!isInitialized || !hasConsentFor('analytics')) {
     return;
   }
 
   try {
-    ReactGA.gtag('event', 'add_to_cart', {
+    ReactGA.gtag('event', 'begin_checkout', {
       items: [{
-        item_id: item.id,
-        item_name: item.name,
-        price: item.price,
-        quantity: item.quantity || 1,
+        item_id: service.id,
+        item_name: service.name,
+        item_category: service.category,
+        price: service.price,
+        quantity: 1,
       }],
     });
   } catch (error) {
-    console.error('[Analytics] Failed to track add to cart:', error);
+    console.error('[Analytics] Failed to track service booking:', error);
+  }
+}
+
+/**
+ * Track when a user views a service detail page
+ * @param {Object} service - Service data
+ */
+export function trackServiceView(service) {
+  if (!isInitialized || !hasConsentFor('analytics')) {
+    return;
+  }
+
+  try {
+    ReactGA.gtag('event', 'view_item', {
+      items: [{
+        item_id: service.id,
+        item_name: service.name,
+        item_category: service.category,
+        price: service.price,
+      }],
+    });
+  } catch (error) {
+    console.error('[Analytics] Failed to track service view:', error);
   }
 }
 

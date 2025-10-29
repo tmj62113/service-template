@@ -6,8 +6,8 @@ export default function AdminSearch() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const [results, setResults] = useState({
-    products: [],
-    orders: [],
+    services: [],
+    bookings: [],
     customers: [],
     messages: []
   });
@@ -24,41 +24,41 @@ export default function AdminSearch() {
   const searchAll = async (searchTerm) => {
     setLoading(true);
     try {
-      const [productsRes, ordersRes, customersRes, messagesRes] = await Promise.all([
-        fetch(getApiUrl('/api/products'), { credentials: 'include' }),
-        fetch(getApiUrl('/api/orders'), { credentials: 'include' }),
+      const [servicesRes, bookingsRes, customersRes, messagesRes] = await Promise.all([
+        fetch(getApiUrl('/api/services'), { credentials: 'include' }),
+        fetch(getApiUrl('/api/bookings'), { credentials: 'include' }),
         fetch(getApiUrl('/api/customers'), { credentials: 'include' }),
         fetch(getApiUrl('/api/messages'), { credentials: 'include' })
       ]);
 
-      const [productsData, ordersData, customersData, messagesData] = await Promise.all([
-        productsRes.json(),
-        ordersRes.json(),
-        customersRes.json(),
+      const [servicesData, bookingsData, customersData, messagesData] = await Promise.all([
+        servicesRes.json(),
+        bookingsRes.json(),
+        customersData.json(),
         messagesRes.json()
       ]);
 
       const term = searchTerm.toLowerCase();
 
-      // Filter products
-      const products = (productsData.products || []).filter(p =>
-        p.name.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term) ||
-        p._id.slice(-8).toUpperCase().includes(term.toUpperCase())
+      // Filter services
+      const services = (servicesData.services || []).filter(s =>
+        s.name.toLowerCase().includes(term) ||
+        s.category.toLowerCase().includes(term) ||
+        s._id.slice(-8).toUpperCase().includes(term.toUpperCase())
       );
 
-      // Filter orders
-      const orders = (ordersData.orders || []).filter(o => {
-        const orderId = o._id.slice(-8).toUpperCase();
+      // Filter bookings
+      const bookings = (bookingsData.bookings || []).filter(b => {
+        const bookingId = b._id.slice(-8).toUpperCase();
         const searchUpper = term.toUpperCase();
-        // Remove "ORD-" prefix if present
-        const searchWithoutPrefix = searchUpper.replace(/^ORD-/, '');
+        // Remove "BKG-" prefix if present
+        const searchWithoutPrefix = searchUpper.replace(/^BKG-/, '');
 
         return (
-          orderId.includes(searchWithoutPrefix) ||
-          o._id.toUpperCase().includes(searchWithoutPrefix) ||
-          o.customerEmail?.toLowerCase().includes(term) ||
-          o.status?.toLowerCase().includes(term)
+          bookingId.includes(searchWithoutPrefix) ||
+          b._id.toUpperCase().includes(searchWithoutPrefix) ||
+          b.clientInfo?.email?.toLowerCase().includes(term) ||
+          b.status?.toLowerCase().includes(term)
         );
       });
 
@@ -77,7 +77,7 @@ export default function AdminSearch() {
         m.message?.toLowerCase().includes(term)
       );
 
-      setResults({ products, orders, customers, messages });
+      setResults({ services, bookings, customers, messages });
     } catch (error) {
       console.error('Search error:', error);
     } finally {
@@ -104,7 +104,7 @@ export default function AdminSearch() {
     return (
       <div className="admin-search">
         <h2>Search</h2>
-        <p>Enter a search term in the search box above to find products, orders, customers, and messages.</p>
+        <p>Enter a search term in the search box above to find services, bookings, customers, and messages.</p>
       </div>
     );
   }
@@ -113,7 +113,7 @@ export default function AdminSearch() {
     return <div className="loading">Searching...</div>;
   }
 
-  const totalResults = results.products.length + results.orders.length + results.customers.length + results.messages.length;
+  const totalResults = results.services.length + results.bookings.length + results.customers.length + results.messages.length;
 
   return (
     <div className="admin-search">
@@ -128,22 +128,22 @@ export default function AdminSearch() {
         </div>
       )}
 
-      {results.products.length > 0 && (
+      {results.services.length > 0 && (
         <div className="search-section">
-          <h3>Products ({results.products.length})</h3>
+          <h3>Services ({results.services.length})</h3>
           <div className="results-list">
-            {results.products.map(product => (
-              <Link to={`/admin/products?productId=${product._id}`} key={product._id} className="result-item">
+            {results.services.map(service => (
+              <Link to={`/admin/services?serviceId=${service._id}`} key={service._id} className="result-item">
                 <div className="result-icon">
-                  <span className="material-symbols-outlined">inventory_2</span>
+                  <span className="material-symbols-outlined">schedule</span>
                 </div>
                 <div className="result-content">
-                  <h4>{product.name}</h4>
-                  <p>{product.category} • {formatCurrency(product.price)} • Stock: {product.stock}</p>
+                  <h4>{service.name}</h4>
+                  <p>{service.category} • {formatCurrency(service.price)} • {service.duration} min</p>
                 </div>
                 <div className="result-meta">
-                  <span className={`status-badge status-${product.status.toLowerCase().replace(' ', '-')}`}>
-                    {product.status}
+                  <span className={`status-badge status-${service.isActive ? 'active' : 'inactive'}`}>
+                    {service.isActive ? 'Active' : 'Inactive'}
                   </span>
                 </div>
               </Link>
@@ -152,23 +152,23 @@ export default function AdminSearch() {
         </div>
       )}
 
-      {results.orders.length > 0 && (
+      {results.bookings.length > 0 && (
         <div className="search-section">
-          <h3>Orders ({results.orders.length})</h3>
+          <h3>Bookings ({results.bookings.length})</h3>
           <div className="results-list">
-            {results.orders.map(order => (
-              <Link to={`/admin/orders/${order._id}`} key={order._id} className="result-item">
+            {results.bookings.map(booking => (
+              <Link to={`/admin/bookings/${booking._id}`} key={booking._id} className="result-item">
                 <div className="result-icon">
-                  <span className="material-symbols-outlined">description</span>
+                  <span className="material-symbols-outlined">event</span>
                 </div>
                 <div className="result-content">
-                  <h4>Order #{order._id.slice(-8).toUpperCase()}</h4>
-                  <p>{order.customerEmail} • {formatDate(order.createdAt)}</p>
+                  <h4>Booking #{booking._id.slice(-8).toUpperCase()}</h4>
+                  <p>{booking.clientInfo?.email} • {formatDate(booking.createdAt)}</p>
                 </div>
                 <div className="result-meta">
-                  <span className="result-amount">{formatCurrency(order.total)}</span>
-                  <span className={`status-badge status-${order.status?.toLowerCase()}`}>
-                    {order.status}
+                  <span className="result-amount">{formatCurrency(booking.amount / 100)}</span>
+                  <span className={`status-badge status-${booking.status?.toLowerCase()}`}>
+                    {booking.status}
                   </span>
                 </div>
               </Link>
@@ -191,7 +191,7 @@ export default function AdminSearch() {
                   <p>{customer.email}</p>
                 </div>
                 <div className="result-meta">
-                  <span className="result-stat">{customer.totalOrders || 0} orders</span>
+                  <span className="result-stat">{customer.totalBookings || 0} bookings</span>
                 </div>
               </Link>
             ))}
