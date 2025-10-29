@@ -49,7 +49,7 @@ describe('Header', () => {
     renderHeader();
     const logo = screen.getByAltText('Clockwork');
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute('src', '/clockwork_logo.png');
+    expect(logo).toHaveAttribute('src', '/clockwork_logo_inverse.png');
   });
 
   it('renders navigation links', () => {

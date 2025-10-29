@@ -27,12 +27,15 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="hero-section section-container--full">
-        <img
-          src="/images/hero/home_hero.png"
-          alt="Professional workspace"
-          className="hero-image"
-        />
+        <div className="hero-media" aria-hidden="true">
+          <img
+            src="/images/hero/home_hero.png"
+            alt=""
+            className="hero-image"
+          />
+        </div>
         <div className="hero-content">
+          <span className="hero-kicker">Modern operations for service brands</span>
           <h1>Everything you need to launch and grow</h1>
           <p>
             Clockwork gives you a fully customizable website with booking and
