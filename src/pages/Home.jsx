@@ -40,7 +40,7 @@ export default function Home() {
             <span className="no-wrap">One platform.</span> Any service business.
           </p>
           <button
-            className="btn btn-primary btn-lg"
+            className="btn btn-secondary"
             onClick={() => navigate("/services")}
           >
             Work with us
@@ -70,7 +70,7 @@ export default function Home() {
               </p>
             </div>
             <button
-              className="features-full-link"
+              className="btn btn-tertiary"
               onClick={() => navigate("/services")}
             >
               Read more
@@ -85,7 +85,7 @@ export default function Home() {
               <p>Fast quoting, accurate deliveries, and less back-and-forth.</p>
             </div>
             <button
-              className="features-full-link"
+              className="btn btn-tertiary"
               onClick={() => navigate("/services")}
             >
               Read more
@@ -105,7 +105,7 @@ export default function Home() {
               </p>
             </div>
             <button
-              className="features-full-link"
+              className="btn btn-tertiary"
               onClick={() => navigate("/services")}
             >
               Read more
@@ -124,7 +124,7 @@ export default function Home() {
               </p>
             </div>
             <button
-              className="features-full-link"
+              className="btn btn-tertiary"
               onClick={() => navigate("/services")}
             >
               Read more
@@ -143,7 +143,7 @@ export default function Home() {
               </p>
             </div>
             <button
-              className="features-full-link"
+              className="btn btn-tertiary"
               onClick={() => navigate("/services")}
             >
               Read more

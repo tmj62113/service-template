@@ -13,12 +13,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    to bottom,
-    rgba(16, 16, 20, 0.9) 0%,
-    rgba(16, 16, 20, 0.6) 50%,
-    rgba(16, 16, 20, 0) 100%
-  );
+  background: transparent;
 }
 
 .header-content {
@@ -100,7 +95,7 @@
   padding: 0.625rem; /* 10px - matches Casewell exactly */
   font-size: var(--font-size-base); /* 16px */
   font-weight: var(--font-weight-normal); /* 400 */
-  color: var(--color-primary-light); /* Very light beige text */
+  color: var(--color-text);
   text-decoration: none;
   text-transform: uppercase;
   transition: opacity var(--transition-base);

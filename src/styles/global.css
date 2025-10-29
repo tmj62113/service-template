@@ -120,6 +120,8 @@ ol {
   --font-size-5xl: 3rem; /* 48px */
 
   /* Font Weights */
+  --font-weight-lightest: 200;
+  --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -205,7 +207,6 @@ h4,
 h5,
 h6 {
   font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   margin-bottom: var(--spacing-md);
   color: var(--color-text);
@@ -213,6 +214,7 @@ h6 {
 
 h1 {
   font-size: var(--font-size-3xl); /* 30px on mobile */
+  font-weight: var(--font-weight-normal);
 }
 
 h2 {
