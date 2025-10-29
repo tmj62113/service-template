@@ -90,6 +90,13 @@ ol {
   --color-border: #e1dbcb;
   --color-border-dark: #d4ceba;
 
+  /* RGB Channels for Alpha Transparency */
+  /* Use these with rgba() for colors that need transparency */
+  --rgb-primary: 225, 219, 203; /* #e1dbcb */
+  --rgb-primary-light: 242, 240, 234; /* #f2f0ea */
+  --rgb-secondary: 16, 16, 20; /* #101014 */
+  --rgb-black: 0, 0, 0;
+
   /* Spacing Scale (rem based on 16px) */
   --spacing-xs: 0.25rem; /* 4px */
   --spacing-sm: 0.5rem; /* 8px */

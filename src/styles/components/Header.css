@@ -95,13 +95,13 @@
   padding: 0.625rem; /* 10px */
   font-size: var(--font-size-lg); /* 18px */
   font-weight: var(--font-weight-normal);
-  color: rgba(225, 219, 203, 0.72);
+  color: rgba(var(--rgb-primary), 0.72);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   transition: color var(--transition-base), opacity var(--transition-base);
   white-space: nowrap;
-  text-shadow: 0 0.125rem 0.25rem rgba(16, 16, 20, 0.6);
+  text-shadow: 0 0.125rem 0.25rem rgba(var(--rgb-secondary), 0.6);
   position: relative;
 }
 
@@ -111,7 +111,7 @@
 }
 
 .nav-content a:focus-visible {
-  outline: 0.125rem solid rgba(225, 219, 203, 0.6);
+  outline: 0.125rem solid rgba(var(--rgb-primary), 0.6);
   outline-offset: 0.125rem;
   border-radius: var(--radius-sm);
 }
@@ -154,7 +154,7 @@
   gap: var(--spacing-sm);
   font-size: var(--font-size-xs);
   color: var(--color-primary-light);
-  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.8); /* Shadow for readability over images */
+  text-shadow: 0 0.125rem 0.25rem rgba(var(--rgb-black), 0.8); /* Shadow for readability over images */
 }
 
 .user-menu button {

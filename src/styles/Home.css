@@ -21,7 +21,13 @@
   color: var(--color-primary-light);
   background-color: var(--color-secondary);
   overflow: hidden;
-  z-index: 0; /* Ensure media/overlay stay within a local stacking context */
+  isolation: isolate; /* Creates new stacking context */
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .hero-section::after {
@@ -30,18 +36,12 @@
   inset: 0;
   background: linear-gradient(
     128deg,
-    rgba(16, 16, 20, 0.78) 0%,
-    rgba(16, 16, 20, 0.55) 55%,
-    rgba(16, 16, 20, 0.35) 100%
+    rgba(var(--rgb-secondary), 0.78) 0%,
+    rgba(var(--rgb-secondary), 0.55) 55%,
+    rgba(var(--rgb-secondary), 0.35) 100%
   );
   pointer-events: none;
-  z-index: -1;
-}
-
-.hero-media {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
+  z-index: 1;
 }
 
 .hero-image {
@@ -53,7 +53,7 @@
 
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   max-width: min(32rem, 90vw);
   display: flex;
   flex-direction: column;
@@ -103,7 +103,7 @@
 .hero-content .btn:hover,
 .hero-content .btn:focus-visible {
   border-color: var(--color-primary-light);
-  background-color: rgba(225, 219, 203, 0.9);
+  background-color: rgba(var(--rgb-primary), 0.9);
 }
 
 /* =====================================

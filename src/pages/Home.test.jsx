@@ -92,4 +92,30 @@ describe('Home', () => {
     // Should have 5 Read more buttons (one per feature card)
     expect(readMoreButtons.length).toBe(5);
   });
+
+  it('renders hero kicker text', () => {
+    renderHome();
+    expect(screen.getByText(/modern operations for service brands/i)).toBeInTheDocument();
+  });
+
+  it('renders hero content in proper hierarchy', () => {
+    renderHome();
+    const kicker = screen.getByText(/modern operations for service brands/i);
+    const heading = screen.getByRole('heading', { level: 1, name: /everything you need to launch and grow/i });
+
+    expect(kicker).toBeInTheDocument();
+    expect(heading).toBeInTheDocument();
+  });
+
+  it('hides decorative hero media from screen readers', () => {
+    const { container } = renderHome();
+    const heroMedia = container.querySelector('.hero-media');
+    expect(heroMedia).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('decorative hero image has empty alt text', () => {
+    const { container } = renderHome();
+    const heroImage = container.querySelector('.hero-image');
+    expect(heroImage).toHaveAttribute('alt', '');
+  });
 });
