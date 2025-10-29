@@ -16,8 +16,8 @@ export default function NotFound() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // Navigate to products page with search query
-      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      // Navigate to services page with search query
+      navigate(`/services?search=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
@@ -30,22 +30,22 @@ export default function NotFound() {
       path: '/'
     },
     {
-      icon: 'palette',
-      label: 'Browse Artwork',
-      description: 'Explore our full collection',
-      path: '/products'
+      icon: 'schedule',
+      label: 'Browse Services',
+      description: 'Explore our service offerings',
+      path: '/services'
     },
     {
       icon: 'info',
-      label: 'About the Artist',
-      description: 'Learn more about Mark J Peterson',
+      label: 'About Us',
+      description: 'Learn more about Clockwork',
       path: '/about'
     },
     {
       icon: 'mail',
       label: 'Contact Us',
       description: 'Get in touch with questions',
-      path: '/#contact'
+      path: '/contact'
     }
   ];
 
@@ -53,7 +53,7 @@ export default function NotFound() {
     <div className="not-found section-container">
       <SEO
         title="Page Not Found"
-        description="The page you're looking for could not be found. Browse our artwork collection or return to the homepage."
+        description="The page you're looking for could not be found. Browse our services or return to the homepage."
       />
 
       <div className="not-found__container container container--sm">
@@ -77,7 +77,7 @@ export default function NotFound() {
         {/* Search box */}
         <div className="not-found__search">
           <h2 className="not-found__search-title">
-            Search for artwork
+            Search for services
           </h2>
           <form onSubmit={handleSearch} className="not-found__search-form">
             <div className="not-found__search-input-wrapper">
@@ -87,10 +87,10 @@ export default function NotFound() {
               <input
                 type="text"
                 className="not-found__search-input"
-                placeholder="Search by title, style, or theme..."
+                placeholder="Search by service name or category..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search for artwork"
+                aria-label="Search for services"
               />
             </div>
             <button

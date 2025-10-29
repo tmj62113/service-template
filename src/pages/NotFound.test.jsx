@@ -42,9 +42,9 @@ describe('NotFound', () => {
     expect(screen.getByText(/We couldn't find the page you're looking for/i)).toBeInTheDocument();
   });
 
-  it('renders search input for artwork', () => {
+  it('renders search input for services', () => {
     renderNotFound();
-    const searchInput = screen.getByPlaceholderText(/search by title, style, or theme/i);
+    const searchInput = screen.getByPlaceholderText(/search by service name or category/i);
     expect(searchInput).toBeInTheDocument();
   });
 
@@ -64,46 +64,46 @@ describe('NotFound', () => {
     const user = userEvent.setup();
     renderNotFound();
 
-    const searchInput = screen.getByPlaceholderText(/search by title, style, or theme/i);
+    const searchInput = screen.getByPlaceholderText(/search by service name or category/i);
     const searchButton = screen.getByRole('button', { name: /^search$/i });
 
-    await user.type(searchInput, 'steampunk');
+    await user.type(searchInput, 'coaching');
 
     expect(searchButton).not.toBeDisabled();
   });
 
-  it('navigates to products page with search query on form submit', async () => {
+  it('navigates to services page with search query on form submit', async () => {
     const user = userEvent.setup();
     renderNotFound();
 
-    const searchInput = screen.getByPlaceholderText(/search by title, style, or theme/i);
+    const searchInput = screen.getByPlaceholderText(/search by service name or category/i);
     const searchButton = screen.getByRole('button', { name: /^search$/i });
 
-    await user.type(searchInput, 'victorian art');
+    await user.type(searchInput, 'life coaching');
     await user.click(searchButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/products?search=victorian%20art');
+    expect(mockNavigate).toHaveBeenCalledWith('/services?search=life%20coaching');
   });
 
   it('trims whitespace from search query', async () => {
     const user = userEvent.setup();
     renderNotFound();
 
-    const searchInput = screen.getByPlaceholderText(/search by title, style, or theme/i);
+    const searchInput = screen.getByPlaceholderText(/search by service name or category/i);
     const searchButton = screen.getByRole('button', { name: /^search$/i });
 
-    await user.type(searchInput, '  brass  ');
+    await user.type(searchInput, '  tutoring  ');
     await user.click(searchButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/products?search=brass');
+    expect(mockNavigate).toHaveBeenCalledWith('/services?search=tutoring');
   });
 
   it('renders all suggestion cards', () => {
     renderNotFound();
 
     expect(screen.getByText('Homepage')).toBeInTheDocument();
-    expect(screen.getByText('Browse Artwork')).toBeInTheDocument();
-    expect(screen.getByText('About the Artist')).toBeInTheDocument();
+    expect(screen.getByText('Browse Services')).toBeInTheDocument();
+    expect(screen.getByText('About Us')).toBeInTheDocument();
     expect(screen.getByText('Contact Us')).toBeInTheDocument();
   });
 
@@ -111,22 +111,22 @@ describe('NotFound', () => {
     renderNotFound();
 
     const homepageLink = screen.getByRole('link', { name: /navigate to homepage/i });
-    const browseLink = screen.getByRole('link', { name: /navigate to browse artwork/i });
-    const aboutLink = screen.getByRole('link', { name: /navigate to about the artist/i });
+    const browseLink = screen.getByRole('link', { name: /navigate to browse services/i });
+    const aboutLink = screen.getByRole('link', { name: /navigate to about us/i });
     const contactLink = screen.getByRole('link', { name: /navigate to contact us/i });
 
     expect(homepageLink).toHaveAttribute('href', '/');
-    expect(browseLink).toHaveAttribute('href', '/products');
+    expect(browseLink).toHaveAttribute('href', '/services');
     expect(aboutLink).toHaveAttribute('href', '/about');
-    expect(contactLink).toHaveAttribute('href', '/#contact');
+    expect(contactLink).toHaveAttribute('href', '/contact');
   });
 
   it('renders suggestion descriptions', () => {
     renderNotFound();
 
     expect(screen.getByText('Start from the beginning')).toBeInTheDocument();
-    expect(screen.getByText('Explore our full collection')).toBeInTheDocument();
-    expect(screen.getByText('Learn more about Mark J Peterson')).toBeInTheDocument();
+    expect(screen.getByText('Explore our service offerings')).toBeInTheDocument();
+    expect(screen.getByText('Learn more about Clockwork')).toBeInTheDocument();
     expect(screen.getByText('Get in touch with questions')).toBeInTheDocument();
   });
 
@@ -150,7 +150,7 @@ describe('NotFound', () => {
     renderNotFound();
 
     const mainHeading = screen.getByRole('heading', { level: 1, name: /page not found/i });
-    const searchHeading = screen.getByRole('heading', { level: 2, name: /search for artwork/i });
+    const searchHeading = screen.getByRole('heading', { level: 2, name: /search for services/i });
     const suggestionsHeading = screen.getByRole('heading', { level: 2, name: /where would you like to go/i });
 
     expect(mainHeading).toBeInTheDocument();
@@ -161,7 +161,7 @@ describe('NotFound', () => {
   it('has proper ARIA labels for accessibility', () => {
     renderNotFound();
 
-    expect(screen.getByLabelText(/search for artwork/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/search for services/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /go back to previous page/i })).toBeInTheDocument();
   });
 
@@ -175,7 +175,7 @@ describe('NotFound', () => {
     renderNotFound();
 
     expect(screen.getByText('home')).toBeInTheDocument();
-    expect(screen.getByText('palette')).toBeInTheDocument();
+    expect(screen.getByText('schedule')).toBeInTheDocument();
     expect(screen.getByText('info')).toBeInTheDocument();
     expect(screen.getByText('mail')).toBeInTheDocument();
   });
@@ -184,10 +184,10 @@ describe('NotFound', () => {
     const user = userEvent.setup();
     renderNotFound();
 
-    const searchInput = screen.getByPlaceholderText(/search by title, style, or theme/i);
-    await user.type(searchInput, 'copper artwork');
+    const searchInput = screen.getByPlaceholderText(/search by service name or category/i);
+    await user.type(searchInput, 'personal training');
 
-    expect(searchInput).toHaveValue('copper artwork');
+    expect(searchInput).toHaveValue('personal training');
   });
 
   it('maintains proper component structure', () => {

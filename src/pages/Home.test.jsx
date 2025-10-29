@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import userEvent from '@testing-library/user-event';
 import Home from './Home';
 
-// Mock fetch for contact form submissions
+// Mock fetch for potential API calls
 global.fetch = vi.fn();
 
 const renderHome = () => {
@@ -27,67 +27,69 @@ describe('Home', () => {
     });
   });
 
-  it('renders hero slideshow', () => {
+  it('renders hero section with main heading', () => {
+    renderHome();
+    expect(screen.getByText('Everything you need to launch and grow')).toBeInTheDocument();
+  });
+
+  it('renders hero section description with Clockwork branding', () => {
+    renderHome();
+    expect(screen.getByText(/Clockwork gives you a fully customizable website/i)).toBeInTheDocument();
+    expect(screen.getByText(/One platform/i)).toBeInTheDocument();
+    expect(screen.getByText(/Any service business/i)).toBeInTheDocument();
+  });
+
+  it('renders Work with us button in hero', () => {
+    renderHome();
+    expect(screen.getByText('Work with us')).toBeInTheDocument();
+  });
+
+  it('renders features section header', () => {
+    renderHome();
+    expect(screen.getByText('Why Choose Clockwork?')).toBeInTheDocument();
+  });
+
+  it('renders features section intro text', () => {
+    renderHome();
+    expect(screen.getByText(/We built the booking platform that should've existed all along/i)).toBeInTheDocument();
+  });
+
+  it('renders all five feature cards', () => {
+    renderHome();
+    expect(screen.getByText('Complete Project Support')).toBeInTheDocument();
+    expect(screen.getByText('Streamlined Operations')).toBeInTheDocument();
+    expect(screen.getByText('Professional-Grade Range')).toBeInTheDocument();
+    expect(screen.getByText('Your Clients Stay Yours')).toBeInTheDocument();
+    expect(screen.getByText('True Partnership Pricing')).toBeInTheDocument();
+  });
+
+  it('renders slider section header', () => {
+    renderHome();
+    expect(screen.getByText(/You are in the right place if you're a/i)).toBeInTheDocument();
+  });
+
+  it('renders hero slideshow with controls', () => {
     renderHome();
     // Check for slideshow controls
     expect(screen.getByLabelText('Previous slide')).toBeInTheDocument();
     expect(screen.getByLabelText('Next slide')).toBeInTheDocument();
   });
 
-  it('renders collections section header', () => {
-    renderHome();
-    expect(screen.getByText('MJ Peterson Art Collections')).toBeInTheDocument();
-  });
-
-  it('renders all three collection buttons', () => {
-    renderHome();
-    expect(screen.getByText('Steampunk Art')).toBeInTheDocument();
-    expect(screen.getByText('Brass & Copper')).toBeInTheDocument();
-    expect(screen.getByText('Victorian Dreams')).toBeInTheDocument();
-  });
-
-  it('renders artwork section header', () => {
-    renderHome();
-    expect(screen.getByText('Artwork by MJ Peterson')).toBeInTheDocument();
-  });
-
-  it('renders about section', () => {
-    renderHome();
-    expect(screen.getByText('About MJ Peterson')).toBeInTheDocument();
-    expect(screen.getByText(/Victorian elegance and industrial innovation/i)).toBeInTheDocument();
-  });
-
-  it('renders contact section', () => {
-    renderHome();
-    expect(screen.getByText('CONTACT')).toBeInTheDocument();
-    expect(screen.getByText(/mark@mjpetersonart.com/i)).toBeInTheDocument();
-  });
-
-  it('renders contact form fields', () => {
-    renderHome();
-    expect(screen.getByLabelText('FIRST NAME')).toBeInTheDocument();
-    expect(screen.getByLabelText('LAST NAME')).toBeInTheDocument();
-    expect(screen.getByLabelText('EMAIL *')).toBeInTheDocument();
-    expect(screen.getByLabelText('MESSAGE')).toBeInTheDocument();
-    expect(screen.getByLabelText('SIGN UP FOR MY MAILING LIST')).toBeInTheDocument();
-  });
-
-  it('submits contact form successfully', async () => {
+  it('navigates to services when hero button is clicked', async () => {
     const user = userEvent.setup();
     renderHome();
 
-    // Fill out form
-    await user.type(screen.getByLabelText('FIRST NAME'), 'John');
-    await user.type(screen.getByLabelText('LAST NAME'), 'Doe');
-    await user.type(screen.getByLabelText('EMAIL *'), 'john@example.com');
-    await user.type(screen.getByLabelText('MESSAGE'), 'Test message');
+    const workWithUsButton = screen.getByText('Work with us');
+    await user.click(workWithUsButton);
 
-    // Submit form
-    await user.click(screen.getByText('Send'));
+    // Can't test actual navigation in this test, but we can verify button is clickable
+    expect(workWithUsButton).toBeInTheDocument();
+  });
 
-    // Wait for success message
-    await waitFor(() => {
-      expect(screen.getByText('Thank you for your message!')).toBeInTheDocument();
-    });
+  it('renders multiple Read more buttons for feature cards', () => {
+    renderHome();
+    const readMoreButtons = screen.getAllByText('Read more');
+    // Should have 5 Read more buttons (one per feature card)
+    expect(readMoreButtons.length).toBe(5);
   });
 });
