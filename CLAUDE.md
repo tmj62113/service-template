@@ -4,17 +4,61 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A **service booking and appointment scheduling platform** designed for consulting and coaching businesses. Built on top of the e-commerce template, adapted for service-based businesses with comprehensive scheduling capabilities.
+A **flexible service booking and appointment scheduling platform** for any service-based business. Built on top of an e-commerce template, this system provides custom websites with comprehensive booking, payment processing, and scheduling capabilities.
+
+**Use Cases:**
+- Professional services (consulting, coaching, legal, accounting)
+- Health & wellness (fitness training, therapy, spa services, medical appointments)
+- Personal services (hair salons, barbershops, personal styling)
+- Creative services (photography, videography, design consultations)
+- Education & tutoring (music lessons, language tutoring, test prep)
+- Home services (home inspections, appraisals, installations)
+- Any appointment-based business requiring scheduling and payments
 
 **Key Features:**
-- Service catalog (instead of product catalog)
+- Service catalog with flexible categorization
 - Calendar-based booking with availability management
-- Staff/consultant assignment
-- Multiple service durations
-- Recurring appointments
-- Stripe payment processing
-- Email notifications and reminders
-- Admin dashboard for managing bookings, services, and staff
+- Staff/service provider assignment
+- Multiple service durations and pricing options
+- Recurring appointments support
+- Integrated Stripe payment processing
+- Automated email notifications and reminders
+- Comprehensive admin dashboard
+- Customizable branding for white-label deployment
+
+## White-Label & Customization
+
+This platform is designed to be **fully customizable** for any service-based business:
+
+**Branding Customization:**
+- Custom colors, fonts, and logos via theme configuration
+- Client-specific CSS overrides
+- Custom domain and hosting
+- Branded email templates
+
+**Business Model Flexibility:**
+- Individual appointments (1-on-1 services)
+- Group sessions (fitness classes, workshops)
+- Multi-location support
+- Multiple service providers per location
+- Various pricing models (per session, packages, subscriptions)
+
+**Industry Adaptations:**
+The same core system can power websites for:
+- Healthcare clinics (doctor appointments, therapy sessions)
+- Wellness centers (massage, acupuncture, nutrition counseling)
+- Beauty salons (hair, nails, spa treatments)
+- Fitness studios (personal training, group classes)
+- Professional services (legal consultations, financial planning)
+- Creative services (photography shoots, design consultations)
+- Education (tutoring, music lessons, test prep)
+
+Each deployment can be customized with industry-specific:
+- Terminology (staff vs. practitioners vs. stylists vs. trainers)
+- Service categories and types
+- Booking policies and rules
+- Required client information fields
+- Custom metadata and forms
 
 ## Architecture Transformation
 
@@ -24,12 +68,12 @@ This project was derived from an e-commerce template. Here's the conceptual mapp
 
 | E-commerce Concept | Service Booking Equivalent |
 |-------------------|---------------------------|
-| Products | Services (coaching sessions, consultations) |
+| Products | Services (appointments, sessions, consultations) |
 | Shopping Cart | Service selection (no cart needed - direct booking) |
 | Orders | Bookings/Appointments |
 | Checkout | Time slot selection + booking confirmation |
-| Inventory/Stock | Staff availability and time slots |
-| Product Categories | Service types (1-on-1, group, workshops) |
+| Inventory/Stock | Provider availability and time slots |
+| Product Categories | Service types (individual, group, packages) |
 
 ### What's Being Kept from Template
 
@@ -68,12 +112,12 @@ This project was derived from an e-commerce template. Here's the conceptual mapp
 
 ➕ **New Features to Add:**
 - Calendar widget for time slot selection
-- Staff/consultant model and management
+- Service provider/staff model and management
 - Availability scheduling system
 - Recurring booking logic
 - Time zone handling
 - Booking status management (pending, confirmed, completed, cancelled, rescheduled)
-- Automated email reminders
+- Automated email reminders and notifications
 
 ## Technology Stack
 
@@ -90,7 +134,7 @@ This project was derived from an e-commerce template. Here's the conceptual mapp
 - **Express.js** (Node.js web server)
 - **MongoDB Atlas** (cloud database)
 - **Stripe** for payment processing
-- **Cloudinary** for image storage (staff photos, service images)
+- **Cloudinary** for image storage (service provider photos, service images)
 - **Resend** for transactional emails
 - **Winston** for structured logging
 - **Sentry** for error monitoring
@@ -103,13 +147,13 @@ Replaces the Product model.
 ```javascript
 {
   _id: ObjectId,
-  name: String,              // "60-Minute Coaching Session"
+  name: String,              // "60-Minute Consultation", "Haircut & Style", "Personal Training Session"
   description: String,       // Full service description
-  category: String,          // "1-on-1", "Group Session", "Workshop"
-  duration: Number,          // Duration in minutes (60, 90, 120, etc.)
+  category: String,          // "Individual", "Group", "Package", "Workshop"
+  duration: Number,          // Duration in minutes (30, 60, 90, 120, etc.)
   price: Number,             // Price in cents
   image: String,             // Cloudinary URL
-  staffIds: [ObjectId],      // Which staff can provide this service
+  staffIds: [ObjectId],      // Which service providers can provide this service
   isActive: Boolean,
   bufferTime: Number,        // Minutes between bookings (0, 15, 30)
   maxAdvanceBooking: Number, // Days in advance clients can book (30, 60, 90)
@@ -117,7 +161,7 @@ Replaces the Product model.
     hoursBeforeStart: Number, // Minimum hours before appointment to cancel
     refundPercentage: Number  // 100 = full refund, 50 = 50% refund
   },
-  metadata: Object,          // Additional custom fields
+  metadata: Object,          // Additional custom fields (e.g., requires_consultation, location_type)
   createdAt: Date,
   updatedAt: Date
 }
@@ -143,7 +187,7 @@ Replaces the Order model.
   status: String,            // "pending", "confirmed", "completed", "cancelled", "no-show", "rescheduled"
   cancellationReason: String,
   cancelledAt: Date,
-  cancelledBy: ObjectId,     // Staff or Client who cancelled
+  cancelledBy: ObjectId,     // Service provider or Client who cancelled
 
   // Payment
   paymentStatus: String,     // "pending", "paid", "refunded", "failed"
@@ -171,7 +215,7 @@ Replaces the Order model.
   }],
 
   // Metadata
-  internalNotes: String,     // Staff notes (not visible to client)
+  internalNotes: String,     // Service provider notes (not visible to client)
   metadata: Object,
 
   createdAt: Date,
@@ -180,7 +224,7 @@ Replaces the Order model.
 ```
 
 ### Staff Model
-New model for coaches/consultants.
+New model for service providers (coaches, consultants, stylists, trainers, therapists, etc.).
 
 ```javascript
 {
@@ -190,8 +234,8 @@ New model for coaches/consultants.
   phone: String,
   bio: String,
   photo: String,             // Cloudinary URL
-  title: String,             // "Senior Coach", "Lead Consultant"
-  specialties: [String],     // ["Leadership", "Career Coaching"]
+  title: String,             // "Master Stylist", "Senior Consultant", "Certified Trainer"
+  specialties: [String],     // ["Color Specialist", "Sports Massage", "Tax Planning"]
   serviceIds: [ObjectId],    // Services they can provide
 
   // User account reference (if staff can login)
@@ -211,7 +255,7 @@ New model for coaches/consultants.
 ```
 
 ### Availability Model
-New model for managing when staff are available.
+New model for managing when service providers are available.
 
 ```javascript
 {
@@ -309,7 +353,7 @@ Extends/enhances the existing User model.
   timeZone: String,
 
   // Preferences
-  preferredStaffIds: [ObjectId],
+  preferredStaffIds: [ObjectId],    // Preferred service providers
   communicationPreferences: {
     emailReminders: Boolean,
     smsReminders: Boolean,    // For future SMS integration
@@ -322,7 +366,7 @@ Extends/enhances the existing User model.
   noShowCount: Number,
 
   // Notes
-  clientNotes: String,       // Staff notes about client
+  clientNotes: String,       // Service provider notes about client
 
   // Status
   isActive: Boolean,
@@ -350,22 +394,22 @@ Extends/enhances the existing User model.
 - `POST /api/bookings` - Create new booking
 - `PUT /api/bookings/:id` - Update booking (reschedule)
 - `DELETE /api/bookings/:id` - Cancel booking
-- `POST /api/bookings/:id/complete` - Mark booking as completed (staff)
-- `POST /api/bookings/:id/no-show` - Mark as no-show (staff)
+- `POST /api/bookings/:id/complete` - Mark booking as completed (provider)
+- `POST /api/bookings/:id/no-show` - Mark as no-show (provider)
 
 **Availability:**
-- `GET /api/availability/staff/:staffId` - Get staff availability
+- `GET /api/availability/staff/:staffId` - Get service provider availability
 - `GET /api/availability/slots` - Get available time slots for a service
-- `POST /api/availability/staff/:staffId` - Set staff schedule (admin/staff)
+- `POST /api/availability/staff/:staffId` - Set provider schedule (admin/provider)
 - `POST /api/availability/staff/:staffId/exceptions` - Add time off
 - `PUT /api/availability/:id` - Update availability settings
 
-**Staff:**
-- `GET /api/staff` - List all active staff
-- `GET /api/staff/:id` - Get staff profile
-- `POST /api/staff` - Create staff member (admin)
-- `PUT /api/staff/:id` - Update staff profile (admin/staff)
-- `DELETE /api/staff/:id` - Deactivate staff (admin)
+**Staff (Service Providers):**
+- `GET /api/staff` - List all active service providers
+- `GET /api/staff/:id` - Get service provider profile
+- `POST /api/staff` - Create service provider (admin)
+- `PUT /api/staff/:id` - Update service provider profile (admin/provider)
+- `DELETE /api/staff/:id` - Deactivate service provider (admin)
 
 **Recurring Bookings:**
 - `POST /api/bookings/recurring` - Create recurring booking pattern
@@ -397,7 +441,7 @@ Extends/enhances the existing User model.
 **Frontend Calendar Component:**
 - Display monthly/weekly view
 - Show available time slots for selected service
-- Filter by staff member (optional)
+- Filter by service provider (optional)
 - Handle timezone conversion
 - Real-time availability checking
 - Visual indicators for:
@@ -407,9 +451,9 @@ Extends/enhances the existing User model.
   - Current user's bookings
 
 **Availability Calculation Logic:**
-1. Get staff's regular schedule for requested date
+1. Get service provider's regular schedule for requested date
 2. Check for exceptions (time off, special hours)
-3. Get existing bookings for that staff member
+3. Get existing bookings for that service provider
 4. Calculate service duration + buffer time
 5. Generate available time slots (e.g., 9:00 AM, 9:30 AM, 10:00 AM)
 6. Filter out slots that conflict with existing bookings
@@ -421,7 +465,7 @@ Extends/enhances the existing User model.
 **User Journey:**
 1. Browse services → Select service
 2. View available time slots on calendar
-3. (Optional) Select preferred staff member
+3. (Optional) Select preferred service provider
 4. Select date and time
 5. Enter client information (name, email, phone, notes)
 6. Review booking details
@@ -435,9 +479,9 @@ Extends/enhances the existing User model.
 3. Reserve time slot (temporary lock for 10 minutes)
 4. Process payment
 5. Create booking in database (via webhook)
-6. Send confirmation email
+6. Send confirmation email to client and service provider
 7. Schedule reminder emails (24h before, 1h before)
-8. Update staff calendar
+8. Update provider's calendar
 
 ### Recurring Booking Logic
 
@@ -454,7 +498,7 @@ Extends/enhances the existing User model.
 - Cancelling one occurrence → just that booking
 - Cancelling all future → update RecurringBooking status
 - Rescheduling one → modify that specific booking
-- Staff unavailability conflict → notify client, offer reschedule
+- Service provider unavailability conflict → notify client, offer reschedule
 
 ### Time Zone Handling
 
@@ -464,7 +508,7 @@ Extends/enhances the existing User model.
 - Convert display times based on user timezone
 - Show timezone in booking confirmations
 - Handle daylight saving time transitions
-- Display "Your local time" vs "Staff local time" if different
+- Display "Your local time" vs "Provider local time" if different
 
 ## Development Commands
 
@@ -511,24 +555,26 @@ npm run preview        # Preview production build
 1. Create new database models:
    - [ ] Service model (replace Product)
    - [ ] Booking model (replace Order)
-   - [ ] Staff model (new)
+   - [ ] Staff model (new - represents any service provider)
    - [ ] Availability model (new)
    - [ ] RecurringBooking model (new)
    - [ ] Extend User model for Client features
 
 2. Create API endpoints:
    - [ ] Services CRUD
-   - [ ] Staff CRUD
+   - [ ] Staff/Service Providers CRUD
    - [ ] Availability management
    - [ ] Booking creation and management
    - [ ] Available slots calculation endpoint
 
 3. Update authentication:
-   - [ ] Add staff role to auth system
-   - [ ] Staff-specific permissions
+   - [ ] Add service provider role to auth system
+   - [ ] Provider-specific permissions
    - [ ] Client portal access
 
 **Tests:** Write comprehensive tests for all models and API endpoints
+
+**Note:** Throughout the codebase, "Staff" refers to any type of service provider (stylists, coaches, therapists, trainers, consultants, etc.). This generic term allows the same system to work for any service-based business.
 
 ### Phase 2: Basic Booking Flow
 **Priority: HIGH - Core functionality**
@@ -551,9 +597,10 @@ npm run preview        # Preview production build
    - [ ] Prevent double-booking
 
 4. Email notifications:
-   - [ ] Booking confirmation email
-   - [ ] Staff notification email
+   - [ ] Booking confirmation email (client)
+   - [ ] Booking notification email (service provider)
    - [ ] Cancellation email template
+   - [ ] Rescheduling email template
 
 **Tests:** Test booking flow end-to-end, availability logic, payment integration
 
@@ -569,7 +616,7 @@ npm run preview        # Preview production build
    - [ ] Display available slots
    - [ ] Click to select time
    - [ ] Show existing bookings (if logged in)
-   - [ ] Filter by staff member
+   - [ ] Filter by service provider
 
 3. Time zone support:
    - [ ] Detect user timezone
@@ -579,28 +626,28 @@ npm run preview        # Preview production build
 
 **Tests:** Test calendar rendering, time zone conversions, slot selection
 
-### Phase 4: Staff Management
+### Phase 4: Service Provider Management
 **Priority: MEDIUM - Admin features**
 
-1. Staff admin pages:
-   - [ ] List all staff members
-   - [ ] Add/edit/delete staff
-   - [ ] Staff profile pages (public facing)
-   - [ ] Staff photo upload
+1. Service provider admin pages:
+   - [ ] List all service providers
+   - [ ] Add/edit/delete service providers
+   - [ ] Service provider profile pages (public facing)
+   - [ ] Profile photo upload
 
 2. Availability management:
    - [ ] Set regular weekly schedule UI
    - [ ] Add exceptions (time off)
-   - [ ] Calendar view of staff availability
+   - [ ] Calendar view of provider availability
    - [ ] Bulk schedule updates
 
-3. Staff portal (optional):
-   - [ ] Staff login
+3. Service provider portal (optional):
+   - [ ] Provider login
    - [ ] View their bookings
    - [ ] Manage their availability
    - [ ] Client notes
 
-**Tests:** Test staff CRUD, availability management, staff portal
+**Tests:** Test service provider CRUD, availability management, provider portal
 
 ### Phase 5: Advanced Booking Features
 **Priority: MEDIUM - Enhanced functionality**
@@ -638,7 +685,7 @@ npm run preview        # Preview production build
    - [ ] Upcoming bookings
    - [ ] Revenue metrics
    - [ ] Popular services
-   - [ ] Staff utilization
+   - [ ] Service provider utilization
 
 2. Booking management:
    - [ ] View all bookings
@@ -650,7 +697,7 @@ npm run preview        # Preview production build
 3. Reports:
    - [ ] Booking reports by date range
    - [ ] Revenue reports
-   - [ ] Staff performance
+   - [ ] Service provider performance
    - [ ] Client booking history
    - [ ] Export to CSV
 
@@ -674,10 +721,14 @@ npm run preview        # Preview production build
 
 3. Additional features:
    - [ ] SMS reminders (Twilio integration)
-   - [ ] Video call links (Zoom/Google Meet integration)
+   - [ ] Video call links (Zoom/Google Meet integration) for virtual appointments
    - [ ] Client self-service reschedule
    - [ ] Waitlist for fully booked times
-   - [ ] Package deals (buy 5 sessions, get discount)
+   - [ ] Package deals and membership options
+   - [ ] Multi-location support for businesses with multiple offices/studios
+   - [ ] Resource management (rooms, equipment) alongside provider scheduling
+   - [ ] Client intake forms and pre-appointment questionnaires
+   - [ ] Post-appointment feedback and ratings
 
 **Tests:** Performance testing, accessibility testing, cross-browser testing
 
@@ -735,9 +786,10 @@ That file contains the original template's development guidelines, which still a
 - Always consider timezone implications when working with dates/times
 - Test availability logic thoroughly (edge cases, race conditions)
 - Validate booking slots are still available before confirming
-- Consider staff schedule changes and how they affect existing bookings
+- Consider service provider schedule changes and how they affect existing bookings
 - Handle cancellations and refunds according to cancellation policy
 - Write integration tests for complete booking flows
+- Keep the system flexible for various service types and business models
 
 ## Key Technical Decisions
 
@@ -796,7 +848,7 @@ That file contains the original template's development guidelines, which still a
 ### Files to Create
 - `db/models/Service.js`
 - `db/models/Booking.js`
-- `db/models/Staff.js`
+- `db/models/Staff.js` (represents any service provider)
 - `db/models/Availability.js`
 - `db/models/RecurringBooking.js`
 - `src/components/Calendar/`
@@ -805,7 +857,7 @@ That file contains the original template's development guidelines, which still a
 - `src/pages/BookService.jsx`
 - `src/pages/MyBookings.jsx`
 - `src/stores/bookingStore.js`
-- API routes for services, bookings, staff, availability
+- API routes for services, bookings, service providers, availability
 
 ## Documentation
 
