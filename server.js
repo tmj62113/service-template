@@ -1900,13 +1900,20 @@ app.delete('/api/bookings/:id', authenticateToken, async (req, res) => {
 // Mark booking as completed (staff/admin only)
 app.post('/api/bookings/:id/complete', authenticateToken, async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Check authorization: admin or provider assigned to this booking
+    if (req.user.role === 'provider') {
+      // Find staff record for this provider
+      const staffMember = await Staff.findByUserId(req.user._id);
+      if (!staffMember || booking.staffId.toString() !== staffMember._id.toString()) {
+        return res.status(403).json({ error: 'Forbidden: You can only manage your own bookings' });
+      }
+    } else if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin or provider access required' });
     }
 
     const completedBooking = await Booking.markAsCompleted(req.params.id);
@@ -1924,13 +1931,20 @@ app.post('/api/bookings/:id/complete', authenticateToken, async (req, res) => {
 // Mark booking as no-show (staff/admin only)
 app.post('/api/bookings/:id/no-show', authenticateToken, async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
     const booking = await Booking.findById(req.params.id);
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Check authorization: admin or provider assigned to this booking
+    if (req.user.role === 'provider') {
+      // Find staff record for this provider
+      const staffMember = await Staff.findByUserId(req.user._id);
+      if (!staffMember || booking.staffId.toString() !== staffMember._id.toString()) {
+        return res.status(403).json({ error: 'Forbidden: You can only manage your own bookings' });
+      }
+    } else if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Forbidden: Admin or provider access required' });
     }
 
     const noShowBooking = await Booking.markAsNoShow(req.params.id);

@@ -56,12 +56,12 @@ export class User {
   }
 
   /**
-   * Create a new user (admin or client)
+   * Create a new user (admin, client, or provider)
    * @param {Object} userData - User data
    * @param {string} userData.email - User email
    * @param {string} userData.password - Plain text password (will be hashed)
    * @param {string} userData.name - User's full name
-   * @param {string} userData.role - User role ('admin' or 'client')
+   * @param {string} userData.role - User role ('admin', 'client', or 'provider')
    * @param {string} userData.phone - Phone number (optional)
    * @param {string} userData.timeZone - Timezone (optional)
    * @returns {Promise<Object>} Created user (without password)
@@ -74,6 +74,13 @@ export class User {
     const existingUser = await collection.findOne({ email: userData.email });
     if (existingUser) {
       throw new Error('User with this email already exists');
+    }
+
+    // Validate role
+    const validRoles = ['admin', 'client', 'provider'];
+    const role = userData.role || 'client';
+    if (!validRoles.includes(role)) {
+      throw new Error(`Invalid role. Must be one of: ${validRoles.join(', ')}`);
     }
 
     // Validate password strength
@@ -92,7 +99,7 @@ export class User {
       email: userData.email,
       password: hashedPassword,
       name: userData.name,
-      role: userData.role || 'client', // Default to 'client' for service booking
+      role: role, // 'admin', 'client', or 'provider'
       phone: userData.phone || null,
       timeZone: userData.timeZone || 'America/New_York',
 
@@ -592,6 +599,60 @@ export class User {
       totalClients,
       activeClients,
       blockedClients
+    };
+  }
+
+  /**
+   * Get all providers (users with role='provider')
+   * @param {Object} options - Query options
+   * @param {number} options.page - Page number (default: 1)
+   * @param {number} options.limit - Items per page (default: 20)
+   * @returns {Promise<Object>} Providers and pagination info
+   */
+  static async findAllProviders({ page = 1, limit = 20 } = {}) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const query = { role: 'provider' };
+    const skip = (page - 1) * limit;
+
+    const [providers, total] = await Promise.all([
+      collection
+        .find(query, { projection: { password: 0 } }) // Exclude password
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .toArray(),
+      collection.countDocuments(query),
+    ]);
+
+    return {
+      providers,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  /**
+   * Get provider statistics
+   * @returns {Promise<Object>} Provider stats
+   */
+  static async getProviderStats() {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    const totalProviders = await collection.countDocuments({ role: 'provider' });
+    const activeProviders = await collection.countDocuments({ role: 'provider', isActive: true });
+    const inactiveProviders = await collection.countDocuments({ role: 'provider', isActive: false });
+
+    return {
+      totalProviders,
+      activeProviders,
+      inactiveProviders
     };
   }
 }
