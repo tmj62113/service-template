@@ -20,6 +20,7 @@ import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
 import { User } from './db/models/User.js';
 import { Product } from './db/models/Product.js';
+import { Order } from './db/models/Order.js';
 import { Subscriber } from './db/models/Subscriber.js';
 import { Newsletter } from './db/models/Newsletter.js';
 import { AuditLog } from './db/models/AuditLog.js';
@@ -552,6 +553,9 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
 
 // JSON body parser for other routes (with 1MB size limit to prevent DoS attacks)
 app.use(express.json({ limit: '1mb' }));
+
+// Enforce CSRF protection on state-changing routes in accordance with security guidelines
+app.use(csrfProtection);
 
 // Create Checkout Session endpoint
 app.post('/api/create-checkout-session', async (req, res) => {
