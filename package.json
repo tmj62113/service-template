@@ -1,8 +1,8 @@
 {
-  "name": "service-booking-app",
+  "name": "service-template",
   "private": true,
   "version": "1.0.0",
-  "description": "Service booking and appointment scheduling platform for consulting and coaching",
+  "description": "White-label service booking and appointment scheduling template for any service-based business",
   "type": "module",
   "scripts": {
     "dev": "vite",

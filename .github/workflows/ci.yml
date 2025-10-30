@@ -126,7 +126,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/ecommerce-template
+          images: ${{ secrets.DOCKER_USERNAME }}/service-template
           tags: |
             type=ref,event=branch
             type=sha,prefix={{branch}}-

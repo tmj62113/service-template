@@ -278,8 +278,8 @@ docker:
         context: .
         push: true
         tags: |
-          ${{ secrets.DOCKER_USERNAME }}/ecommerce-template:latest
-          ${{ secrets.DOCKER_USERNAME }}/ecommerce-template:${{ github.sha }}
+          ${{ secrets.DOCKER_USERNAME }}/service-template:latest
+          ${{ secrets.DOCKER_USERNAME }}/service-template:${{ github.sha }}
 ```
 
 **Image Tags Created:**

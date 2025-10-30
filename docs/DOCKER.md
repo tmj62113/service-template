@@ -392,7 +392,7 @@ docker volume ls
 
 **To remove specific volume**:
 ```bash
-docker volume rm ecommerce-template_mongodb_data
+docker volume rm service-template_mongodb_data
 ```
 
 ---

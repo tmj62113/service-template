@@ -893,6 +893,6 @@ Original template documentation in `/docs` - some still relevant:
 
 ## Support
 
-- **Original Template:** https://github.com/tmj62113/ecommerce-template
+- **Original Template:** https://github.com/tmj62113/service-template
 - **Development Workflow:** `.claude/CLAUDE.md`
 - **This Architecture:** This file (CLAUDE.md)
