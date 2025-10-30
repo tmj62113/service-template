@@ -31,7 +31,7 @@ import { Staff } from './db/models/Staff.js';
 import { Booking } from './db/models/Booking.js';
 import { Availability } from './db/models/Availability.js';
 import { RecurringBooking } from './db/models/RecurringBooking.js';
-import { generateOrderConfirmationEmail } from './utils/emailTemplates.js';
+import { generateOrderConfirmationEmail, generateBookingConfirmationEmail } from './utils/emailTemplates.js';
 import { authenticateToken, generateToken } from './middleware/auth.js';
 // [LEGACY E-COMMERCE - DEPRECATED] import { createShipment, getTrackingStatus } from './services/shippoService.js';
 import { getCollection, getDatabase } from './db/connection.js';
@@ -285,7 +285,39 @@ cron.schedule('0 3 * * *', async () => {
 console.log('⏰ Scheduled task: Daily IP block cleanup at 3 AM');
 
 /**
+ * Send booking confirmation email
+ * @param {Object} bookingData - Booking information including populated service and staff
+ */
+async function sendBookingConfirmationEmail(bookingData) {
+  try {
+    const emailHtml = generateBookingConfirmationEmail(bookingData);
+
+    const bookingNumber = bookingData._id.toString().slice(-8).toUpperCase();
+    const { data, error } = await resend.emails.send({
+      from: 'Mark J Peterson Art <onboarding@resend.dev>',
+      to: bookingData.clientInfo.email,
+      subject: `Booking Confirmation - #${bookingNumber}`,
+      html: emailHtml,
+    });
+
+    if (error) {
+      console.error('❌ Failed to send booking confirmation email:', error);
+      throw error;
+    }
+
+    console.log('📧 Booking confirmation email sent:', data.id);
+    return data;
+  } catch (error) {
+    console.error('❌ Error sending booking email:', error);
+    // Don't throw - we don't want email failures to break booking processing
+    return null;
+  }
+}
+
+/**
+ * [LEGACY E-COMMERCE - DEPRECATED]
  * Send order confirmation email
+ * @deprecated Use sendBookingConfirmationEmail instead
  * @param {Object} orderData - Order information
  */
 async function sendOrderConfirmationEmail(orderData) {
@@ -405,11 +437,14 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
         // Update client booking count
         await User.incrementBookingCount(client._id, 'total');
 
-        // TODO: Send booking confirmation email
-        // await sendBookingConfirmationEmail(savedBooking);
+        // Populate service and staff details for email
+        const bookingWithDetails = await Booking.findById(savedBooking._id);
+
+        // Send booking confirmation email
+        await sendBookingConfirmationEmail(bookingWithDetails);
 
         // TODO: Send calendar invite
-        // await sendCalendarInvite(savedBooking);
+        // await sendCalendarInvite(bookingWithDetails);
 
       } else {
         // [LEGACY E-COMMERCE - DEPRECATED] Handle product order payment

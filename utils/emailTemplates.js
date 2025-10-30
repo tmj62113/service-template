@@ -1,5 +1,205 @@
 /**
+ * Email template for booking confirmation
+ * @param {Object} bookingData - Booking information including service, client, staff, and appointment details
+ * @returns {string} HTML email content
+ */
+export function generateBookingConfirmationEmail(bookingData) {
+  const {
+    _id,
+    serviceId,
+    staffId,
+    startDateTime,
+    endDateTime,
+    duration,
+    clientInfo,
+    amount,
+    currency,
+    status,
+    createdAt,
+  } = bookingData;
+
+  const bookingNumber = _id ? _id.toString().slice(-8).toUpperCase() : 'N/A';
+  const bookingDate = new Date(createdAt).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const appointmentDate = new Date(startDateTime).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const appointmentTime = new Date(startDateTime).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  const appointmentEndTime = new Date(endDateTime).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency || 'USD',
+    }).format(amount / 100); // Amount is stored in cents
+  };
+
+  const serviceName = serviceId?.name || 'Service';
+  const staffName = staffId?.name || 'Service Provider';
+  const clientName = clientInfo?.name || 'Valued Client';
+  const clientEmail = clientInfo?.email || '';
+  const clientPhone = clientInfo?.phone || '';
+  const clientNotes = clientInfo?.notes || '';
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmation</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 40px 30px; text-align: center; background-color: #E9E9E9; border-radius: 8px 8px 0 0;">
+              <h1 style="color: #1a1a1a; margin: 0; font-size: 28px;">Booking Confirmed!</h1>
+              <p style="color: #6b7280; margin: 10px 0 0; font-size: 16px;">Your appointment has been scheduled</p>
+            </td>
+          </tr>
+
+          <!-- Booking Info -->
+          <tr>
+            <td style="padding: 30px 40px;">
+              <p style="color: #111827; font-size: 16px; margin: 0 0 10px;">Hi ${clientName},</p>
+              <p style="color: #6b7280; font-size: 16px; margin: 0 0 20px; line-height: 1.6;">
+                Your appointment has been confirmed. We're looking forward to seeing you!
+              </p>
+
+              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <p style="margin: 0; color: #6b7280; font-size: 14px;">Booking Number</p>
+                <p style="margin: 5px 0 0; color: #111827; font-size: 20px; font-weight: 700;">#${bookingNumber}</p>
+                <p style="margin: 10px 0 0; color: #6b7280; font-size: 14px;">Booked on ${bookingDate}</p>
+              </div>
+
+              <!-- Appointment Details -->
+              <h2 style="color: #111827; font-size: 20px; margin: 0 0 20px;">Appointment Details</h2>
+              <table width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin-bottom: 30px;">
+                <tr>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                    <strong style="color: #111827;">Service</strong>
+                  </td>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb; text-align: right; color: #111827;">
+                    ${serviceName}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                    <strong style="color: #111827;">Service Provider</strong>
+                  </td>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb; text-align: right; color: #111827;">
+                    ${staffName}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                    <strong style="color: #111827;">Date</strong>
+                  </td>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb; text-align: right; color: #111827;">
+                    ${appointmentDate}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                    <strong style="color: #111827;">Time</strong>
+                  </td>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb; text-align: right; color: #111827;">
+                    ${appointmentTime} - ${appointmentEndTime}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb;">
+                    <strong style="color: #111827;">Duration</strong>
+                  </td>
+                  <td style="padding: 15px; border-bottom: 1px solid #e5e7eb; text-align: right; color: #111827;">
+                    ${duration} minutes
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px; background-color: #f9fafb; text-align: right; font-size: 18px; font-weight: 700; color: #111827;">
+                    Total Paid:
+                  </td>
+                  <td style="padding: 15px; background-color: #f9fafb; text-align: right; font-size: 18px; font-weight: 700; color: #1a1a1a;">
+                    ${formatCurrency(amount)}
+                  </td>
+                </tr>
+              </table>
+
+              ${clientNotes ? `
+              <!-- Client Notes -->
+              <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 30px; border-radius: 4px;">
+                <p style="margin: 0; color: #92400e; font-size: 14px; font-weight: 600;">Your Notes:</p>
+                <p style="margin: 5px 0 0; color: #92400e; font-size: 14px; line-height: 1.6;">${clientNotes}</p>
+              </div>
+              ` : ''}
+
+              <!-- What to Expect -->
+              <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-bottom: 30px; border-radius: 4px;">
+                <p style="margin: 0; color: #1e40af; font-size: 14px; font-weight: 600;">What to Expect</p>
+                <p style="margin: 10px 0 0; color: #1e40af; font-size: 14px; line-height: 1.6;">
+                  Please arrive 5-10 minutes before your scheduled appointment time. If you need to reschedule or cancel,
+                  please contact us at least 24 hours in advance.
+                </p>
+              </div>
+
+              <!-- Support -->
+              <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e5e7eb;">
+                <p style="color: #6b7280; font-size: 14px; margin: 0 0 10px; line-height: 1.6;">
+                  Questions about your appointment? Contact us at
+                  <a href="mailto:support@markjpetersonart.com" style="color: #1a1a1a; text-decoration: none;">support@markjpetersonart.com</a>
+                </p>
+                <p style="color: #6b7280; font-size: 14px; margin: 0; line-height: 1.6;">
+                  Need to reschedule? Log in to your account or reply to this email.
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px 40px; text-align: center; background-color: #f9fafb; border-radius: 0 0 8px 8px;">
+              <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                &copy; ${new Date().getFullYear()} Your Service. All rights reserved.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+}
+
+/**
+ * [LEGACY E-COMMERCE - DEPRECATED]
  * Email template for order confirmation
+ * @deprecated Use generateBookingConfirmationEmail instead
  * @param {Object} orderData - Order information
  * @returns {string} HTML email content
  */
