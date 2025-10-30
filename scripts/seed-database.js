@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * Database Seeding Script
+ * Database Seeding Script - Service Booking Platform
  *
  * Seeds the MongoDB database with sample data for development and testing.
- * This includes products, categories, and optionally an admin user.
+ * This includes services, staff members, and optionally an admin user.
  *
  * Usage:
  *   node scripts/seed-database.js          (seed all data)
@@ -12,7 +12,6 @@
  *   node scripts/seed-database.js --help   (show help)
  */
 
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import path from 'path';
@@ -25,9 +24,11 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
 // Import models
-import Product from '../db/models/Product.js';
+import { Service } from '../db/models/Service.js';
+import { Staff } from '../db/models/Staff.js';
 import User from '../db/models/User.js';
 import connectDB from '../db/connection.js';
+// [LEGACY E-COMMERCE - DEPRECATED] import Product from '../db/models/Product.js';
 
 // ANSI color codes
 const colors = {
@@ -40,117 +41,145 @@ const colors = {
   red: '\x1b[31m',
 };
 
-// Sample product data
-const sampleProducts = [
+// Sample staff data
+const sampleStaff = [
   {
-    name: 'Sunset Over Mountains',
-    description: 'A vibrant oil painting capturing the golden hour over mountain peaks. Rich oranges and purples blend seamlessly to create a warm, inviting atmosphere.',
-    price: 499.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1560015534-cee980ba7e13?w=800'],
-    stock: 3,
-    featured: true,
-    dimensions: '24" x 36"',
-    medium: 'Oil on Canvas',
+    name: 'Sarah Johnson',
+    email: 'sarah@example.com',
+    phone: '+1-555-0101',
+    bio: 'Certified professional coach with 10+ years of experience helping individuals achieve their personal and professional goals. Specializes in career transitions and leadership development.',
+    title: 'Senior Career Coach',
+    specialties: ['Career Development', 'Leadership Coaching', 'Executive Coaching'],
+    isActive: true,
+    acceptingBookings: true,
+    timeZone: 'America/New_York',
   },
   {
-    name: 'Ocean Waves Abstract',
-    description: 'An abstract interpretation of ocean waves using bold blues and whites. This piece brings the energy of the sea into any space.',
-    price: 599.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?w=800'],
-    stock: 2,
-    featured: true,
-    dimensions: '30" x 40"',
-    medium: 'Acrylic on Canvas',
+    name: 'Michael Chen',
+    email: 'michael@example.com',
+    phone: '+1-555-0102',
+    bio: 'Licensed therapist specializing in cognitive behavioral therapy and mindfulness practices. Dedicated to helping clients develop healthy coping strategies and achieve mental wellness.',
+    title: 'Licensed Therapist',
+    specialties: ['CBT', 'Anxiety Management', 'Stress Reduction', 'Mindfulness'],
+    isActive: true,
+    acceptingBookings: true,
+    timeZone: 'America/Los_Angeles',
   },
   {
-    name: 'Urban Landscape',
-    description: 'A contemporary take on city architecture with geometric shapes and muted colors. Perfect for modern office spaces.',
-    price: 449.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1578926375605-eaf7559b46d5?w=800'],
-    stock: 5,
-    featured: false,
-    dimensions: '20" x 30"',
-    medium: 'Mixed Media',
+    name: 'Emily Rodriguez',
+    email: 'emily@example.com',
+    phone: '+1-555-0103',
+    bio: 'Certified personal trainer and nutrition specialist. Passionate about helping clients achieve their fitness goals through personalized workout plans and sustainable nutrition habits.',
+    title: 'Certified Personal Trainer',
+    specialties: ['Strength Training', 'Weight Loss', 'Nutrition Planning', 'HIIT'],
+    isActive: true,
+    acceptingBookings: true,
+    timeZone: 'America/Chicago',
   },
   {
-    name: 'Forest Path',
-    description: 'A serene forest scene with dappled sunlight filtering through tall trees. Creates a sense of peace and tranquility.',
-    price: 379.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1518893063132-36e46dbe2428?w=800'],
-    stock: 4,
-    featured: true,
-    dimensions: '18" x 24"',
-    medium: 'Watercolor',
+    name: 'David Kim',
+    email: 'david@example.com',
+    phone: '+1-555-0104',
+    bio: 'Business consultant with expertise in strategy, operations, and digital transformation. Helps small to medium businesses optimize their processes and scale effectively.',
+    title: 'Business Strategy Consultant',
+    specialties: ['Business Strategy', 'Operations', 'Digital Transformation', 'Process Optimization'],
+    isActive: true,
+    acceptingBookings: true,
+    timeZone: 'America/Denver',
+  },
+];
+
+// Sample services data (will be linked to staff after creation)
+const sampleServices = [
+  {
+    name: '60-Minute Career Coaching Session',
+    description: 'One-on-one career coaching session focused on your professional development, career transitions, or leadership skills. Includes personalized action plan and follow-up resources.',
+    category: 'Individual',
+    duration: 60,
+    price: 15000, // $150.00 in cents
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800',
+    isActive: true,
+    bufferTime: 15,
+    maxAdvanceBooking: 60,
+    cancellationPolicy: {
+      hoursBeforeStart: 24,
+      refundPercentage: 100,
+    },
   },
   {
-    name: 'Abstract Expressions',
-    description: 'Bold, expressive brushstrokes in vibrant reds, yellows, and blacks. A statement piece that demands attention.',
-    price: 699.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800'],
-    stock: 1,
-    featured: false,
-    dimensions: '36" x 48"',
-    medium: 'Oil on Canvas',
+    name: 'Initial Therapy Consultation',
+    description: 'First-time consultation to discuss your mental health goals, assess your needs, and create a personalized treatment plan. A safe, confidential space to begin your wellness journey.',
+    category: 'Individual',
+    duration: 90,
+    price: 18000, // $180.00 in cents
+    image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=800',
+    isActive: true,
+    bufferTime: 30,
+    maxAdvanceBooking: 30,
+    cancellationPolicy: {
+      hoursBeforeStart: 48,
+      refundPercentage: 100,
+    },
   },
   {
-    name: 'Minimalist Circles',
-    description: 'Simple geometric circles in black and white. A minimalist piece that complements any modern interior.',
-    price: 299.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=800'],
-    stock: 8,
-    featured: false,
-    dimensions: '16" x 20"',
-    medium: 'Digital Print',
+    name: 'Personal Training Session',
+    description: 'Customized one-on-one training session tailored to your fitness goals. Includes exercise instruction, form correction, and motivation to help you reach your potential.',
+    category: 'Individual',
+    duration: 60,
+    price: 9500, // $95.00 in cents
+    image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800',
+    isActive: true,
+    bufferTime: 15,
+    maxAdvanceBooking: 45,
+    cancellationPolicy: {
+      hoursBeforeStart: 12,
+      refundPercentage: 50,
+    },
   },
   {
-    name: 'Desert Dreams',
-    description: 'Warm earth tones capture the essence of desert landscapes. Layers of texture create depth and interest.',
-    price: 549.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1549887534-1541e9326642?w=800'],
-    stock: 3,
-    featured: false,
-    dimensions: '24" x 36"',
-    medium: 'Acrylic on Canvas',
+    name: 'Business Strategy Consultation',
+    description: 'In-depth business consultation to analyze your current operations, identify growth opportunities, and develop actionable strategies for your business success.',
+    category: 'Individual',
+    duration: 120,
+    price: 25000, // $250.00 in cents
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800',
+    isActive: true,
+    bufferTime: 30,
+    maxAdvanceBooking: 90,
+    cancellationPolicy: {
+      hoursBeforeStart: 48,
+      refundPercentage: 100,
+    },
   },
   {
-    name: 'Floral Burst',
-    description: 'Vibrant flowers in full bloom with rich purples, pinks, and greens. Brings the beauty of nature indoors.',
-    price: 429.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800'],
-    stock: 6,
-    featured: true,
-    dimensions: '20" x 24"',
-    medium: 'Oil on Canvas',
+    name: '30-Minute Check-In Session',
+    description: 'Quick follow-up session for existing clients. Perfect for progress updates, addressing specific questions, or maintaining momentum between longer sessions.',
+    category: 'Individual',
+    duration: 30,
+    price: 7500, // $75.00 in cents
+    image: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800',
+    isActive: true,
+    bufferTime: 10,
+    maxAdvanceBooking: 30,
+    cancellationPolicy: {
+      hoursBeforeStart: 24,
+      refundPercentage: 100,
+    },
   },
   {
-    name: 'Monochrome Portrait',
-    description: 'A striking black and white portrait study. Powerful contrasts and emotional depth.',
-    price: 649.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1577083552431-6e5fd01988ec?w=800'],
-    stock: 2,
-    featured: false,
-    dimensions: '24" x 30"',
-    medium: 'Charcoal on Paper',
-  },
-  {
-    name: 'Cosmic Wonder',
-    description: 'An ethereal space-inspired piece with deep blues, purples, and sparkling whites. Evokes the mystery of the cosmos.',
-    price: 799.99,
-    category: 'art',
-    images: ['https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=800'],
-    stock: 1,
-    featured: true,
-    dimensions: '30" x 40"',
-    medium: 'Mixed Media',
+    name: 'Group Fitness Class',
+    description: 'High-energy group fitness class combining cardio, strength training, and core work. Maximum 10 participants for personalized attention in a motivating group environment.',
+    category: 'Group',
+    duration: 45,
+    price: 3500, // $35.00 in cents
+    image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800',
+    isActive: true,
+    bufferTime: 15,
+    maxAdvanceBooking: 14,
+    cancellationPolicy: {
+      hoursBeforeStart: 6,
+      refundPercentage: 0,
+    },
   },
 ];
 
@@ -164,8 +193,11 @@ const adminUser = {
 async function clearDatabase() {
   console.log(`${colors.yellow}Clearing existing data...${colors.reset}`);
 
-  await Product.deleteMany({});
-  console.log(`${colors.green}  ✓ Cleared products${colors.reset}`);
+  await Service.deleteMany({});
+  console.log(`${colors.green}  ✓ Cleared services${colors.reset}`);
+
+  await Staff.deleteMany({});
+  console.log(`${colors.green}  ✓ Cleared staff${colors.reset}`);
 
   // Optionally clear users (commented out for safety)
   // await User.deleteMany({});
@@ -174,20 +206,65 @@ async function clearDatabase() {
   console.log();
 }
 
-async function seedProducts() {
-  console.log(`${colors.cyan}Seeding products...${colors.reset}`);
+async function seedStaff() {
+  console.log(`${colors.cyan}Seeding staff members...${colors.reset}`);
 
   try {
-    const products = await Product.insertMany(sampleProducts);
-    console.log(`${colors.green}  ✓ Created ${products.length} products${colors.reset}`);
+    const staff = await Staff.insertMany(sampleStaff);
+    console.log(`${colors.green}  ✓ Created ${staff.length} staff members${colors.reset}`);
 
-    // Show featured products
-    const featuredCount = products.filter((p) => p.featured).length;
-    console.log(`${colors.blue}  → ${featuredCount} featured products${colors.reset}`);
+    // Show active staff
+    const activeCount = staff.filter((s) => s.isActive && s.acceptingBookings).length;
+    console.log(`${colors.blue}  → ${activeCount} accepting bookings${colors.reset}`);
 
-    return products;
+    return staff;
   } catch (error) {
-    console.error(`${colors.red}  ✗ Error seeding products: ${error.message}${colors.reset}`);
+    console.error(`${colors.red}  ✗ Error seeding staff: ${error.message}${colors.reset}`);
+    throw error;
+  }
+}
+
+async function seedServices(staffMembers) {
+  console.log(`${colors.cyan}Seeding services...${colors.reset}`);
+
+  try {
+    // Assign staff to services based on their specialties
+    const servicesWithStaff = sampleServices.map((service, index) => {
+      // Assign 1-2 staff members per service
+      const assignedStaff = [];
+
+      if (service.name.includes('Career Coaching')) {
+        assignedStaff.push(staffMembers[0]._id); // Sarah Johnson
+      } else if (service.name.includes('Therapy')) {
+        assignedStaff.push(staffMembers[1]._id); // Michael Chen
+      } else if (service.name.includes('Training') || service.name.includes('Fitness')) {
+        assignedStaff.push(staffMembers[2]._id); // Emily Rodriguez
+      } else if (service.name.includes('Business')) {
+        assignedStaff.push(staffMembers[3]._id); // David Kim
+      } else if (service.name.includes('Check-In')) {
+        // Check-in sessions available with all coaches
+        assignedStaff.push(staffMembers[0]._id, staffMembers[1]._id, staffMembers[3]._id);
+      }
+
+      return {
+        ...service,
+        staffIds: assignedStaff,
+      };
+    });
+
+    const services = await Service.insertMany(servicesWithStaff);
+    console.log(`${colors.green}  ✓ Created ${services.length} services${colors.reset}`);
+
+    // Show service categories
+    const categories = [...new Set(services.map((s) => s.category))];
+    categories.forEach((cat) => {
+      const count = services.filter((s) => s.category === cat).length;
+      console.log(`${colors.blue}  → ${count} ${cat} service(s)${colors.reset}`);
+    });
+
+    return services;
+  } catch (error) {
+    console.error(`${colors.red}  ✗ Error seeding services: ${error.message}${colors.reset}`);
     throw error;
   }
 }
@@ -226,25 +303,37 @@ async function seedAdminUser() {
   }
 }
 
-async function showSummary(products) {
+async function showSummary(staff, services) {
   console.log(`\n${colors.bright}${colors.green}Database Seeding Complete!${colors.reset}\n`);
 
   console.log(`${colors.cyan}Summary:${colors.reset}`);
-  console.log(`  Products: ${products.length}`);
-  console.log(`  Total Inventory Value: $${products.reduce((sum, p) => sum + p.price, 0).toFixed(2)}`);
-  console.log(`  Featured Products: ${products.filter((p) => p.featured).length}`);
-  console.log(`  Total Stock Units: ${products.reduce((sum, p) => sum + p.stock, 0)}`);
+  console.log(`  Staff Members: ${staff.length}`);
+  console.log(`  Services Available: ${services.length}`);
+  console.log(`  Active Staff: ${staff.filter((s) => s.isActive && s.acceptingBookings).length}`);
 
-  console.log(`\n${colors.cyan}Categories:${colors.reset}`);
-  const categories = [...new Set(products.map((p) => p.category))];
+  // Calculate total revenue potential (average price * services)
+  const avgPrice = services.reduce((sum, s) => sum + s.price, 0) / services.length / 100;
+  console.log(`  Average Service Price: $${avgPrice.toFixed(2)}`);
+
+  console.log(`\n${colors.cyan}Service Categories:${colors.reset}`);
+  const categories = [...new Set(services.map((s) => s.category))];
   categories.forEach((cat) => {
-    const count = products.filter((p) => p.category === cat).length;
-    console.log(`  ${cat}: ${count} products`);
+    const count = services.filter((s) => s.category === cat).length;
+    const catServices = services.filter((s) => s.category === cat);
+    const avgDuration = catServices.reduce((sum, s) => sum + s.duration, 0) / catServices.length;
+    console.log(`  ${cat}: ${count} service(s), avg ${avgDuration} min`);
+  });
+
+  console.log(`\n${colors.cyan}Staff Details:${colors.reset}`);
+  staff.forEach((member) => {
+    const assignedServices = services.filter((s) => s.staffIds.some((id) => id.equals(member._id)));
+    console.log(`  ${member.name} (${member.title})`);
+    console.log(`    → ${assignedServices.length} service(s) assigned`);
   });
 
   console.log(`\n${colors.yellow}Next Steps:${colors.reset}`);
   console.log(`  1. Start the server: ${colors.bright}node server.js${colors.reset}`);
-  console.log(`  2. Visit the shop: ${colors.bright}http://localhost:5173/shop${colors.reset}`);
+  console.log(`  2. Visit the services: ${colors.bright}http://localhost:5173/services${colors.reset}`);
   console.log(`  3. Login to admin: ${colors.bright}http://localhost:5173/admin${colors.reset}`);
   console.log(`     Email: admin@example.com`);
   console.log(`     Password: admin123`);
@@ -257,7 +346,7 @@ async function main() {
   // Show help
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
-${colors.bright}Database Seeding Script${colors.reset}
+${colors.bright}Database Seeding Script - Service Booking Platform${colors.reset}
 
 ${colors.cyan}Usage:${colors.reset}
   node scripts/seed-database.js          Seed database with sample data
@@ -265,14 +354,19 @@ ${colors.cyan}Usage:${colors.reset}
   node scripts/seed-database.js --help   Show this help message
 
 ${colors.cyan}Options:${colors.reset}
-  --clear    Delete all existing products before seeding
+  --clear    Delete all existing services and staff before seeding
   --no-user  Skip creating admin user
   --help     Show this help message
+
+${colors.cyan}What gets seeded:${colors.reset}
+  - 4 sample staff members (coaches, therapists, trainers, consultants)
+  - 6 sample services (individual and group sessions)
+  - 1 admin user (optional)
 
 ${colors.cyan}Examples:${colors.reset}
   node scripts/seed-database.js          # Seed with sample data
   node scripts/seed-database.js --clear  # Clear and reseed
-  node scripts/seed-database.js --no-user # Seed products only
+  node scripts/seed-database.js --no-user # Seed services/staff only
     `);
     process.exit(0);
   }
@@ -281,7 +375,7 @@ ${colors.cyan}Examples:${colors.reset}
     console.log(`${colors.bright}${colors.blue}
 ╔════════════════════════════════════════════════════════════╗
 ║                                                            ║
-║               Database Seeding Script                      ║
+║       Database Seeding Script - Service Booking            ║
 ║                                                            ║
 ╚════════════════════════════════════════════════════════════╝
 ${colors.reset}\n`);
@@ -296,8 +390,12 @@ ${colors.reset}\n`);
       await clearDatabase();
     }
 
-    // Seed products
-    const products = await seedProducts();
+    // Seed staff first (services depend on staff IDs)
+    const staff = await seedStaff();
+    console.log();
+
+    // Seed services (with staff assignments)
+    const services = await seedServices(staff);
     console.log();
 
     // Seed admin user (unless --no-user flag is present)
@@ -306,11 +404,10 @@ ${colors.reset}\n`);
     }
 
     // Show summary
-    await showSummary(products);
+    await showSummary(staff, services);
 
-    // Disconnect
-    await mongoose.connection.close();
-    console.log(`${colors.cyan}Database connection closed${colors.reset}\n`);
+    // Note: Connection is managed by the connection module
+    console.log(`${colors.cyan}Seeding complete${colors.reset}\n`);
 
     process.exit(0);
   } catch (error) {
