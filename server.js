@@ -412,111 +412,9 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, 
         // await sendCalendarInvite(savedBooking);
 
       } else {
-        // Handle product order payment
-        console.log('📦 Processing product order');
-
-        // Extract order information
-        const orderData = {
-          sessionId: fullSession.id,
-          paymentIntentId: typeof fullSession.payment_intent === 'string'
-            ? fullSession.payment_intent
-            : fullSession.payment_intent?.id,
-          customerId: fullSession.customer,
-          customerEmail: fullSession.customer_details?.email,
-          customerName: fullSession.customer_details?.name,
-
-          // Shipping information (use shipping address if provided, otherwise use billing address)
-          shippingAddress: fullSession.shipping_details?.address || fullSession.customer_details?.address,
-          shippingName: fullSession.shipping_details?.name || fullSession.customer_details?.name,
-
-          // Billing information
-          billingAddress: fullSession.customer_details?.address,
-
-          // Order details
-          items: fullSession.line_items?.data.map(item => ({
-            name: item.description,
-            quantity: item.quantity,
-            price: (item.amount_total / item.quantity) / 100, // Unit price: divide total by quantity, then convert from cents
-          })),
-
-          // Totals
-          subtotal: fullSession.amount_subtotal / 100,
-          total: fullSession.amount_total / 100,
-          currency: fullSession.currency,
-
-          // Status
-          paymentStatus: fullSession.payment_status,
-          status: fullSession.status,
-
-          // Timestamps
-          createdAt: new Date(fullSession.created * 1000),
-        };
-
-        console.log('📦 Order Data:', JSON.stringify(orderData, null, 2));
-
-        // Check if order already exists (idempotency)
-        const existingOrder = await Order.findBySessionId(orderData.sessionId);
-        if (existingOrder) {
-          console.log('⚠️  Order already exists:', existingOrder._id);
-          break;
-        }
-
-        // Save order to database
-        const savedOrder = await Order.create(orderData);
-        console.log('✅ Order saved to database:', savedOrder._id);
-
-        // Update product inventory
-        try {
-          const lineItems = fullSession.line_items?.data || [];
-          console.log(`📦 Processing ${lineItems.length} line items for inventory update`);
-
-          for (let i = 0; i < lineItems.length; i++) {
-            const lineItem = lineItems[i];
-            const quantity = lineItem.quantity;
-
-            // Try to get product ID from metadata
-            let productId = lineItem.price?.product?.metadata?.product_id;
-            console.log(`📦 Line item ${i}: ${lineItem.description}, quantity: ${quantity}, productId: ${productId || 'not found'}`);
-
-            // If we have product ID, update directly
-            if (productId) {
-              const result = await Product.updateStock(productId, -quantity);
-              if (result) {
-                console.log(`✅ Updated stock for product ${productId}: -${quantity}`);
-              } else {
-                console.warn(`⚠️  Failed to update stock for product ${productId}`);
-              }
-            } else {
-              // Fallback: search by product name
-              const productName = lineItem.description;
-              console.log(`🔍 Searching for product by name: "${productName}"`);
-              const products = await Product.search(productName);
-              const product = products.find(p => p.name === productName);
-
-              if (product) {
-                const result = await Product.updateStock(product._id, -quantity);
-                if (result) {
-                  console.log(`✅ Updated stock for ${product.name}: -${quantity}`);
-                } else {
-                  console.warn(`⚠️  Failed to update stock for ${product.name}`);
-                }
-              } else {
-                console.warn(`⚠️  Product not found for inventory update: ${productName}`);
-              }
-            }
-          }
-          console.log('✅ Inventory update completed');
-        } catch (inventoryError) {
-          console.error('❌ Error updating inventory:', inventoryError);
-          console.error('Stack trace:', inventoryError.stack);
-          // Don't fail the order if inventory update fails
-        }
-
-        // Send confirmation email
-        await sendOrderConfirmationEmail(savedOrder);
-
-        // TODO: Notify admin/warehouse
-        // await notifyWarehouse(orderData);
+        // [LEGACY E-COMMERCE - DEPRECATED] Handle product order payment
+        console.log('⚠️  Non-booking checkout detected - this application only supports service bookings');
+        console.log('Session metadata:', fullSession.metadata);
       }
 
       break;
@@ -557,59 +455,59 @@ app.use(express.json({ limit: '1mb' }));
 // Enforce CSRF protection on state-changing routes in accordance with security guidelines
 app.use(csrfProtection);
 
-// Create Checkout Session endpoint
-app.post('/api/create-checkout-session', async (req, res) => {
-  try {
-    const { items } = req.body;
-
-    if (!items || items.length === 0) {
-      return res.status(400).json({ error: 'No items in cart' });
-    }
-
-    // Create line items for Stripe Checkout
-    const lineItems = items.map((item) => ({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: item.name,
-          metadata: {
-            product_id: item._id || item.id || '', // Store product ID for inventory tracking
-          },
-        },
-        unit_amount: Math.round(item.price * 100), // Convert to cents
-      },
-      quantity: item.quantity,
-    }));
-
-    // Get the client URL from request origin or env
-    const clientUrl = req.headers.origin || process.env.CLIENT_URL || 'http://localhost:5173';
-
-    // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: lineItems,
-      mode: 'payment',
-      success_url: `${clientUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${clientUrl}/cancel`,
-      // Collect shipping address
-      shipping_address_collection: {
-        allowed_countries: ['US', 'CA', 'GB', 'AU', 'NZ', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI', 'IE', 'AT', 'CH', 'PT', 'PL', 'CZ', 'GR', 'RO', 'HU'],
-      },
-      // Require billing address
-      billing_address_collection: 'required',
-      // Collect customer email
-      customer_email: undefined, // User will enter on Stripe checkout page
-    });
-
-    return res.status(200).json({ url: session.url });
-  } catch (error) {
-    console.error('Stripe checkout error:', error);
-    return res.status(500).json({
-      error: 'Failed to create checkout session',
-      details: error.message
-    });
-  }
-});
+// [LEGACY E-COMMERCE - DEPRECATED] Create Checkout Session endpoint (replaced by /api/create-booking-checkout)
+// [LEGACY E-COMMERCE - DEPRECATED] app.post('/api/create-checkout-session', async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const { items } = req.body;
+// [LEGACY E-COMMERCE - DEPRECATED]
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!items || items.length === 0) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(400).json({ error: 'No items in cart' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED]
+// [LEGACY E-COMMERCE - DEPRECATED]     // Create line items for Stripe Checkout
+// [LEGACY E-COMMERCE - DEPRECATED]     const lineItems = items.map((item) => ({
+// [LEGACY E-COMMERCE - DEPRECATED]       price_data: {
+// [LEGACY E-COMMERCE - DEPRECATED]         currency: 'usd',
+// [LEGACY E-COMMERCE - DEPRECATED]         product_data: {
+// [LEGACY E-COMMERCE - DEPRECATED]           name: item.name,
+// [LEGACY E-COMMERCE - DEPRECATED]           metadata: {
+// [LEGACY E-COMMERCE - DEPRECATED]             product_id: item._id || item.id || '', // Store product ID for inventory tracking
+// [LEGACY E-COMMERCE - DEPRECATED]           },
+// [LEGACY E-COMMERCE - DEPRECATED]         },
+// [LEGACY E-COMMERCE - DEPRECATED]         unit_amount: Math.round(item.price * 100), // Convert to cents
+// [LEGACY E-COMMERCE - DEPRECATED]       },
+// [LEGACY E-COMMERCE - DEPRECATED]       quantity: item.quantity,
+// [LEGACY E-COMMERCE - DEPRECATED]     }));
+// [LEGACY E-COMMERCE - DEPRECATED]
+// [LEGACY E-COMMERCE - DEPRECATED]     // Get the client URL from request origin or env
+// [LEGACY E-COMMERCE - DEPRECATED]     const clientUrl = req.headers.origin || process.env.CLIENT_URL || 'http://localhost:5173';
+// [LEGACY E-COMMERCE - DEPRECATED]
+// [LEGACY E-COMMERCE - DEPRECATED]     // Create Stripe Checkout Session
+// [LEGACY E-COMMERCE - DEPRECATED]     const session = await stripe.checkout.sessions.create({
+// [LEGACY E-COMMERCE - DEPRECATED]       payment_method_types: ['card'],
+// [LEGACY E-COMMERCE - DEPRECATED]       line_items: lineItems,
+// [LEGACY E-COMMERCE - DEPRECATED]       mode: 'payment',
+// [LEGACY E-COMMERCE - DEPRECATED]       success_url: `${clientUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+// [LEGACY E-COMMERCE - DEPRECATED]       cancel_url: `${clientUrl}/cancel`,
+// [LEGACY E-COMMERCE - DEPRECATED]       // Collect shipping address
+// [LEGACY E-COMMERCE - DEPRECATED]       shipping_address_collection: {
+// [LEGACY E-COMMERCE - DEPRECATED]         allowed_countries: ['US', 'CA', 'GB', 'AU', 'NZ', 'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'SE', 'NO', 'DK', 'FI', 'IE', 'AT', 'CH', 'PT', 'PL', 'CZ', 'GR', 'RO', 'HU'],
+// [LEGACY E-COMMERCE - DEPRECATED]       },
+// [LEGACY E-COMMERCE - DEPRECATED]       // Require billing address
+// [LEGACY E-COMMERCE - DEPRECATED]       billing_address_collection: 'required',
+// [LEGACY E-COMMERCE - DEPRECATED]       // Collect customer email
+// [LEGACY E-COMMERCE - DEPRECATED]       customer_email: undefined, // User will enter on Stripe checkout page
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED]
+// [LEGACY E-COMMERCE - DEPRECATED]     return res.status(200).json({ url: session.url });
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Stripe checkout error:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     return res.status(500).json({
+// [LEGACY E-COMMERCE - DEPRECATED]       error: 'Failed to create checkout session',
+// [LEGACY E-COMMERCE - DEPRECATED]       details: error.message
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
 
 // Create Booking Checkout Session endpoint
 app.post('/api/create-booking-checkout', async (req, res) => {
