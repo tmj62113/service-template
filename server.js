@@ -33,7 +33,7 @@ import { Availability } from './db/models/Availability.js';
 import { RecurringBooking } from './db/models/RecurringBooking.js';
 import { generateOrderConfirmationEmail } from './utils/emailTemplates.js';
 import { authenticateToken, generateToken } from './middleware/auth.js';
-import { createShipment, getTrackingStatus } from './services/shippoService.js';
+// [LEGACY E-COMMERCE - DEPRECATED] import { createShipment, getTrackingStatus } from './services/shippoService.js';
 import { getCollection, getDatabase } from './db/connection.js';
 import { ObjectId } from 'mongodb';
 import { validateContactForm, validateNewsletterSubscription, validateProductData, validateNewsletterContent, isHoneypotFilled } from './utils/security.js';
@@ -201,9 +201,9 @@ const csrfProtection = (req, res, next) => {
   // Skip CSRF for Stripe webhooks and specific public endpoints
   const publicEndpoints = [
     '/api/webhook',
-    '/api/shippo-webhook',
+    // '/api/shippo-webhook', // [LEGACY E-COMMERCE - DEPRECATED]
     '/api/webhooks/email-reply',
-    '/api/products', // GET only (read operations are safe)
+    // '/api/products', // [LEGACY E-COMMERCE - DEPRECATED] GET only (read operations are safe)
     '/api/health',
     '/api/sitemap.xml',
   ];
@@ -939,458 +939,458 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
   });
 });
 
-// ========================================
-// Admin Order Management Endpoints
-// ========================================
-
-// Get all orders with pagination and filtering
-app.get('/api/orders', authenticateToken, async (req, res) => {
-  try {
-    const { page = 1, limit = 20, status } = req.query;
-
-    const result = await Order.findAll({
-      page: parseInt(page),
-      limit: parseInt(limit),
-      status,
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error('Error fetching orders:', error);
-    res.status(500).json({ error: 'Failed to fetch orders' });
-  }
-});
-
-// Get single order by ID
-app.get('/api/orders/:id', authenticateToken, async (req, res) => {
-  try {
-    let orderId = req.params.id;
-
-    // If the ID starts with ORD- or is 8 chars (short format), convert to MongoDB query
-    if (orderId.startsWith('ORD-')) {
-      orderId = orderId.substring(4).toLowerCase(); // Remove ORD- prefix and lowercase
-    }
-
-    // If it's 8 characters, it's a short ID - find by matching last 8 chars
-    let order;
-    if (orderId.length === 8) {
-      const { orders } = await Order.findAll({ limit: 1000 }); // Get all orders
-      order = orders.find(o => o._id.toString().slice(-8).toLowerCase() === orderId.toLowerCase());
-    } else {
-      // Full MongoDB ID
-      order = await Order.findById(orderId);
-    }
-
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    // Transform database fields to frontend-friendly names
-    const transformedOrder = {
-      ...order,
-      sessionId: order.stripeSessionId,
-      paymentIntentId: order.stripePaymentIntentId,
-      customerId: order.stripeCustomerId,
-    };
-
-    res.json(transformedOrder);
-  } catch (error) {
-    console.error('Error fetching order:', error);
-    res.status(500).json({ error: 'Failed to fetch order' });
-  }
-});
-
-// Get order by Stripe session ID (for success page)
-app.get('/api/orders/session/:sessionId', async (req, res) => {
-  try {
-    const order = await Order.findBySessionId(req.params.sessionId);
-
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    res.json({ order });
-  } catch (error) {
-    console.error('Error fetching order by session ID:', error);
-    res.status(500).json({ error: 'Failed to fetch order' });
-  }
-});
-
-// Get orders by customer email
-app.get('/api/orders/customer/:email', authenticateToken, async (req, res) => {
-  try {
-    const orders = await Order.findByCustomerEmail(req.params.email);
-    res.json(orders);
-  } catch (error) {
-    console.error('Error fetching customer orders:', error);
-    res.status(500).json({ error: 'Failed to fetch customer orders' });
-  }
-});
-
-// Update order status
-app.put('/api/orders/:id/status', authenticateToken, async (req, res) => {
-  try {
-    const { orderStatus, fulfillmentStatus } = req.body;
-
-    const updates = {};
-    if (orderStatus) updates.orderStatus = orderStatus;
-    if (fulfillmentStatus) updates.fulfillmentStatus = fulfillmentStatus;
-
-    const order = await Order.update(req.params.id, updates);
-
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    res.json(order);
-  } catch (error) {
-    console.error('Error updating order:', error);
-    res.status(500).json({ error: 'Failed to update order' });
-  }
-});
-
-// Update order fulfillment and tracking
-app.put('/api/orders/:id/fulfillment', authenticateToken, async (req, res) => {
-  try {
-    const { status, trackingNumber, carrier } = req.body;
-
-    const order = await Order.updateFulfillment(req.params.id, {
-      status,
-      trackingNumber,
-      carrier,
-    });
-
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    res.json(order);
-  } catch (error) {
-    console.error('Error updating fulfillment:', error);
-    res.status(500).json({ error: 'Failed to update fulfillment' });
-  }
-});
-
-// Get order statistics
-app.get('/api/orders/stats/summary', authenticateToken, async (req, res) => {
-  try {
-    const stats = await Order.getStats();
-    res.json(stats);
-  } catch (error) {
-    console.error('Error fetching stats:', error);
-    res.status(500).json({ error: 'Failed to fetch statistics' });
-  }
-});
-
-// Create shipment for an order
-app.post('/api/orders/:id/create-shipment', authenticateToken, async (req, res) => {
-  try {
-    let orderId = req.params.id;
-
-    // Handle short ID format
-    if (orderId.startsWith('ORD-')) {
-      orderId = orderId.substring(4).toLowerCase();
-    }
-
-    // Get order details
-    let order;
-    if (orderId.length === 8) {
-      const { orders } = await Order.findAll({ limit: 1000 });
-      order = orders.find(o => o._id.toString().slice(-8).toLowerCase() === orderId.toLowerCase());
-    } else {
-      order = await Order.findById(orderId);
-    }
-
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    // Use the actual MongoDB ID for updates
-    const actualOrderId = order._id.toString();
-
-    // Check if shipment already exists
-    if (order.trackingNumber) {
-      return res.status(400).json({
-        error: 'Shipment already created for this order',
-        trackingNumber: order.trackingNumber,
-        carrier: order.carrier,
-      });
-    }
-
-    // Create shipment via Shippo
-    const shipmentData = await createShipment({
-      shippingAddress: order.shippingAddress,
-      shippingName: order.shippingName,
-      items: order.items,
-      orderId: actualOrderId,
-    });
-
-    // Update order with tracking information
-    const updatedOrder = await Order.update(actualOrderId, {
-      trackingNumber: shipmentData.trackingNumber,
-      trackingUrlProvider: shipmentData.trackingUrlProvider,
-      carrier: shipmentData.carrier,
-      shippingLabelUrl: shipmentData.shippingLabelUrl,
-      shippoTransactionId: shipmentData.shippoTransactionId,
-      fulfillmentStatus: 'fulfilled',
-      orderStatus: 'shipped',
-      shippedAt: new Date(),
-    });
-
-    res.json({
-      success: true,
-      message: 'Shipment created successfully',
-      order: updatedOrder,
-      shipment: shipmentData,
-    });
-  } catch (error) {
-    console.error('Error creating shipment:', error);
-    res.status(500).json({
-      error: 'Failed to create shipment',
-      message: error.message
-    });
-  }
-});
-
-// Get tracking status for an order
-app.get('/api/orders/:id/tracking', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const order = await Order.findById(id);
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    if (!order.trackingNumber || !order.carrier) {
-      return res.status(400).json({ error: 'No tracking information available' });
-    }
-
-    const trackingInfo = await getTrackingStatus(order.trackingNumber, order.carrier);
-
-    res.json({
-      order: {
-        id: order._id,
-        trackingNumber: order.trackingNumber,
-        carrier: order.carrier,
-        shippedAt: order.shippedAt,
-      },
-      tracking: trackingInfo,
-    });
-  } catch (error) {
-    console.error('Error fetching tracking:', error);
-    res.status(500).json({
-      error: 'Failed to fetch tracking status',
-      message: error.message
-    });
-  }
-});
-
-// ========================================
-// Product Management Endpoints
-// ========================================
-
-// Upload product image (admin only)
-app.post('/api/products/upload-image', authenticateToken, upload.single('image'), async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
-    if (!req.file) {
-      return res.status(400).json({ error: 'No image file provided' });
-    }
-
-    // Upload to Cloudinary using upload_stream
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: 'products',
-        transformation: [
-          { width: 1000, height: 1000, crop: 'limit' },
-          { quality: 'auto' },
-          { fetch_format: 'auto' },
-        ],
-      },
-      (error, result) => {
-        if (error) {
-          console.error('Cloudinary upload error:', error);
-          return res.status(500).json({ error: 'Failed to upload image' });
-        }
-
-        res.json({
-          url: result.secure_url,
-          public_id: result.public_id,
-        });
-      }
-    );
-
-    // Pipe the buffer to Cloudinary
-    uploadStream.end(req.file.buffer);
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    res.status(500).json({ error: 'Failed to upload image' });
-  }
-});
-
-// Get all products (public - for store, with optional admin filtering)
-app.get('/api/products', async (req, res) => {
-  try {
-    const { page = 1, limit = 100, category, status } = req.query;
-
-    // Non-authenticated users only see active products
-    const isActive = req.user ? undefined : true;
-
-    const result = await Product.findAll({
-      page: parseInt(page),
-      limit: parseInt(limit),
-      category,
-      status,
-      isActive,
-    });
-
-    res.json(result);
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Failed to fetch products' });
-  }
-});
-
-// Get single product by ID (public)
-app.get('/api/products/:id', async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.json(product);
-  } catch (error) {
-    console.error('Error fetching product:', error);
-    res.status(500).json({ error: 'Failed to fetch product' });
-  }
-});
-
-// Create new product (admin only)
-app.post('/api/products', authenticateToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
-    // Validate and sanitize product data
-    const validation = validateProductData(req.body);
-    if (!validation.valid) {
-      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
-    }
-
-    const product = await Product.create(validation.sanitized);
-    res.status(201).json(product);
-  } catch (error) {
-    console.error('Error creating product:', error);
-    res.status(500).json({ error: 'Failed to create product' });
-  }
-});
-
-// Update product (admin only)
-app.put('/api/products/:id', authenticateToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
-    // Validate and sanitize product data
-    const validation = validateProductData(req.body);
-    if (!validation.valid) {
-      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
-    }
-
-    // If stock is being updated to 0 or less, automatically set status to "Sold Out"
-    if (validation.sanitized.stock !== undefined && validation.sanitized.stock <= 0) {
-      validation.sanitized.status = 'Sold Out';
-    }
-
-    const product = await Product.update(req.params.id, validation.sanitized);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.json(product);
-  } catch (error) {
-    console.error('Error updating product:', error);
-    res.status(500).json({ error: 'Failed to update product' });
-  }
-});
-
-// Delete product (admin only - soft delete)
-app.delete('/api/products/:id', authenticateToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
-    const { hard } = req.query;
-
-    let success;
-    if (hard === 'true') {
-      success = await Product.delete(req.params.id);
-    } else {
-      success = await Product.softDelete(req.params.id);
-    }
-
-    if (!success) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    res.json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting product:', error);
-    res.status(500).json({ error: 'Failed to delete product' });
-  }
-});
-
-// Get product categories (public)
-app.get('/api/products/meta/categories', async (req, res) => {
-  try {
-    const categories = await Product.getCategories();
-    res.json(categories);
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    res.status(500).json({ error: 'Failed to fetch categories' });
-  }
-});
-
-// Search products (public)
-app.get('/api/products/search/:term', async (req, res) => {
-  try {
-    const products = await Product.search(req.params.term);
-    res.json(products);
-  } catch (error) {
-    console.error('Error searching products:', error);
-    res.status(500).json({ error: 'Failed to search products' });
-  }
-});
-
-// Get product statistics (admin only)
-app.get('/api/products/stats/summary', authenticateToken, async (req, res) => {
-  try {
-    // Check if user is admin
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
-    const stats = await Product.getStats();
-    res.json(stats);
-  } catch (error) {
-    console.error('Error fetching product stats:', error);
-    res.status(500).json({ error: 'Failed to fetch statistics' });
-  }
-});
+// [LEGACY E-COMMERCE - DEPRECATED] // ========================================
+// [LEGACY E-COMMERCE - DEPRECATED] // Admin Order Management Endpoints
+// [LEGACY E-COMMERCE - DEPRECATED] // ========================================
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get all orders with pagination and filtering
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/orders', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const { page = 1, limit = 20, status } = req.query;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const result = await Order.findAll({
+// [LEGACY E-COMMERCE - DEPRECATED]       page: parseInt(page),
+// [LEGACY E-COMMERCE - DEPRECATED]       limit: parseInt(limit),
+// [LEGACY E-COMMERCE - DEPRECATED]       status,
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(result);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching orders:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch orders' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get single order by ID
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/orders/:id', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     let orderId = req.params.id;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // If the ID starts with ORD- or is 8 chars (short format), convert to MongoDB query
+// [LEGACY E-COMMERCE - DEPRECATED]     if (orderId.startsWith('ORD-')) {
+// [LEGACY E-COMMERCE - DEPRECATED]       orderId = orderId.substring(4).toLowerCase(); // Remove ORD- prefix and lowercase
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // If it's 8 characters, it's a short ID - find by matching last 8 chars
+// [LEGACY E-COMMERCE - DEPRECATED]     let order;
+// [LEGACY E-COMMERCE - DEPRECATED]     if (orderId.length === 8) {
+// [LEGACY E-COMMERCE - DEPRECATED]       const { orders } = await Order.findAll({ limit: 1000 }); // Get all orders
+// [LEGACY E-COMMERCE - DEPRECATED]       order = orders.find(o => o._id.toString().slice(-8).toLowerCase() === orderId.toLowerCase());
+// [LEGACY E-COMMERCE - DEPRECATED]     } else {
+// [LEGACY E-COMMERCE - DEPRECATED]       // Full MongoDB ID
+// [LEGACY E-COMMERCE - DEPRECATED]       order = await Order.findById(orderId);
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!order) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Order not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Transform database fields to frontend-friendly names
+// [LEGACY E-COMMERCE - DEPRECATED]     const transformedOrder = {
+// [LEGACY E-COMMERCE - DEPRECATED]       ...order,
+// [LEGACY E-COMMERCE - DEPRECATED]       sessionId: order.stripeSessionId,
+// [LEGACY E-COMMERCE - DEPRECATED]       paymentIntentId: order.stripePaymentIntentId,
+// [LEGACY E-COMMERCE - DEPRECATED]       customerId: order.stripeCustomerId,
+// [LEGACY E-COMMERCE - DEPRECATED]     };
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(transformedOrder);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching order:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch order' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get order by Stripe session ID (for success page)
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/orders/session/:sessionId', async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const order = await Order.findBySessionId(req.params.sessionId);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!order) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Order not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json({ order });
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching order by session ID:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch order' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get orders by customer email
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/orders/customer/:email', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const orders = await Order.findByCustomerEmail(req.params.email);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(orders);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching customer orders:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch customer orders' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Update order status
+// [LEGACY E-COMMERCE - DEPRECATED] app.put('/api/orders/:id/status', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const { orderStatus, fulfillmentStatus } = req.body;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const updates = {};
+// [LEGACY E-COMMERCE - DEPRECATED]     if (orderStatus) updates.orderStatus = orderStatus;
+// [LEGACY E-COMMERCE - DEPRECATED]     if (fulfillmentStatus) updates.fulfillmentStatus = fulfillmentStatus;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const order = await Order.update(req.params.id, updates);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!order) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Order not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(order);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error updating order:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to update order' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Update order fulfillment and tracking
+// [LEGACY E-COMMERCE - DEPRECATED] app.put('/api/orders/:id/fulfillment', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const { status, trackingNumber, carrier } = req.body;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const order = await Order.updateFulfillment(req.params.id, {
+// [LEGACY E-COMMERCE - DEPRECATED]       status,
+// [LEGACY E-COMMERCE - DEPRECATED]       trackingNumber,
+// [LEGACY E-COMMERCE - DEPRECATED]       carrier,
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!order) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Order not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(order);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error updating fulfillment:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to update fulfillment' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get order statistics
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/orders/stats/summary', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const stats = await Order.getStats();
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(stats);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching stats:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch statistics' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Create shipment for an order
+// [LEGACY E-COMMERCE - DEPRECATED] app.post('/api/orders/:id/create-shipment', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     let orderId = req.params.id;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Handle short ID format
+// [LEGACY E-COMMERCE - DEPRECATED]     if (orderId.startsWith('ORD-')) {
+// [LEGACY E-COMMERCE - DEPRECATED]       orderId = orderId.substring(4).toLowerCase();
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Get order details
+// [LEGACY E-COMMERCE - DEPRECATED]     let order;
+// [LEGACY E-COMMERCE - DEPRECATED]     if (orderId.length === 8) {
+// [LEGACY E-COMMERCE - DEPRECATED]       const { orders } = await Order.findAll({ limit: 1000 });
+// [LEGACY E-COMMERCE - DEPRECATED]       order = orders.find(o => o._id.toString().slice(-8).toLowerCase() === orderId.toLowerCase());
+// [LEGACY E-COMMERCE - DEPRECATED]     } else {
+// [LEGACY E-COMMERCE - DEPRECATED]       order = await Order.findById(orderId);
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!order) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Order not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Use the actual MongoDB ID for updates
+// [LEGACY E-COMMERCE - DEPRECATED]     const actualOrderId = order._id.toString();
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Check if shipment already exists
+// [LEGACY E-COMMERCE - DEPRECATED]     if (order.trackingNumber) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(400).json({
+// [LEGACY E-COMMERCE - DEPRECATED]         error: 'Shipment already created for this order',
+// [LEGACY E-COMMERCE - DEPRECATED]         trackingNumber: order.trackingNumber,
+// [LEGACY E-COMMERCE - DEPRECATED]         carrier: order.carrier,
+// [LEGACY E-COMMERCE - DEPRECATED]       });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Create shipment via Shippo
+// [LEGACY E-COMMERCE - DEPRECATED]     const shipmentData = await createShipment({
+// [LEGACY E-COMMERCE - DEPRECATED]       shippingAddress: order.shippingAddress,
+// [LEGACY E-COMMERCE - DEPRECATED]       shippingName: order.shippingName,
+// [LEGACY E-COMMERCE - DEPRECATED]       items: order.items,
+// [LEGACY E-COMMERCE - DEPRECATED]       orderId: actualOrderId,
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Update order with tracking information
+// [LEGACY E-COMMERCE - DEPRECATED]     const updatedOrder = await Order.update(actualOrderId, {
+// [LEGACY E-COMMERCE - DEPRECATED]       trackingNumber: shipmentData.trackingNumber,
+// [LEGACY E-COMMERCE - DEPRECATED]       trackingUrlProvider: shipmentData.trackingUrlProvider,
+// [LEGACY E-COMMERCE - DEPRECATED]       carrier: shipmentData.carrier,
+// [LEGACY E-COMMERCE - DEPRECATED]       shippingLabelUrl: shipmentData.shippingLabelUrl,
+// [LEGACY E-COMMERCE - DEPRECATED]       shippoTransactionId: shipmentData.shippoTransactionId,
+// [LEGACY E-COMMERCE - DEPRECATED]       fulfillmentStatus: 'fulfilled',
+// [LEGACY E-COMMERCE - DEPRECATED]       orderStatus: 'shipped',
+// [LEGACY E-COMMERCE - DEPRECATED]       shippedAt: new Date(),
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json({
+// [LEGACY E-COMMERCE - DEPRECATED]       success: true,
+// [LEGACY E-COMMERCE - DEPRECATED]       message: 'Shipment created successfully',
+// [LEGACY E-COMMERCE - DEPRECATED]       order: updatedOrder,
+// [LEGACY E-COMMERCE - DEPRECATED]       shipment: shipmentData,
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error creating shipment:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({
+// [LEGACY E-COMMERCE - DEPRECATED]       error: 'Failed to create shipment',
+// [LEGACY E-COMMERCE - DEPRECATED]       message: error.message
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get tracking status for an order
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/orders/:id/tracking', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const { id } = req.params;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const order = await Order.findById(id);
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!order) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Order not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!order.trackingNumber || !order.carrier) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(400).json({ error: 'No tracking information available' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const trackingInfo = await getTrackingStatus(order.trackingNumber, order.carrier);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json({
+// [LEGACY E-COMMERCE - DEPRECATED]       order: {
+// [LEGACY E-COMMERCE - DEPRECATED]         id: order._id,
+// [LEGACY E-COMMERCE - DEPRECATED]         trackingNumber: order.trackingNumber,
+// [LEGACY E-COMMERCE - DEPRECATED]         carrier: order.carrier,
+// [LEGACY E-COMMERCE - DEPRECATED]         shippedAt: order.shippedAt,
+// [LEGACY E-COMMERCE - DEPRECATED]       },
+// [LEGACY E-COMMERCE - DEPRECATED]       tracking: trackingInfo,
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching tracking:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({
+// [LEGACY E-COMMERCE - DEPRECATED]       error: 'Failed to fetch tracking status',
+// [LEGACY E-COMMERCE - DEPRECATED]       message: error.message
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+
+// [LEGACY E-COMMERCE - DEPRECATED] // ========================================
+// [LEGACY E-COMMERCE - DEPRECATED] // Product Management Endpoints
+// [LEGACY E-COMMERCE - DEPRECATED] // ========================================
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Upload product image (admin only)
+// [LEGACY E-COMMERCE - DEPRECATED] app.post('/api/products/upload-image', authenticateToken, upload.single('image'), async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     // Check if user is admin
+// [LEGACY E-COMMERCE - DEPRECATED]     if (req.user.role !== 'admin') {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(403).json({ error: 'Forbidden: Admin access required' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!req.file) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(400).json({ error: 'No image file provided' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Upload to Cloudinary using upload_stream
+// [LEGACY E-COMMERCE - DEPRECATED]     const uploadStream = cloudinary.uploader.upload_stream(
+// [LEGACY E-COMMERCE - DEPRECATED]       {
+// [LEGACY E-COMMERCE - DEPRECATED]         folder: 'products',
+// [LEGACY E-COMMERCE - DEPRECATED]         transformation: [
+// [LEGACY E-COMMERCE - DEPRECATED]           { width: 1000, height: 1000, crop: 'limit' },
+// [LEGACY E-COMMERCE - DEPRECATED]           { quality: 'auto' },
+// [LEGACY E-COMMERCE - DEPRECATED]           { fetch_format: 'auto' },
+// [LEGACY E-COMMERCE - DEPRECATED]         ],
+// [LEGACY E-COMMERCE - DEPRECATED]       },
+// [LEGACY E-COMMERCE - DEPRECATED]       (error, result) => {
+// [LEGACY E-COMMERCE - DEPRECATED]         if (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]           console.error('Cloudinary upload error:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]           return res.status(500).json({ error: 'Failed to upload image' });
+// [LEGACY E-COMMERCE - DEPRECATED]         }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]         res.json({
+// [LEGACY E-COMMERCE - DEPRECATED]           url: result.secure_url,
+// [LEGACY E-COMMERCE - DEPRECATED]           public_id: result.public_id,
+// [LEGACY E-COMMERCE - DEPRECATED]         });
+// [LEGACY E-COMMERCE - DEPRECATED]       }
+// [LEGACY E-COMMERCE - DEPRECATED]     );
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Pipe the buffer to Cloudinary
+// [LEGACY E-COMMERCE - DEPRECATED]     uploadStream.end(req.file.buffer);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error uploading image:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to upload image' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get all products (public - for store, with optional admin filtering)
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/products', async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const { page = 1, limit = 100, category, status } = req.query;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Non-authenticated users only see active products
+// [LEGACY E-COMMERCE - DEPRECATED]     const isActive = req.user ? undefined : true;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const result = await Product.findAll({
+// [LEGACY E-COMMERCE - DEPRECATED]       page: parseInt(page),
+// [LEGACY E-COMMERCE - DEPRECATED]       limit: parseInt(limit),
+// [LEGACY E-COMMERCE - DEPRECATED]       category,
+// [LEGACY E-COMMERCE - DEPRECATED]       status,
+// [LEGACY E-COMMERCE - DEPRECATED]       isActive,
+// [LEGACY E-COMMERCE - DEPRECATED]     });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(result);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching products:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch products' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get single product by ID (public)
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/products/:id', async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const product = await Product.findById(req.params.id);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!product) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Product not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(product);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching product:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch product' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Create new product (admin only)
+// [LEGACY E-COMMERCE - DEPRECATED] app.post('/api/products', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     // Check if user is admin
+// [LEGACY E-COMMERCE - DEPRECATED]     if (req.user.role !== 'admin') {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(403).json({ error: 'Forbidden: Admin access required' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Validate and sanitize product data
+// [LEGACY E-COMMERCE - DEPRECATED]     const validation = validateProductData(req.body);
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!validation.valid) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const product = await Product.create(validation.sanitized);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(201).json(product);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error creating product:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to create product' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Update product (admin only)
+// [LEGACY E-COMMERCE - DEPRECATED] app.put('/api/products/:id', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     // Check if user is admin
+// [LEGACY E-COMMERCE - DEPRECATED]     if (req.user.role !== 'admin') {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(403).json({ error: 'Forbidden: Admin access required' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Validate and sanitize product data
+// [LEGACY E-COMMERCE - DEPRECATED]     const validation = validateProductData(req.body);
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!validation.valid) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // If stock is being updated to 0 or less, automatically set status to "Sold Out"
+// [LEGACY E-COMMERCE - DEPRECATED]     if (validation.sanitized.stock !== undefined && validation.sanitized.stock <= 0) {
+// [LEGACY E-COMMERCE - DEPRECATED]       validation.sanitized.status = 'Sold Out';
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const product = await Product.update(req.params.id, validation.sanitized);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!product) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Product not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(product);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error updating product:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to update product' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Delete product (admin only - soft delete)
+// [LEGACY E-COMMERCE - DEPRECATED] app.delete('/api/products/:id', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     // Check if user is admin
+// [LEGACY E-COMMERCE - DEPRECATED]     if (req.user.role !== 'admin') {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(403).json({ error: 'Forbidden: Admin access required' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const { hard } = req.query;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     let success;
+// [LEGACY E-COMMERCE - DEPRECATED]     if (hard === 'true') {
+// [LEGACY E-COMMERCE - DEPRECATED]       success = await Product.delete(req.params.id);
+// [LEGACY E-COMMERCE - DEPRECATED]     } else {
+// [LEGACY E-COMMERCE - DEPRECATED]       success = await Product.softDelete(req.params.id);
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     if (!success) {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(404).json({ error: 'Product not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json({ message: 'Product deleted successfully' });
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error deleting product:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to delete product' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get product categories (public)
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/products/meta/categories', async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const categories = await Product.getCategories();
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(categories);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching categories:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch categories' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Search products (public)
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/products/search/:term', async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     const products = await Product.search(req.params.term);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(products);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error searching products:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to search products' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED] // Get product statistics (admin only)
+// [LEGACY E-COMMERCE - DEPRECATED] app.get('/api/products/stats/summary', authenticateToken, async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     // Check if user is admin
+// [LEGACY E-COMMERCE - DEPRECATED]     if (req.user.role !== 'admin') {
+// [LEGACY E-COMMERCE - DEPRECATED]       return res.status(403).json({ error: 'Forbidden: Admin access required' });
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const stats = await Product.getStats();
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json(stats);
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('Error fetching product stats:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Failed to fetch statistics' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
 
 // ============================================
 // SERVICE ENDPOINTS (Service Booking System)
@@ -1960,61 +1960,61 @@ app.get('/api/bookings/stats/summary', authenticateToken, async (req, res) => {
   }
 });
 
-// Shippo webhook endpoint for tracking updates
-app.post('/api/shippo-webhook', express.json(), async (req, res) => {
-  try {
-    console.log('📦 Shippo webhook received:', req.body);
-
-    const event = req.body;
-
-    // Check if this is a tracking status update
-    if (event.event === 'track_updated') {
-      const trackingNumber = event.data?.tracking_number;
-      const trackingStatus = event.data?.tracking_status?.status;
-
-      console.log(`📦 Tracking update: ${trackingNumber} - Status: ${trackingStatus}`);
-
-      if (!trackingNumber) {
-        return res.status(400).json({ error: 'No tracking number provided' });
-      }
-
-      // Find order by tracking number
-      const { orders } = await Order.findAll({ limit: 1000 });
-      const order = orders.find(o => o.trackingNumber === trackingNumber);
-
-      if (!order) {
-        console.log(`⚠️ No order found with tracking number: ${trackingNumber}`);
-        return res.status(404).json({ error: 'Order not found' });
-      }
-
-      // Update order status based on tracking status
-      if (trackingStatus === 'DELIVERED') {
-        const updatedOrder = await Order.findByIdAndUpdate(
-          order._id,
-          {
-            orderStatus: 'delivered',
-            deliveredAt: new Date(),
-          }
-        );
-
-        console.log(`✅ Order ${order._id} marked as delivered`);
-
-        // TODO: Send delivery confirmation email
-      } else if (trackingStatus === 'TRANSIT' || trackingStatus === 'IN_TRANSIT') {
-        await Order.findByIdAndUpdate(
-          order._id,
-          { orderStatus: 'in_transit' }
-        );
-        console.log(`🚚 Order ${order._id} in transit`);
-      }
-    }
-
-    res.json({ received: true });
-  } catch (error) {
-    console.error('❌ Shippo webhook error:', error);
-    res.status(500).json({ error: 'Webhook processing failed' });
-  }
-});
+// [LEGACY E-COMMERCE - DEPRECATED] // Shippo webhook endpoint for tracking updates
+// [LEGACY E-COMMERCE - DEPRECATED] app.post('/api/shippo-webhook', express.json(), async (req, res) => {
+// [LEGACY E-COMMERCE - DEPRECATED]   try {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.log('📦 Shippo webhook received:', req.body);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     const event = req.body;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     // Check if this is a tracking status update
+// [LEGACY E-COMMERCE - DEPRECATED]     if (event.event === 'track_updated') {
+// [LEGACY E-COMMERCE - DEPRECATED]       const trackingNumber = event.data?.tracking_number;
+// [LEGACY E-COMMERCE - DEPRECATED]       const trackingStatus = event.data?.tracking_status?.status;
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]       console.log(`📦 Tracking update: ${trackingNumber} - Status: ${trackingStatus}`);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]       if (!trackingNumber) {
+// [LEGACY E-COMMERCE - DEPRECATED]         return res.status(400).json({ error: 'No tracking number provided' });
+// [LEGACY E-COMMERCE - DEPRECATED]       }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]       // Find order by tracking number
+// [LEGACY E-COMMERCE - DEPRECATED]       const { orders } = await Order.findAll({ limit: 1000 });
+// [LEGACY E-COMMERCE - DEPRECATED]       const order = orders.find(o => o.trackingNumber === trackingNumber);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]       if (!order) {
+// [LEGACY E-COMMERCE - DEPRECATED]         console.log(`⚠️ No order found with tracking number: ${trackingNumber}`);
+// [LEGACY E-COMMERCE - DEPRECATED]         return res.status(404).json({ error: 'Order not found' });
+// [LEGACY E-COMMERCE - DEPRECATED]       }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]       // Update order status based on tracking status
+// [LEGACY E-COMMERCE - DEPRECATED]       if (trackingStatus === 'DELIVERED') {
+// [LEGACY E-COMMERCE - DEPRECATED]         const updatedOrder = await Order.findByIdAndUpdate(
+// [LEGACY E-COMMERCE - DEPRECATED]           order._id,
+// [LEGACY E-COMMERCE - DEPRECATED]           {
+// [LEGACY E-COMMERCE - DEPRECATED]             orderStatus: 'delivered',
+// [LEGACY E-COMMERCE - DEPRECATED]             deliveredAt: new Date(),
+// [LEGACY E-COMMERCE - DEPRECATED]           }
+// [LEGACY E-COMMERCE - DEPRECATED]         );
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]         console.log(`✅ Order ${order._id} marked as delivered`);
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]         // TODO: Send delivery confirmation email
+// [LEGACY E-COMMERCE - DEPRECATED]       } else if (trackingStatus === 'TRANSIT' || trackingStatus === 'IN_TRANSIT') {
+// [LEGACY E-COMMERCE - DEPRECATED]         await Order.findByIdAndUpdate(
+// [LEGACY E-COMMERCE - DEPRECATED]           order._id,
+// [LEGACY E-COMMERCE - DEPRECATED]           { orderStatus: 'in_transit' }
+// [LEGACY E-COMMERCE - DEPRECATED]         );
+// [LEGACY E-COMMERCE - DEPRECATED]         console.log(`🚚 Order ${order._id} in transit`);
+// [LEGACY E-COMMERCE - DEPRECATED]       }
+// [LEGACY E-COMMERCE - DEPRECATED]     }
+// [LEGACY E-COMMERCE - DEPRECATED] 
+// [LEGACY E-COMMERCE - DEPRECATED]     res.json({ received: true });
+// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
+// [LEGACY E-COMMERCE - DEPRECATED]     console.error('❌ Shippo webhook error:', error);
+// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Webhook processing failed' });
+// [LEGACY E-COMMERCE - DEPRECATED]   }
+// [LEGACY E-COMMERCE - DEPRECATED] });
 
 // Get customers list (aggregated from orders)
 app.get('/api/customers', authenticateToken, async (req, res) => {

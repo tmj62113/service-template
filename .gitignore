@@ -50,3 +50,4 @@ scripts/createAdminQuick.js
 # Context folder with design files (may contain client-specific info)
 context/
 .vercel
+*.backup*
