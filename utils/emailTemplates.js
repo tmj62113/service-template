@@ -197,6 +197,240 @@ export function generateBookingConfirmationEmail(bookingData) {
 }
 
 /**
+ * Email template for 24-hour booking reminder
+ * @param {Object} booking - Booking information
+ * @param {Object} service - Service details
+ * @param {Object} staff - Staff member details
+ * @returns {string} HTML email content
+ */
+export function generateBookingReminder24h(booking, service, staff) {
+  const appointmentDate = new Date(booking.startDateTime).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: booking.timeZone || 'America/New_York'
+  });
+
+  const appointmentTime = new Date(booking.startDateTime).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: booking.timeZone || 'America/New_York'
+  });
+
+  const clientName = booking.clientInfo?.name || 'Valued Client';
+  const serviceName = service?.name || 'Your Appointment';
+  const staffName = staff?.name || 'Our Team';
+  const duration = booking.duration || service?.duration || 60;
+  const bookingId = booking._id?.toString() || '';
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reminder: Your appointment tomorrow</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 40px 30px; text-align: center; background-color: #dbeafe; border-radius: 8px 8px 0 0;">
+              <h1 style="color: #1e40af; margin: 0; font-size: 28px;">📅 Appointment Reminder</h1>
+              <p style="color: #1e3a8a; margin: 10px 0 0; font-size: 16px;">Tomorrow at ${appointmentTime}</p>
+            </td>
+          </tr>
+
+          <!-- Reminder Content -->
+          <tr>
+            <td style="padding: 30px 40px;">
+              <p style="color: #111827; font-size: 16px; margin: 0 0 10px;">Hi ${clientName},</p>
+              <p style="color: #6b7280; font-size: 16px; margin: 0 0 30px; line-height: 1.6;">
+                This is a friendly reminder about your upcoming appointment tomorrow.
+              </p>
+
+              <!-- Appointment Details -->
+              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <h2 style="color: #111827; font-size: 18px; margin: 0 0 15px;">Appointment Details</h2>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Service:</td>
+                    <td style="padding: 8px 0; color: #111827; font-size: 14px; font-weight: 600; text-align: right;">
+                      ${serviceName}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Date & Time:</td>
+                    <td style="padding: 8px 0; color: #111827; font-size: 14px; font-weight: 600; text-align: right;">
+                      ${appointmentDate}<br>${appointmentTime}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Duration:</td>
+                    <td style="padding: 8px 0; color: #111827; font-size: 14px; font-weight: 600; text-align: right;">
+                      ${duration} minutes
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">With:</td>
+                    <td style="padding: 8px 0; color: #111827; font-size: 14px; font-weight: 600; text-align: right;">
+                      ${staffName}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Reminder Note -->
+              <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-bottom: 30px; border-radius: 4px;">
+                <p style="margin: 0; color: #1e40af; font-size: 14px; line-height: 1.6;">
+                  <strong>Please note:</strong> We ask that you arrive 5-10 minutes early for your appointment.
+                  If you need to reschedule or cancel, please let us know as soon as possible.
+                </p>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="text-align: center; margin: 30px 0;">
+                <p style="color: #6b7280; font-size: 14px; margin: 0 0 15px;">Need to make changes?</p>
+                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}/bookings/${bookingId}"
+                   style="display: inline-block; padding: 12px 24px; background-color: #1a1a1a; color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                  Manage Booking
+                </a>
+              </div>
+
+              <!-- Support -->
+              <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e5e7eb; text-align: center;">
+                <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                  Questions? Contact us at
+                  <a href="mailto:support@example.com" style="color: #1a1a1a; text-decoration: none;">support@example.com</a>
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px 40px; text-align: center; background-color: #f9fafb; border-radius: 0 0 8px 8px;">
+              <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                We look forward to seeing you soon!
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+}
+
+/**
+ * Email template for 1-hour booking reminder
+ * @param {Object} booking - Booking information
+ * @param {Object} service - Service details
+ * @param {Object} staff - Staff member details
+ * @returns {string} HTML email content
+ */
+export function generateBookingReminder1h(booking, service, staff) {
+  const appointmentTime = new Date(booking.startDateTime).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: booking.timeZone || 'America/New_York'
+  });
+
+  const clientName = booking.clientInfo?.name || 'Valued Client';
+  const serviceName = service?.name || 'Your Appointment';
+  const staffName = staff?.name || 'Our Team';
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your appointment is in 1 hour</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 40px 30px; text-align: center; background-color: #fef3c7; border-radius: 8px 8px 0 0;">
+              <h1 style="color: #92400e; margin: 0; font-size: 28px;">⏰ Starting Soon!</h1>
+              <p style="color: #b45309; margin: 10px 0 0; font-size: 16px;">Your appointment is in about 1 hour</p>
+            </td>
+          </tr>
+
+          <!-- Reminder Content -->
+          <tr>
+            <td style="padding: 30px 40px;">
+              <p style="color: #111827; font-size: 16px; margin: 0 0 10px;">Hi ${clientName},</p>
+              <p style="color: #6b7280; font-size: 16px; margin: 0 0 30px; line-height: 1.6;">
+                Your appointment is coming up soon!
+              </p>
+
+              <!-- Quick Details -->
+              <div style="background-color: #fef3c7; padding: 25px; border-radius: 8px; text-align: center; margin-bottom: 30px;">
+                <p style="color: #92400e; font-size: 14px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: 1px;">
+                  <strong>Starting at</strong>
+                </p>
+                <p style="color: #78350f; font-size: 32px; font-weight: 700; margin: 0 0 15px;">
+                  ${appointmentTime}
+                </p>
+                <p style="color: #92400e; font-size: 16px; margin: 0;">
+                  <strong>${serviceName}</strong>
+                </p>
+                <p style="color: #b45309; font-size: 14px; margin: 5px 0 0;">
+                  with ${staffName}
+                </p>
+              </div>
+
+              <!-- Reminder -->
+              <div style="background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin-bottom: 30px; border-radius: 4px;">
+                <p style="margin: 0; color: #1e40af; font-size: 14px; line-height: 1.6;">
+                  Please arrive a few minutes early. We look forward to seeing you!
+                </p>
+              </div>
+
+              <!-- Support -->
+              <div style="text-align: center;">
+                <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                  Questions? Call us at <strong style="color: #111827;">(555) 123-4567</strong>
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px 40px; text-align: center; background-color: #f9fafb; border-radius: 0 0 8px 8px;">
+              <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+                See you soon!
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `;
+}
+
+/**
  * [LEGACY E-COMMERCE - DEPRECATED]
  * Email template for order confirmation
  * @deprecated Use generateBookingConfirmationEmail instead

@@ -31,6 +31,7 @@ import { Staff } from './db/models/Staff.js';
 import { Booking } from './db/models/Booking.js';
 import { RecurringBooking } from './db/models/RecurringBooking.js';
 import { generateOrderConfirmationEmail, generateBookingConfirmationEmail } from './utils/emailTemplates.js';
+import { startBookingReminderJobs } from './src/jobs/bookingReminders.js';
 import { authenticateToken, generateToken, requireAdmin } from './middleware/auth.js';
 // [LEGACY E-COMMERCE - DEPRECATED] import { createShipment, getTrackingStatus } from './services/shippoService.js';
 import { getCollection, getDatabase } from './db/connection.js';
@@ -3719,6 +3720,9 @@ if (process.env.NODE_ENV !== 'test') {
     } else {
       console.log('🔓 Development mode: Enhanced error messages enabled');
     }
+
+    // Start booking reminder cron jobs
+    startBookingReminderJobs();
   });
 }
 
