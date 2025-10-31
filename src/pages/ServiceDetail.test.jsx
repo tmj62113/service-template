@@ -24,6 +24,12 @@ const renderDetail = () => {
   );
 };
 
+const createJsonResponse = (data, options = {}) => ({
+  ok: options.ok ?? true,
+  status: options.status ?? 200,
+  json: async () => data,
+});
+
 describe('ServiceDetail page', () => {
   beforeEach(() => {
     mockNavigate.mockReset();
@@ -34,13 +40,21 @@ describe('ServiceDetail page', () => {
     global.fetch.mockReset();
   });
 
-  it('renders service information, staff, and related services', async () => {
+  it('shows a loading indicator while fetching service details', () => {
+    mockParams.id = 'service-loading';
+    global.fetch.mockReturnValue(new Promise(() => {}));
+
+    renderDetail();
+
+    expect(screen.getByText('Loading service...')).toBeInTheDocument();
+  });
+
+  it('renders service information, cancellation policy, and related services', async () => {
     mockParams.id = 'service-1';
 
     global.fetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
+      .mockResolvedValueOnce(
+        createJsonResponse({
           _id: 'service-1',
           name: 'Strategy Session',
           description: 'Comprehensive planning for your next move.',
@@ -54,11 +68,10 @@ describe('ServiceDetail page', () => {
             refundPercentage: 100,
           },
           staffIds: ['staff-1'],
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
+        })
+      )
+      .mockResolvedValueOnce(
+        createJsonResponse({
           staff: [
             {
               _id: 'staff-1',
@@ -67,11 +80,10 @@ describe('ServiceDetail page', () => {
               specialties: ['Leadership'],
             },
           ],
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
+        })
+      )
+      .mockResolvedValueOnce(
+        createJsonResponse({
           services: [
             {
               _id: 'service-2',
@@ -82,8 +94,8 @@ describe('ServiceDetail page', () => {
               price: 25000,
             },
           ],
-        }),
-      });
+        })
+      );
 
     renderDetail();
 
@@ -92,15 +104,23 @@ describe('ServiceDetail page', () => {
     expect(staffMember).toBeInTheDocument();
     const relatedService = await screen.findByText('Strategy Intensive');
     expect(relatedService.closest('a')).toHaveAttribute('href', '/services/service-2');
+    expect(screen.getByText('Strategy')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Cancel up to 24 hours before your appointment for a 100% refund.'
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Note: A 15 minute buffer is included after each session.')
+    ).toBeInTheDocument();
   });
 
   it('navigates to booking with selected staff member', async () => {
     mockParams.id = 'service-2';
 
     global.fetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
+      .mockResolvedValueOnce(
+        createJsonResponse({
           _id: 'service-2',
           name: 'Operations Roadmap',
           description: 'Align operations with strategy.',
@@ -109,11 +129,10 @@ describe('ServiceDetail page', () => {
           price: 18000,
           bufferTime: 10,
           staffIds: ['staff-99'],
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
+        })
+      )
+      .mockResolvedValueOnce(
+        createJsonResponse({
           staff: [
             {
               _id: 'staff-99',
@@ -122,12 +141,9 @@ describe('ServiceDetail page', () => {
               specialties: ['Efficiency'],
             },
           ],
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ services: [] }),
-      });
+        })
+      )
+      .mockResolvedValueOnce(createJsonResponse({ services: [] }));
 
     renderDetail();
     await screen.findByRole('heading', { name: 'Operations Roadmap' });
@@ -142,11 +158,9 @@ describe('ServiceDetail page', () => {
   it('shows an error state when the service is not found', async () => {
     mockParams.id = 'missing-service';
 
-    global.fetch.mockResolvedValueOnce({
-      ok: false,
-      status: 404,
-      json: async () => ({ error: 'Service not found' }),
-    });
+    global.fetch.mockResolvedValueOnce(
+      createJsonResponse({ error: 'Service not found' }, { ok: false, status: 404 })
+    );
 
     renderDetail();
 
@@ -158,9 +172,8 @@ describe('ServiceDetail page', () => {
     mockParams.id = 'service-3';
 
     global.fetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
+      .mockResolvedValueOnce(
+        createJsonResponse({
           _id: 'service-3',
           name: 'Wellness Recharge',
           description: 'Holistic reset for your team.',
@@ -168,11 +181,10 @@ describe('ServiceDetail page', () => {
           duration: 45,
           price: 12000,
           staffIds: [],
-        }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
+        })
+      )
+      .mockResolvedValueOnce(
+        createJsonResponse({
           services: [
             {
               _id: 'service-4',
@@ -183,8 +195,8 @@ describe('ServiceDetail page', () => {
               price: 40000,
             },
           ],
-        }),
-      });
+        })
+      );
 
     renderDetail();
 
@@ -193,5 +205,95 @@ describe('ServiceDetail page', () => {
     const relatedWellness = await screen.findByText('Wellness Retreat Planning');
     expect(relatedWellness.closest('a')).toHaveAttribute('href', '/services/service-4');
     expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it('shows loading state for related services while fetching suggestions', async () => {
+    mockParams.id = 'service-related-loading';
+
+    const pendingRelated = new Promise(() => {});
+
+    global.fetch
+      .mockResolvedValueOnce(
+        createJsonResponse({
+          _id: 'service-related-loading',
+          name: 'Leadership Workshop',
+          description: 'Team leadership intensive.',
+          category: 'Leadership',
+          duration: 90,
+          price: 28000,
+          staffIds: [],
+        })
+      )
+      .mockReturnValueOnce(pendingRelated);
+
+    renderDetail();
+
+    expect(await screen.findByText('Leadership Workshop')).toBeInTheDocument();
+    expect(screen.getByText('Loading related services...')).toBeInTheDocument();
+  });
+
+  it('renders staff cards with placeholders when no photo is provided', async () => {
+    mockParams.id = 'service-4';
+
+    global.fetch
+      .mockResolvedValueOnce(
+        createJsonResponse({
+          _id: 'service-4',
+          name: 'Executive Coaching',
+          description: 'One-on-one executive coaching.',
+          category: 'Coaching',
+          duration: 60,
+          price: 20000,
+          staffIds: ['staff-10'],
+        })
+      )
+      .mockResolvedValueOnce(
+        createJsonResponse({
+          staff: [
+            {
+              _id: 'staff-10',
+              name: 'Morgan Lee',
+              title: 'Executive Coach',
+              specialties: ['Leadership'],
+              photo: null,
+            },
+          ],
+        })
+      )
+      .mockResolvedValueOnce(createJsonResponse({ services: [] }));
+
+    const { container } = renderDetail();
+
+    expect(await screen.findByRole('heading', { name: 'Executive Coaching' })).toBeInTheDocument();
+    const staffButton = await screen.findByRole('button', { name: /Morgan Lee/ });
+    expect(staffButton).toBeInTheDocument();
+    expect(container.querySelectorAll('.staff-avatar-placeholder')).toHaveLength(2);
+  });
+
+  it('keeps the booking CTA available even when staff is not selected', async () => {
+    mockParams.id = 'service-cta';
+
+    global.fetch
+      .mockResolvedValueOnce(
+        createJsonResponse({
+          _id: 'service-cta',
+          name: 'Mindset Reset',
+          description: 'Reset your mindset.',
+          category: 'Mindset',
+          duration: 50,
+          price: 15000,
+          staffIds: [],
+        })
+      )
+      .mockResolvedValueOnce(
+        createJsonResponse({
+          services: [],
+        })
+      );
+
+    renderDetail();
+
+    expect(await screen.findByRole('heading', { name: 'Mindset Reset' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Book This Service' })).toBeInTheDocument();
   });
 });
