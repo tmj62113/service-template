@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import '../styles/ServiceDetail.css';
 
@@ -10,6 +10,8 @@ function ServiceDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState(null);
+  const [relatedServices, setRelatedServices] = useState([]);
+  const [relatedLoading, setRelatedLoading] = useState(false);
 
   useEffect(() => {
     fetchService();
@@ -34,6 +36,7 @@ function ServiceDetail() {
 
       const data = await response.json();
       setService(data);
+      setSelectedStaff(null);
       setError(null);
     } catch (err) {
       console.error('Error fetching service:', err);
@@ -54,6 +57,41 @@ function ServiceDetail() {
       console.error('Error fetching staff:', err);
     }
   };
+
+  const fetchRelatedServices = useCallback(async (category, currentServiceId) => {
+    if (!category) return;
+
+    const params = new URLSearchParams({
+      isActive: 'true',
+      limit: '6',
+      category,
+    });
+
+    try {
+      setRelatedLoading(true);
+      const response = await fetch(`/api/services?${params}`);
+      if (!response.ok) throw new Error('Failed to fetch related services');
+
+      const data = await response.json();
+      const related = (data.services || [])
+        .filter((item) => item._id !== currentServiceId)
+        .slice(0, 3);
+      setRelatedServices(related);
+    } catch (err) {
+      console.error('Error fetching related services:', err);
+      setRelatedServices([]);
+    } finally {
+      setRelatedLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (service?.category) {
+      fetchRelatedServices(service.category, service._id);
+    } else {
+      setRelatedServices([]);
+    }
+  }, [service, fetchRelatedServices]);
 
   const formatPrice = (priceInCents) => {
     return new Intl.NumberFormat('en-US', {
@@ -230,6 +268,51 @@ function ServiceDetail() {
             </button>
           </div>
         </div>
+
+        {(relatedLoading || relatedServices.length > 0) && (
+          <section className="related-services-section" aria-label="Related services">
+            <div className="related-services-header">
+              <h2>Explore more services</h2>
+              <p>Discover additional ways we can support your goals.</p>
+            </div>
+
+            {relatedLoading ? (
+              <div className="related-services-loading">Loading related services...</div>
+            ) : (
+              <div className="related-services-grid">
+                {relatedServices.map((related) => (
+                  <Link
+                    key={related._id}
+                    to={`/services/${related._id}`}
+                    className="related-service-card"
+                  >
+                    {related.image && (
+                      <div className="related-service-image">
+                        <img src={related.image} alt={related.name} />
+                      </div>
+                    )}
+                    <div className="related-service-content">
+                      <div className="related-service-category">{related.category}</div>
+                      <h3 className="related-service-title">{related.name}</h3>
+                      <p className="related-service-description">
+                        {related.description && related.description.length > 90
+                          ? `${related.description.substring(0, 90)}...`
+                          : related.description}
+                      </p>
+                      <div className="related-service-meta">
+                        <span>{formatDuration(related.duration)}</span>
+                        <span className="related-service-price">{formatPrice(related.price)}</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+                {(!relatedServices || relatedServices.length === 0) && !relatedLoading && (
+                  <div className="related-services-empty">No additional services available right now.</div>
+                )}
+              </div>
+            )}
+          </section>
+        )}
     </div>
   );
 }

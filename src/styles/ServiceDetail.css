@@ -190,6 +190,99 @@
   padding: var(--spacing-md) var(--spacing-xl);
 }
 
+.related-services-section {
+  margin-top: var(--spacing-3xl);
+  padding: var(--spacing-2xl);
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  border: 0.0625rem solid var(--color-primary);
+}
+
+.related-services-header {
+  max-width: 40rem;
+  margin-bottom: var(--spacing-xl);
+}
+
+.related-services-header h2 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.related-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.related-service-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+  border: 0.0625rem solid var(--color-primary);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: inherit;
+}
+
+.related-service-card:hover {
+  transform: translateY(-0.25rem);
+  box-shadow: var(--shadow-md);
+}
+
+.related-service-image {
+  height: 9.375rem;
+  background: var(--color-primary-light);
+}
+
+.related-service-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.related-service-content {
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.related-service-category {
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+.related-service-title {
+  font-size: 1.125rem;
+}
+
+.related-service-description {
+  font-size: 0.9375rem;
+  color: var(--color-text-light);
+}
+
+.related-service-meta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: var(--font-weight-semibold);
+}
+
+.related-service-price {
+  color: var(--color-primary-dark);
+}
+
+.related-services-loading,
+.related-services-empty {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-light);
+}
+
 .loading,
 .error-container {
   text-align: center;
@@ -239,5 +332,9 @@
 
   .staff-grid {
     grid-template-columns: 1fr;
+  }
+
+  .related-services-section {
+    padding: var(--spacing-lg);
   }
 }
