@@ -549,17 +549,46 @@ export class User {
   }
 
   /**
+   * Find client by ID (role must be 'client')
+   * @param {string} id - Client ID
+   * @returns {Promise<Object|null>} Client object (without password) or null
+   */
+  static async findClientById(id) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    return await collection.findOne(
+      { _id: new ObjectId(id), role: 'client' },
+      { projection: { password: 0 } }
+    );
+  }
+
+  /**
    * Get all clients (users with role='client')
    * @param {Object} options - Query options
    * @param {number} options.page - Page number (default: 1)
    * @param {number} options.limit - Items per page (default: 20)
+   * @param {string} options.search - Search term for name, email, or phone
    * @returns {Promise<Object>} Clients and pagination info
    */
-  static async findAllClients({ page = 1, limit = 20 } = {}) {
+  static async findAllClients({ page = 1, limit = 20, search = '' } = {}) {
     const db = await getDatabase();
     const collection = db.collection(COLLECTION_NAME);
 
     const query = { role: 'client' };
+    const trimmedSearch = search.trim();
+
+    // Add search filter if search term provided
+    if (trimmedSearch) {
+      const escapedSearch = trimmedSearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escapedSearch, 'i');
+      query.$or = [
+        { name: { $regex: regex } },
+        { email: { $regex: regex } },
+        { phone: { $regex: regex } },
+      ];
+    }
+
     const skip = (page - 1) * limit;
 
     const [clients, total] = await Promise.all([
@@ -581,6 +610,64 @@ export class User {
         pages: Math.ceil(total / limit),
       },
     };
+  }
+
+  /**
+   * Update client information (allowed fields only)
+   * @param {string} userId - User ID
+   * @param {Object} updates - Fields to update
+   * @returns {Promise<Object|null>} Updated client object or null
+   */
+  static async updateClient(userId, updates = {}) {
+    const db = await getDatabase();
+    const collection = db.collection(COLLECTION_NAME);
+
+    // Only allow specific fields to be updated
+    const allowedFields = [
+      'name',
+      'email',
+      'phone',
+      'timeZone',
+      'communicationPreferences',
+      'clientNotes',
+      'preferredStaffIds'
+    ];
+
+    const setFields = {};
+
+    for (const field of allowedFields) {
+      if (!(field in updates)) continue;
+
+      if (field === 'preferredStaffIds') {
+        // Convert string IDs to ObjectIds
+        if (Array.isArray(updates[field])) {
+          setFields.preferredStaffIds = updates[field].map(id => new ObjectId(id));
+        }
+      } else if (field === 'communicationPreferences' && updates[field]) {
+        // Ensure proper structure for communication preferences
+        setFields.communicationPreferences = {
+          emailReminders: updates[field].emailReminders !== false,
+          smsReminders: updates[field].smsReminders === true,
+        };
+      } else {
+        setFields[field] = updates[field];
+      }
+    }
+
+    // If no valid fields to update, return current client
+    if (Object.keys(setFields).length === 0) {
+      return await this.findClientById(userId);
+    }
+
+    setFields.updatedAt = new Date();
+
+    const result = await collection.findOneAndUpdate(
+      { _id: new ObjectId(userId), role: 'client' },
+      { $set: setFields },
+      { returnDocument: 'after', projection: { password: 0 } }
+    );
+
+    return result?.value || null;
   }
 
   /**

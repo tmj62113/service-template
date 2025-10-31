@@ -2181,129 +2181,283 @@ app.post('/api/shippo-webhook', express.raw({ type: 'application/json' }), (req,
   });
 });
 
-// Get customers list (aggregated from orders)
-app.get('/api/customers', authenticateToken, requireAdmin, async (req, res) => {
+// ============================================================================
+// CLIENT MANAGEMENT API
+// ============================================================================
+// These endpoints manage client (customer) profiles for service bookings
+// Clients are users with role='client' who book appointments and services
+
+// Get all clients (admin only)
+app.get('/api/clients', authenticateToken, async (req, res) => {
+  // Only admins can list all clients
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+
   try {
-    const collection = await getCollection('orders');
+    // Parse pagination and search parameters
+    const pageParam = parseInt(req.query.page, 10);
+    const limitParam = parseInt(req.query.limit, 10);
+    const page = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+    const limitCandidate = Number.isNaN(limitParam) || limitParam < 1 ? 20 : limitParam;
+    const limit = Math.min(limitCandidate, 100); // Cap at 100
+    const search = typeof req.query.search === 'string' ? req.query.search : '';
 
-    // Use MongoDB aggregation to efficiently group all orders by customer
-    // Group by both email AND name to handle cases where different people use the same email
-    const customers = await collection.aggregate([
-      {
-        $group: {
-          _id: { email: '$customerEmail', name: '$customerName' },
-          email: { $first: '$customerEmail' },
-          name: { $first: '$customerName' },
-          totalOrders: { $sum: 1 },
-          totalSpent: { $sum: '$total' },
-          lastOrderDate: { $max: '$createdAt' },
-          firstOrderDate: { $min: '$createdAt' },
-        }
-      },
-      {
-        $sort: { lastOrderDate: -1 }
-      }
-    ]).toArray();
+    // Fetch clients with optional search
+    const { clients, pagination } = await User.findAllClients({ page, limit, search });
 
-    res.json({ customers });
+    const response = { clients, pagination };
+    if (search.trim()) {
+      response.filters = { search: search.trim() };
+    }
+
+    res.json(response);
   } catch (error) {
-    console.error('Error fetching customers:', error);
-    res.status(500).json({ error: 'Failed to fetch customers' });
+    console.error('Error fetching clients:', error);
+    res.status(500).json({ error: 'Failed to fetch clients' });
   }
 });
 
-// Get customer details by email and name
-app.get('/api/customers/:email/:name', authenticateToken, requireAdmin, async (req, res) => {
+// Get client profile by ID
+app.get('/api/clients/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  // Validate ObjectId format
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid client ID' });
+  }
+
+  // Allow admin to view any client, or client to view themselves
+  if (req.user.role !== 'admin' && req.user._id.toString() !== id) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
   try {
-    const { email, name } = req.params;
-    const collection = await getCollection('orders');
+    const client = await User.findClientById(id);
 
-    // Get all orders for this customer
-    const orders = await collection.find({
-      customerEmail: email,
-      customerName: name
-    }).sort({ createdAt: -1 }).toArray();
-
-    if (orders.length === 0) {
-      return res.status(404).json({ error: 'Customer not found' });
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
     }
 
-    // Calculate customer stats
-    const totalOrders = orders.length;
-    const totalSpent = orders.reduce((sum, order) => sum + order.total, 0);
-    const lastOrderDate = orders[0].createdAt;
-    const firstOrderDate = orders[orders.length - 1].createdAt;
-
-    // Get most recent shipping address
-    const mostRecentOrder = orders[0];
-    const mostRecentShippingAddress = mostRecentOrder.shippingAddress;
-    const mostRecentShippingName = mostRecentOrder.shippingName;
-
-    res.json({
-      name,
-      email,
-      totalOrders,
-      totalSpent,
-      lastOrderDate,
-      firstOrderDate,
-      mostRecentShippingAddress,
-      mostRecentShippingName,
-      orders
-    });
+    res.json(client);
   } catch (error) {
-    console.error('Error fetching customer details:', error);
-    res.status(500).json({ error: 'Failed to fetch customer details' });
+    console.error('Error fetching client:', error);
+    res.status(500).json({ error: 'Failed to fetch client' });
   }
 });
 
-// Update customer details (email, name, and/or shipping address)
-app.put('/api/customers/:email/:name', authenticateToken, requireAdmin, async (req, res) => {
+// Update client information
+app.put('/api/clients/:id', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  // Validate ObjectId format
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid client ID' });
+  }
+
+  // Allow admin to update any client, or client to update themselves
+  if (req.user.role !== 'admin' && req.user._id.toString() !== id) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
   try {
-    const { email, name } = req.params;
-    const { newName, newEmail, newShippingName, newShippingAddress } = req.body;
-
-    if (!newName || !newEmail) {
-      return res.status(400).json({ error: 'New name and email are required' });
+    // Check if client exists
+    const existingClient = await User.findClientById(id);
+    if (!existingClient) {
+      return res.status(404).json({ error: 'Client not found' });
     }
 
-    const collection = await getCollection('orders');
-
-    // Build update object
-    const updateFields = {
-      customerEmail: newEmail,
-      customerName: newName
-    };
-
-    // Add shipping fields if provided
-    if (newShippingName !== undefined) {
-      updateFields.shippingName = newShippingName;
-    }
-    if (newShippingAddress !== undefined) {
-      updateFields.shippingAddress = newShippingAddress;
+    // Non-admins can't update clientNotes
+    const updates = { ...req.body };
+    if (req.user.role !== 'admin') {
+      delete updates.clientNotes;
     }
 
-    // Update all orders for this customer
-    const result = await collection.updateMany(
-      {
-        customerEmail: email,
-        customerName: name
-      },
-      {
-        $set: updateFields
-      }
+    // Update client
+    const updatedClient = await User.updateClient(id, updates);
+
+    if (!updatedClient) {
+      return res.status(500).json({ error: 'Failed to update client' });
+    }
+
+    res.json(updatedClient);
+  } catch (error) {
+    console.error('Error updating client:', error);
+    res.status(500).json({ error: 'Failed to update client' });
+  }
+});
+
+// Get client booking history
+app.get('/api/clients/:id/bookings', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  // Validate ObjectId format
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid client ID' });
+  }
+
+  // Allow admin to view any client's bookings, or client to view their own
+  if (req.user.role !== 'admin' && req.user._id.toString() !== id) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
+  try {
+    // Check if client exists
+    const client = await User.findClientById(id);
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+
+    // Get all bookings for this client
+    const bookings = await Booking.findByClient(id);
+
+    // Enrich bookings with service and staff details
+    const enrichedBookings = await Promise.all(
+      bookings.map(async (booking) => {
+        const service = booking.serviceId ? await Service.findById(booking.serviceId.toString()) : null;
+        const staff = booking.staffId ? await Staff.findById(booking.staffId.toString()) : null;
+
+        return {
+          ...booking,
+          serviceName: service?.name || 'Unknown Service',
+          staffName: staff?.name || 'Unassigned',
+        };
+      })
     );
 
-    if (result.matchedCount === 0) {
-      return res.status(404).json({ error: 'Customer not found' });
+    res.json({ bookings: enrichedBookings });
+  } catch (error) {
+    console.error('Error fetching client bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch client bookings' });
+  }
+});
+
+// Get client statistics
+app.get('/api/clients/:id/stats', authenticateToken, async (req, res) => {
+  const { id } = req.params;
+
+  // Validate ObjectId format
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid client ID' });
+  }
+
+  // Allow admin to view any client's stats, or client to view their own
+  if (req.user.role !== 'admin' && req.user._id.toString() !== id) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
+  try {
+    // Check if client exists
+    const client = await User.findClientById(id);
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
     }
 
+    // Get all bookings for this client
+    const bookings = await Booking.findByClient(id);
+    const now = new Date();
+
+    // Calculate statistics
+    const totalBookings = bookings.length;
+    const completedBookings = bookings.filter(b => b.status === 'completed').length;
+    const cancelledBookings = bookings.filter(b => b.status === 'cancelled').length;
+    const noShowBookings = bookings.filter(b => b.status === 'no-show').length;
+    const upcomingBookings = bookings.filter(b => {
+      const start = new Date(b.startDateTime);
+      return start > now && !['cancelled', 'completed', 'no-show'].includes(b.status);
+    }).length;
+
+    // Calculate financial stats
+    const totalAmountCents = bookings.reduce((sum, booking) => sum + (booking.amount || 0), 0);
+    const averageBookingValueCents = totalBookings > 0 ? Math.round(totalAmountCents / totalBookings) : 0;
+
+    // Date-related stats
+    const firstBookingDate = bookings.length > 0
+      ? new Date(Math.min(...bookings.map(b => new Date(b.createdAt).getTime())))
+      : null;
+    const lastBookingDate = bookings.length > 0
+      ? new Date(Math.max(...bookings.map(b => new Date(b.createdAt).getTime())))
+      : null;
+    const nextBooking = bookings
+      .filter(b => new Date(b.startDateTime) > now && !['cancelled', 'completed', 'no-show'].includes(b.status))
+      .sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime))[0] || null;
+
     res.json({
-      message: 'Customer details updated successfully',
-      ordersUpdated: result.modifiedCount
+      totalBookings,
+      completedBookings,
+      cancelledBookings,
+      noShowBookings,
+      upcomingBookings,
+      totalAmountCents,
+      averageBookingValueCents,
+      firstBookingDate,
+      lastBookingDate,
+      nextBooking: nextBooking ? {
+        id: nextBooking._id,
+        startDateTime: nextBooking.startDateTime,
+        serviceName: (await Service.findById(nextBooking.serviceId?.toString()))?.name || 'Unknown'
+      } : null,
     });
   } catch (error) {
-    console.error('Error updating customer details:', error);
-    res.status(500).json({ error: 'Failed to update customer details' });
+    console.error('Error fetching client stats:', error);
+    res.status(500).json({ error: 'Failed to fetch client stats' });
+  }
+});
+
+// Block a client (admin only)
+app.put('/api/clients/:id/block', authenticateToken, requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { reason } = req.body;
+
+  // Validate ObjectId format
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid client ID' });
+  }
+
+  if (!reason || reason.trim() === '') {
+    return res.status(400).json({ error: 'Reason for blocking is required' });
+  }
+
+  try {
+    // Check if client exists
+    const client = await User.findClientById(id);
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+
+    // Block the client
+    await User.blockClient(id, reason.trim());
+
+    res.json({ message: 'Client blocked successfully' });
+  } catch (error) {
+    console.error('Error blocking client:', error);
+    res.status(500).json({ error: 'Failed to block client' });
+  }
+});
+
+// Unblock a client (admin only)
+app.put('/api/clients/:id/unblock', authenticateToken, requireAdmin, async (req, res) => {
+  const { id } = req.params;
+
+  // Validate ObjectId format
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'Invalid client ID' });
+  }
+
+  try {
+    // Check if client exists
+    const client = await User.findClientById(id);
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+
+    // Unblock the client
+    await User.unblockClient(id);
+
+    res.json({ message: 'Client unblocked successfully' });
+  } catch (error) {
+    console.error('Error unblocking client:', error);
+    res.status(500).json({ error: 'Failed to unblock client' });
   }
 });
 

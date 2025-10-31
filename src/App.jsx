@@ -21,7 +21,7 @@ import AdminOverview from './pages/AdminOverview';
 import AdminServices from './pages/AdminServices';
 import AdminStaff from './pages/AdminStaff';
 import AdminMessages from './pages/AdminMessages';
-import AdminCustomers from './pages/AdminCustomers';
+import AdminClients from './pages/AdminClients';
 import AdminSettings from './pages/AdminSettings';
 import AdminSearch from './pages/AdminSearch';
 import AdminNewsletter from './pages/AdminNewsletter';
@@ -32,7 +32,7 @@ import AdminSecurity from './pages/AdminSecurity';
 import AdminIPBlocking from './pages/AdminIPBlocking';
 import AdminAuditLogs from './pages/AdminAuditLogs';
 import Unsubscribe from './pages/Unsubscribe';
-import CustomerDetail from './pages/CustomerDetail';
+import ClientDetail from './pages/ClientDetail';
 import TestUtilities from './pages/TestUtilities';
 import StyleGuide from './pages/StyleGuide';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -114,8 +114,8 @@ function App() {
             <Route path="services" element={<AdminServices />} />
             <Route path="staff" element={<AdminStaff />} />
             <Route path="messages" element={<AdminMessages />} />
-            <Route path="customers" element={<AdminCustomers />} />
-            <Route path="customers/:email/:name" element={<CustomerDetail />} />
+            <Route path="clients" element={<AdminClients />} />
+            <Route path="clients/:clientId" element={<ClientDetail />} />
             <Route path="newsletter" element={<AdminNewsletter />} />
             <Route path="newsletter/create" element={<AdminNewsletterCreate />} />
             <Route path="newsletter/drafts" element={<AdminNewsletterDrafts />} />

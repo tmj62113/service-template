@@ -219,14 +219,14 @@ export default function AdminLayout() {
           </Link>
 
           <Link
-            to="/admin/customers"
+            to="/admin/clients"
             className={`nav-item ${
-              isActive("/admin/customers") ? "active" : ""
+              isActive("/admin/clients") ? "active" : ""
             }`}
             onClick={closeMobileMenu}
           >
             <span className="material-symbols-outlined">people</span>
-            <span>Customers</span>
+            <span>Clients</span>
           </Link>
 
           <Link
