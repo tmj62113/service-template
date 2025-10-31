@@ -106,6 +106,30 @@ export class RecurringBooking {
   }
 
   /**
+   * Get recurring bookings with optional filtering
+   * @param {Object} options - Filter options
+   * @param {string} [options.clientId] - Filter by client ObjectId
+   * @param {string} [options.staffId] - Filter by staff ObjectId
+   * @param {string} [options.serviceId] - Filter by service ObjectId
+   * @param {string} [options.status] - Filter by status
+   * @returns {Promise<Array>}
+   */
+  static async findAll({ clientId, staffId, serviceId, status } = {}) {
+    const collection = await getCollection(COLLECTION_NAME);
+
+    const query = {};
+    if (clientId) query.clientId = new ObjectId(clientId);
+    if (staffId) query.staffId = new ObjectId(staffId);
+    if (serviceId) query.serviceId = new ObjectId(serviceId);
+    if (status) query.status = status;
+
+    return await collection
+      .find(query)
+      .sort({ createdAt: -1 })
+      .toArray();
+  }
+
+  /**
    * Get all active recurring bookings
    * @returns {Promise<Array>}
    */
@@ -133,11 +157,29 @@ export class RecurringBooking {
   static async update(recurringBookingId, updates) {
     const collection = await getCollection(COLLECTION_NAME);
 
+    const updateData = { ...updates };
+
+    if (updateData.clientId) {
+      updateData.clientId = new ObjectId(updateData.clientId);
+    }
+    if (updateData.staffId) {
+      updateData.staffId = new ObjectId(updateData.staffId);
+    }
+    if (updateData.serviceId) {
+      updateData.serviceId = new ObjectId(updateData.serviceId);
+    }
+    if (updateData.startDate) {
+      updateData.startDate = new Date(updateData.startDate);
+    }
+    if (updateData.endDate) {
+      updateData.endDate = new Date(updateData.endDate);
+    }
+
     const result = await collection.findOneAndUpdate(
       { _id: new ObjectId(recurringBookingId) },
       {
         $set: {
-          ...updates,
+          ...updateData,
           updatedAt: new Date(),
         },
       },
@@ -225,7 +267,16 @@ export class RecurringBooking {
    * @returns {Date|null} Next occurrence date or null if series ended
    */
   static calculateNextOccurrence(recurringBooking, fromDate = new Date()) {
-    const { frequency, interval, dayOfWeek, dayOfMonth, startDate, endDate, occurrences, bookingIds } = recurringBooking;
+    const {
+      frequency,
+      interval = 1,
+      dayOfWeek,
+      dayOfMonth,
+      startDate,
+      endDate,
+      occurrences,
+      bookingIds
+    } = recurringBooking;
 
     // Check if series has ended
     if (endDate && fromDate >= endDate) {
@@ -238,29 +289,45 @@ export class RecurringBooking {
     }
 
     const nextDate = new Date(fromDate);
+    const normalizedStartDate = new Date(startDate);
+    const targetDayOfWeek = typeof dayOfWeek === 'number'
+      ? dayOfWeek
+      : normalizedStartDate.getDay();
 
     switch (frequency) {
       case 'weekly':
         // Find next occurrence of the specified day of week
-        const daysUntilNext = (dayOfWeek - nextDate.getDay() + 7) % 7;
-        nextDate.setDate(nextDate.getDate() + (daysUntilNext || 7 * interval));
+        {
+          const normalizedInterval = interval || 1;
+          const daysUntilNext = (targetDayOfWeek - nextDate.getDay() + 7) % 7;
+          const incrementDays = daysUntilNext === 0 ? 7 * normalizedInterval : daysUntilNext;
+          nextDate.setDate(nextDate.getDate() + incrementDays);
+        }
         break;
 
       case 'biweekly':
         // Every 2 weeks on the specified day
-        const daysUntilNextBiweekly = (dayOfWeek - nextDate.getDay() + 7) % 7;
-        nextDate.setDate(nextDate.getDate() + (daysUntilNextBiweekly || 14));
+        {
+          const normalizedInterval = interval || 1;
+          const daysUntilNextBiweekly = (targetDayOfWeek - nextDate.getDay() + 7) % 7;
+          const incrementDays = daysUntilNextBiweekly === 0 ? 14 * normalizedInterval : daysUntilNextBiweekly;
+          nextDate.setDate(nextDate.getDate() + incrementDays);
+        }
         break;
 
       case 'monthly':
         // Same day of month, every N months
-        nextDate.setMonth(nextDate.getMonth() + interval);
-        nextDate.setDate(dayOfMonth);
+        {
+          const normalizedInterval = interval || 1;
+          const targetDayOfMonth = dayOfMonth || normalizedStartDate.getDate();
+          nextDate.setMonth(nextDate.getMonth() + normalizedInterval);
+          nextDate.setDate(targetDayOfMonth);
 
-        // Handle edge case where day doesn't exist in month (e.g., Feb 31)
-        if (nextDate.getDate() !== dayOfMonth) {
-          // Set to last day of previous month
-          nextDate.setDate(0);
+          // Handle edge case where day doesn't exist in month (e.g., Feb 31)
+          if (nextDate.getDate() !== targetDayOfMonth) {
+            // Set to last day of previous month
+            nextDate.setDate(0);
+          }
         }
         break;
 
@@ -332,5 +399,50 @@ export class RecurringBooking {
       activeRecurring,
       byStatus: stats,
     };
+  }
+
+  /**
+   * Get upcoming occurrences from a given date
+   * @param {Object} recurringBooking - Recurring booking object
+   * @param {Object} options - Options
+   * @param {number} [options.count=5] - Maximum number of occurrences to return
+   * @param {Date} [options.fromDate=new Date()] - Start calculation from this date
+   * @returns {Array<Date>} Array of upcoming occurrence dates
+   */
+  static getUpcomingOccurrences(recurringBooking, { count = 5, fromDate = new Date() } = {}) {
+    const occurrences = [];
+    const limit = Math.max(1, Math.min(parseInt(count, 10) || 5, 50));
+    const now = new Date(fromDate);
+    let currentOccurrence = new Date(recurringBooking.startDate);
+    const maxIterations = 500;
+    let iterations = 0;
+
+    // If the first occurrence is in the past, advance until we reach the next upcoming occurrence
+    while (currentOccurrence < now && iterations < maxIterations) {
+      const next = this.calculateNextOccurrence(recurringBooking, currentOccurrence);
+      if (!next) {
+        return occurrences;
+      }
+      currentOccurrence = next;
+      iterations += 1;
+    }
+
+    if (currentOccurrence >= now && iterations < maxIterations) {
+      occurrences.push(new Date(currentOccurrence));
+    }
+
+    while (occurrences.length < limit && iterations < maxIterations) {
+      const next = this.calculateNextOccurrence(recurringBooking, currentOccurrence);
+      if (!next) {
+        break;
+      }
+      currentOccurrence = next;
+      if (currentOccurrence >= now) {
+        occurrences.push(new Date(currentOccurrence));
+      }
+      iterations += 1;
+    }
+
+    return occurrences;
   }
 }

@@ -1666,6 +1666,347 @@ app.post('/api/availability/:id/exceptions', authenticateToken, async (req, res)
 });
 
 // ============================================
+// RECURRING BOOKING ENDPOINTS
+// ============================================
+
+const normalizeId = value => {
+  if (typeof value === 'string') return value;
+  if (value && typeof value.toString === 'function') {
+    return value.toString();
+  }
+  return value;
+};
+
+async function getProviderStaffMember(userId) {
+  if (!userId) return null;
+  return await Staff.findByUserId(userId);
+}
+
+async function getAuthorizedRecurringBooking(req, res) {
+  const recurring = await RecurringBooking.findById(req.params.id);
+
+  if (!recurring) {
+    res.status(404).json({ error: 'Recurring booking not found' });
+    return null;
+  }
+
+  const userId = normalizeId(req.user?._id);
+  const isAdmin = req.user.role === 'admin';
+  let staffMember = null;
+
+  if (req.user.role === 'provider') {
+    staffMember = await getProviderStaffMember(userId);
+  }
+
+  const isClientOwner = userId && normalizeId(recurring.clientId) === userId;
+  const isStaffOwner = staffMember && normalizeId(recurring.staffId) === normalizeId(staffMember._id);
+
+  if (!isAdmin && !isClientOwner && !isStaffOwner) {
+    res.status(403).json({ error: 'Forbidden: You do not have access to this recurring booking' });
+    return null;
+  }
+
+  return { recurring, staffMember };
+}
+
+function validateRecurringPayload(payload, existingRecurring = null) {
+  const errors = [];
+  const allowedFrequencies = ['weekly', 'biweekly', 'monthly'];
+  const frequency = payload.frequency || existingRecurring?.frequency;
+
+  if (!frequency || !allowedFrequencies.includes(frequency)) {
+    errors.push('frequency must be one of weekly, biweekly, or monthly');
+  }
+
+  const duration = payload.duration ?? existingRecurring?.duration;
+  if (duration === undefined || Number.isNaN(Number(duration)) || Number(duration) <= 0) {
+    errors.push('duration must be a positive number');
+  }
+
+  const interval = payload.interval ?? existingRecurring?.interval ?? 1;
+  if (interval !== undefined && (Number.isNaN(Number(interval)) || Number(interval) <= 0)) {
+    errors.push('interval must be a positive number');
+  }
+
+  if (!payload.startTime && !existingRecurring?.startTime) {
+    errors.push('startTime is required');
+  }
+
+  if (!payload.timeZone && !existingRecurring?.timeZone) {
+    errors.push('timeZone is required');
+  }
+
+  if (!payload.startDate && !existingRecurring?.startDate) {
+    errors.push('startDate is required');
+  }
+
+  const resolvedDayOfWeek = payload.dayOfWeek ?? existingRecurring?.dayOfWeek;
+  if ((frequency === 'weekly' || frequency === 'biweekly') &&
+    (resolvedDayOfWeek === undefined || resolvedDayOfWeek === null)) {
+    errors.push('dayOfWeek is required for weekly or biweekly recurrences');
+  }
+
+  const resolvedDayOfMonth = payload.dayOfMonth ?? existingRecurring?.dayOfMonth;
+  if (frequency === 'monthly' &&
+    (resolvedDayOfMonth === undefined || resolvedDayOfMonth === null)) {
+    errors.push('dayOfMonth is required for monthly recurrences');
+  }
+
+  return errors;
+}
+
+// Create recurring booking pattern
+app.post('/api/bookings/recurring', authenticateToken, async (req, res) => {
+  try {
+    const userId = normalizeId(req.user._id);
+    const isAdmin = req.user.role === 'admin';
+    const isProvider = req.user.role === 'provider';
+
+    let clientId = userId;
+
+    if (!isAdmin && !isProvider) {
+      clientId = userId;
+    } else {
+      clientId = normalizeId(req.body.clientId);
+      if (!clientId) {
+        return res.status(400).json({ error: 'clientId is required' });
+      }
+    }
+
+    const staffId = normalizeId(req.body.staffId);
+    const serviceId = normalizeId(req.body.serviceId);
+
+    if (!staffId) {
+      return res.status(400).json({ error: 'staffId is required' });
+    }
+
+    if (!serviceId) {
+      return res.status(400).json({ error: 'serviceId is required' });
+    }
+
+    if (isProvider) {
+      const staffMember = await getProviderStaffMember(userId);
+      if (!staffMember || normalizeId(staffMember._id) !== staffId) {
+        return res.status(403).json({ error: 'Forbidden: Providers can only create recurring bookings for themselves' });
+      }
+    }
+
+    const validationErrors = validateRecurringPayload(req.body);
+    if (validationErrors.length > 0) {
+      return res.status(400).json({ error: 'Validation failed', details: validationErrors });
+    }
+
+    const recurringData = {
+      clientId,
+      staffId,
+      serviceId,
+      frequency: req.body.frequency,
+      interval: req.body.interval ? parseInt(req.body.interval, 10) : undefined,
+      dayOfWeek: req.body.dayOfWeek,
+      dayOfMonth: req.body.dayOfMonth,
+      startTime: req.body.startTime,
+      duration: Number(req.body.duration),
+      timeZone: req.body.timeZone,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+      occurrences: req.body.occurrences ? parseInt(req.body.occurrences, 10) : undefined,
+      paymentPlan: req.body.paymentPlan,
+      status: req.body.status,
+    };
+
+    const recurring = await RecurringBooking.create(recurringData);
+    res.status(201).json(recurring);
+  } catch (error) {
+    console.error('Error creating recurring booking:', error);
+    res.status(500).json({ error: 'Failed to create recurring booking' });
+  }
+});
+
+// Get recurring booking by ID
+app.get('/api/bookings/recurring/:id', authenticateToken, async (req, res) => {
+  try {
+    const context = await getAuthorizedRecurringBooking(req, res);
+    if (!context) {
+      return;
+    }
+
+    res.json(context.recurring);
+  } catch (error) {
+    console.error('Error fetching recurring booking:', error);
+    res.status(500).json({ error: 'Failed to fetch recurring booking' });
+  }
+});
+
+// List recurring bookings with role-based filtering
+app.get('/api/bookings/recurring', authenticateToken, async (req, res) => {
+  try {
+    const userId = normalizeId(req.user._id);
+    const filters = {};
+
+    if (req.user.role === 'client') {
+      filters.clientId = userId;
+    } else if (req.user.role === 'provider') {
+      const staffMember = await getProviderStaffMember(userId);
+      if (!staffMember) {
+        return res.status(403).json({ error: 'Forbidden: Staff profile not found' });
+      }
+      filters.staffId = normalizeId(staffMember._id);
+    } else {
+      if (req.query.clientId) {
+        filters.clientId = req.query.clientId;
+      }
+      if (req.query.staffId) {
+        filters.staffId = req.query.staffId;
+      }
+    }
+
+    if (req.query.serviceId) {
+      filters.serviceId = req.query.serviceId;
+    }
+
+    if (req.query.status) {
+      filters.status = req.query.status;
+    }
+
+    const recurringBookings = await RecurringBooking.findAll(filters);
+    res.json(recurringBookings);
+  } catch (error) {
+    console.error('Error fetching recurring bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch recurring bookings' });
+  }
+});
+
+// Update recurring booking
+app.put('/api/bookings/recurring/:id', authenticateToken, async (req, res) => {
+  try {
+    const context = await getAuthorizedRecurringBooking(req, res);
+    if (!context) {
+      return;
+    }
+
+    const { recurring } = context;
+    const updatableFields = [
+      'frequency',
+      'interval',
+      'dayOfWeek',
+      'dayOfMonth',
+      'startTime',
+      'duration',
+      'timeZone',
+      'startDate',
+      'endDate',
+      'occurrences',
+      'paymentPlan'
+    ];
+
+    const updates = {};
+    for (const field of updatableFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    }
+
+    if (req.user.role === 'admin' && req.body.status) {
+      updates.status = req.body.status;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ error: 'No valid fields provided for update' });
+    }
+
+    const validationErrors = validateRecurringPayload(updates, recurring);
+    if (validationErrors.length > 0) {
+      return res.status(400).json({ error: 'Validation failed', details: validationErrors });
+    }
+
+    if (updates.interval !== undefined) {
+      updates.interval = parseInt(updates.interval, 10);
+    }
+    if (updates.duration !== undefined) {
+      updates.duration = Number(updates.duration);
+    }
+    if (updates.occurrences !== undefined) {
+      updates.occurrences = parseInt(updates.occurrences, 10);
+    }
+
+    const updatedRecurring = await RecurringBooking.update(req.params.id, updates);
+    res.json(updatedRecurring);
+  } catch (error) {
+    console.error('Error updating recurring booking:', error);
+    res.status(500).json({ error: 'Failed to update recurring booking' });
+  }
+});
+
+// Cancel recurring booking (cancel all future occurrences)
+app.delete('/api/bookings/recurring/:id', authenticateToken, async (req, res) => {
+  try {
+    const context = await getAuthorizedRecurringBooking(req, res);
+    if (!context) {
+      return;
+    }
+
+    const cancelled = await RecurringBooking.cancel(req.params.id);
+    res.json({ message: 'Recurring booking cancelled successfully', recurring: cancelled });
+  } catch (error) {
+    console.error('Error cancelling recurring booking:', error);
+    res.status(500).json({ error: 'Failed to cancel recurring booking' });
+  }
+});
+
+// Pause recurring booking
+app.post('/api/bookings/recurring/:id/pause', authenticateToken, async (req, res) => {
+  try {
+    const context = await getAuthorizedRecurringBooking(req, res);
+    if (!context) {
+      return;
+    }
+
+    const paused = await RecurringBooking.pause(req.params.id);
+    res.json(paused);
+  } catch (error) {
+    console.error('Error pausing recurring booking:', error);
+    res.status(500).json({ error: 'Failed to pause recurring booking' });
+  }
+});
+
+// Resume recurring booking
+app.post('/api/bookings/recurring/:id/resume', authenticateToken, async (req, res) => {
+  try {
+    const context = await getAuthorizedRecurringBooking(req, res);
+    if (!context) {
+      return;
+    }
+
+    const resumed = await RecurringBooking.resume(req.params.id);
+    res.json(resumed);
+  } catch (error) {
+    console.error('Error resuming recurring booking:', error);
+    res.status(500).json({ error: 'Failed to resume recurring booking' });
+  }
+});
+
+// Get upcoming occurrences
+app.get('/api/bookings/recurring/:id/upcoming', authenticateToken, async (req, res) => {
+  try {
+    const context = await getAuthorizedRecurringBooking(req, res);
+    if (!context) {
+      return;
+    }
+
+    const count = req.query.count ? parseInt(req.query.count, 10) : undefined;
+    const occurrences = RecurringBooking.getUpcomingOccurrences(context.recurring, {
+      count,
+      fromDate: new Date(),
+    });
+
+    res.json({ occurrences: occurrences.map(date => date.toISOString()) });
+  } catch (error) {
+    console.error('Error fetching upcoming recurring bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch upcoming occurrences' });
+  }
+});
+
+// ============================================
 // BOOKING ENDPOINTS
 // ============================================
 

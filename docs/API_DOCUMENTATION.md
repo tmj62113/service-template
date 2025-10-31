@@ -194,7 +194,185 @@ Authorization: Required (Admin)
 {
   "subject": "Monthly Newsletter",
   "htmlContent": "<html>...</html>",
-  "textContent": "Plain text version"
+"textContent": "Plain text version"
+}
+```
+
+---
+
+## Recurring Bookings
+
+Manage automated booking patterns for clients. All endpoints require authentication via the session cookie.
+
+### Create Recurring Booking
+```http
+POST /api/bookings/recurring
+Cookie: authToken=...
+Content-Type: application/json
+
+{
+  "staffId": "6645f5da3f5f1c0012ab1234",
+  "serviceId": "6645f6103f5f1c0012ab5678",
+  "frequency": "weekly",
+  "interval": 1,
+  "dayOfWeek": 2,
+  "startTime": "14:00",
+  "duration": 60,
+  "timeZone": "America/New_York",
+  "startDate": "2025-06-01T14:00:00.000Z",
+  "paymentPlan": "per_session"
+}
+```
+
+**Description:**
+- Clients create recurring patterns for themselves.
+- Providers and admins must include a `clientId` in the request body.
+
+**Response:**
+```json
+{
+  "_id": "6650adf23f5f1c0012ff1122",
+  "clientId": "663fd2b53f5f1c0012aa9090",
+  "staffId": "6645f5da3f5f1c0012ab1234",
+  "serviceId": "6645f6103f5f1c0012ab5678",
+  "frequency": "weekly",
+  "interval": 1,
+  "dayOfWeek": 2,
+  "startTime": "14:00",
+  "duration": 60,
+  "timeZone": "America/New_York",
+  "startDate": "2025-06-01T14:00:00.000Z",
+  "status": "active",
+  "paymentPlan": "per_session",
+  "createdAt": "2025-05-24T16:15:23.000Z",
+  "updatedAt": "2025-05-24T16:15:23.000Z"
+}
+```
+
+### Get Recurring Booking by ID
+```http
+GET /api/bookings/recurring/:id
+Cookie: authToken=...
+```
+
+**Description:**
+- Admins can fetch any recurring pattern.
+- Clients can fetch their own patterns.
+- Providers can fetch patterns assigned to them.
+
+**Response:** Same payload as the creation response.
+
+### List Recurring Bookings
+```http
+GET /api/bookings/recurring?status=active
+Cookie: authToken=...
+```
+
+**Description:**
+- Clients automatically receive only their patterns.
+- Providers automatically receive patterns for their staff record.
+- Admins can filter with `clientId`, `staffId`, `serviceId`, and `status` query parameters.
+
+**Response:**
+```json
+[
+  {
+    "_id": "6650adf23f5f1c0012ff1122",
+    "clientId": "663fd2b53f5f1c0012aa9090",
+    "staffId": "6645f5da3f5f1c0012ab1234",
+    "serviceId": "6645f6103f5f1c0012ab5678",
+    "frequency": "weekly",
+    "interval": 1,
+    "dayOfWeek": 2,
+    "startTime": "14:00",
+    "duration": 60,
+    "timeZone": "America/New_York",
+    "startDate": "2025-06-01T14:00:00.000Z",
+    "status": "active",
+    "paymentPlan": "per_session",
+    "createdAt": "2025-05-24T16:15:23.000Z",
+    "updatedAt": "2025-05-24T16:15:23.000Z"
+  }
+]
+```
+
+### Update Recurring Booking
+```http
+PUT /api/bookings/recurring/:id
+Cookie: authToken=...
+Content-Type: application/json
+
+{
+  "startTime": "15:30",
+  "duration": 75,
+  "dayOfWeek": 3
+}
+```
+
+**Description:**
+- Admins, the owning client, and assigned providers can update schedule-related fields.
+- Admins may additionally adjust the recurring `status`.
+
+**Response:** Updated recurring booking document.
+
+### Cancel Recurring Booking
+```http
+DELETE /api/bookings/recurring/:id
+Cookie: authToken=...
+```
+
+**Description:**
+- Marks the series as `cancelled` and stops future occurrences.
+- Same role-based access rules as other endpoints.
+
+**Response:**
+```json
+{
+  "message": "Recurring booking cancelled successfully",
+  "recurring": {
+    "_id": "6650adf23f5f1c0012ff1122",
+    "status": "cancelled",
+    "endDate": "2025-05-24T16:20:00.000Z"
+  }
+}
+```
+
+### Pause Recurring Booking
+```http
+POST /api/bookings/recurring/:id/pause
+Cookie: authToken=...
+```
+
+**Description:** Sets status to `paused` without cancelling the series.
+
+**Response:** Updated recurring booking document.
+
+### Resume Recurring Booking
+```http
+POST /api/bookings/recurring/:id/resume
+Cookie: authToken=...
+```
+
+**Description:** Reactivates a paused recurring booking.
+
+**Response:** Updated recurring booking document.
+
+### Get Upcoming Occurrences
+```http
+GET /api/bookings/recurring/:id/upcoming?count=3
+Cookie: authToken=...
+```
+
+**Description:** Returns the next N occurrences (default 5, maximum 50) relative to the current time.
+
+**Response:**
+```json
+{
+  "occurrences": [
+    "2025-06-01T14:00:00.000Z",
+    "2025-06-08T14:00:00.000Z",
+    "2025-06-15T14:00:00.000Z"
+  ]
 }
 ```
 
