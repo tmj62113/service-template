@@ -13,7 +13,7 @@
  */
 
 import dotenv from 'dotenv';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -26,8 +26,8 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 // Import models
 import { Service } from '../db/models/Service.js';
 import { Staff } from '../db/models/Staff.js';
-import User from '../db/models/User.js';
-import connectDB from '../db/connection.js';
+import { User } from '../db/models/User.js';
+import { getDatabase } from '../db/connection.js';
 // [LEGACY E-COMMERCE - DEPRECATED] import Product from '../db/models/Product.js';
 
 // ANSI color codes
@@ -193,14 +193,16 @@ const adminUser = {
 async function clearDatabase() {
   console.log(`${colors.yellow}Clearing existing data...${colors.reset}`);
 
-  await Service.deleteMany({});
+  const db = await getDatabase();
+
+  await db.collection('services').deleteMany({});
   console.log(`${colors.green}  ✓ Cleared services${colors.reset}`);
 
-  await Staff.deleteMany({});
+  await db.collection('staff').deleteMany({});
   console.log(`${colors.green}  ✓ Cleared staff${colors.reset}`);
 
   // Optionally clear users (commented out for safety)
-  // await User.deleteMany({});
+  // await db.collection('users').deleteMany({});
   // console.log(`${colors.green}  ✓ Cleared users${colors.reset}`);
 
   console.log();
@@ -210,14 +212,18 @@ async function seedStaff() {
   console.log(`${colors.cyan}Seeding staff members...${colors.reset}`);
 
   try {
-    const staff = await Staff.insertMany(sampleStaff);
-    console.log(`${colors.green}  ✓ Created ${staff.length} staff members${colors.reset}`);
+    const staffRecords = [];
+    for (const staffData of sampleStaff) {
+      const staff = await Staff.create(staffData);
+      staffRecords.push(staff);
+    }
+    console.log(`${colors.green}  ✓ Created ${staffRecords.length} staff members${colors.reset}`);
 
     // Show active staff
-    const activeCount = staff.filter((s) => s.isActive && s.acceptingBookings).length;
+    const activeCount = staffRecords.filter((s) => s.isActive && s.acceptingBookings).length;
     console.log(`${colors.blue}  → ${activeCount} accepting bookings${colors.reset}`);
 
-    return staff;
+    return staffRecords;
   } catch (error) {
     console.error(`${colors.red}  ✗ Error seeding staff: ${error.message}${colors.reset}`);
     throw error;
@@ -252,17 +258,21 @@ async function seedServices(staffMembers) {
       };
     });
 
-    const services = await Service.insertMany(servicesWithStaff);
-    console.log(`${colors.green}  ✓ Created ${services.length} services${colors.reset}`);
+    const serviceRecords = [];
+    for (const serviceData of servicesWithStaff) {
+      const service = await Service.create(serviceData);
+      serviceRecords.push(service);
+    }
+    console.log(`${colors.green}  ✓ Created ${serviceRecords.length} services${colors.reset}`);
 
     // Show service categories
-    const categories = [...new Set(services.map((s) => s.category))];
+    const categories = [...new Set(serviceRecords.map((s) => s.category))];
     categories.forEach((cat) => {
-      const count = services.filter((s) => s.category === cat).length;
+      const count = serviceRecords.filter((s) => s.category === cat).length;
       console.log(`${colors.blue}  → ${count} ${cat} service(s)${colors.reset}`);
     });
 
-    return services;
+    return serviceRecords;
   } catch (error) {
     console.error(`${colors.red}  ✗ Error seeding services: ${error.message}${colors.reset}`);
     throw error;
@@ -382,7 +392,7 @@ ${colors.reset}\n`);
 
     // Connect to database
     console.log(`${colors.cyan}Connecting to MongoDB...${colors.reset}`);
-    await connectDB();
+    await getDatabase();
     console.log(`${colors.green}  ✓ Connected successfully${colors.reset}\n`);
 
     // Clear database if --clear flag is present

@@ -47,6 +47,21 @@ export async function authenticateToken(req, res, next) {
 }
 
 /**
+ * Middleware to ensure the authenticated user has admin privileges
+ */
+export function requireAdmin(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+
+  next();
+}
+
+/**
  * Generate JWT token for user
  * @param {string} userId - User ID
  * @returns {string} JWT token

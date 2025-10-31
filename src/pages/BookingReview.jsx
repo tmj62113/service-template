@@ -117,11 +117,19 @@ function BookingReview() {
         throw new Error('Invalid booking data');
       }
 
+      // Fetch CSRF token
+      const csrfResponse = await fetch('/api/csrf-token', {
+        credentials: 'include', // Include cookies for CSRF
+      });
+      const { csrfToken } = await csrfResponse.json();
+
       // Create Stripe checkout session
       const response = await fetch('/api/create-booking-checkout', {
         method: 'POST',
+        credentials: 'include', // Include cookies for CSRF validation
         headers: {
           'Content-Type': 'application/json',
+          'x-csrf-token': csrfToken,
         },
         body: JSON.stringify(bookingData),
       });

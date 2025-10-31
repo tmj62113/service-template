@@ -32,7 +32,7 @@ import { Booking } from './db/models/Booking.js';
 import { Availability } from './db/models/Availability.js';
 import { RecurringBooking } from './db/models/RecurringBooking.js';
 import { generateOrderConfirmationEmail, generateBookingConfirmationEmail } from './utils/emailTemplates.js';
-import { authenticateToken, generateToken } from './middleware/auth.js';
+import { authenticateToken, generateToken, requireAdmin } from './middleware/auth.js';
 // [LEGACY E-COMMERCE - DEPRECATED] import { createShipment, getTrackingStatus } from './services/shippoService.js';
 import { getCollection, getDatabase } from './db/connection.js';
 import { ObjectId } from 'mongodb';
@@ -141,6 +141,13 @@ const newsletterLimiter = createRateLimiter(
   'Too many subscription attempts, please try again later'
 );
 
+// Checkout rate limiting
+const checkoutLimiter = createRateLimiter(
+  15 * 60 * 1000, // 15 minutes
+  5, // 5 checkout attempts per window
+  'Too many checkout attempts, please try again later'
+);
+
 // CORS configuration - hardened for production
 const corsOptions = {
   origin: (origin, callback) => {
@@ -162,7 +169,7 @@ const corsOptions = {
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Explicitly allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allowed headers
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-csrf-token'], // Explicitly allowed headers
   maxAge: 86400, // Cache preflight requests for 24 hours
 };
 
@@ -180,11 +187,12 @@ app.use(cookieParser());
 
 // Configure CSRF protection
 const {
-  generateToken: csrfGenerateToken,
+  generateCsrfToken: csrfGenerateToken,
   doubleCsrfProtection,
 } = doubleCsrf({
   getSecret: () => process.env.JWT_SECRET, // Use existing JWT secret for CSRF
-  cookieName: '__Host-mjp.csrf',
+  getSessionIdentifier: (req) => req.session?.id || '', // Session identifier (empty for stateless)
+  cookieName: process.env.NODE_ENV === 'production' ? '__Host-mjp.csrf' : 'mjp.csrf', // Use __Host- prefix only in production
   cookieOptions: {
     httpOnly: true,
     sameSite: 'lax',
@@ -545,7 +553,7 @@ app.use(csrfProtection);
 // [LEGACY E-COMMERCE - DEPRECATED] });
 
 // Create Booking Checkout Session endpoint
-app.post('/api/create-booking-checkout', async (req, res) => {
+app.post('/api/create-booking-checkout', checkoutLimiter, async (req, res) => {
   try {
     const {
       serviceId,
@@ -717,7 +725,7 @@ app.get('/sitemap.xml', async (req, res) => {
 // ========================================
 
 // Login endpoint
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -1907,64 +1915,17 @@ app.get('/api/bookings/stats/summary', authenticateToken, async (req, res) => {
   }
 });
 
-// [LEGACY E-COMMERCE - DEPRECATED] // Shippo webhook endpoint for tracking updates
-// [LEGACY E-COMMERCE - DEPRECATED] app.post('/api/shippo-webhook', express.json(), async (req, res) => {
-// [LEGACY E-COMMERCE - DEPRECATED]   try {
-// [LEGACY E-COMMERCE - DEPRECATED]     console.log('📦 Shippo webhook received:', req.body);
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]     const event = req.body;
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]     // Check if this is a tracking status update
-// [LEGACY E-COMMERCE - DEPRECATED]     if (event.event === 'track_updated') {
-// [LEGACY E-COMMERCE - DEPRECATED]       const trackingNumber = event.data?.tracking_number;
-// [LEGACY E-COMMERCE - DEPRECATED]       const trackingStatus = event.data?.tracking_status?.status;
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]       console.log(`📦 Tracking update: ${trackingNumber} - Status: ${trackingStatus}`);
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]       if (!trackingNumber) {
-// [LEGACY E-COMMERCE - DEPRECATED]         return res.status(400).json({ error: 'No tracking number provided' });
-// [LEGACY E-COMMERCE - DEPRECATED]       }
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]       // Find order by tracking number
-// [LEGACY E-COMMERCE - DEPRECATED]       const { orders } = await Order.findAll({ limit: 1000 });
-// [LEGACY E-COMMERCE - DEPRECATED]       const order = orders.find(o => o.trackingNumber === trackingNumber);
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]       if (!order) {
-// [LEGACY E-COMMERCE - DEPRECATED]         console.log(`⚠️ No order found with tracking number: ${trackingNumber}`);
-// [LEGACY E-COMMERCE - DEPRECATED]         return res.status(404).json({ error: 'Order not found' });
-// [LEGACY E-COMMERCE - DEPRECATED]       }
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]       // Update order status based on tracking status
-// [LEGACY E-COMMERCE - DEPRECATED]       if (trackingStatus === 'DELIVERED') {
-// [LEGACY E-COMMERCE - DEPRECATED]         const updatedOrder = await Order.findByIdAndUpdate(
-// [LEGACY E-COMMERCE - DEPRECATED]           order._id,
-// [LEGACY E-COMMERCE - DEPRECATED]           {
-// [LEGACY E-COMMERCE - DEPRECATED]             orderStatus: 'delivered',
-// [LEGACY E-COMMERCE - DEPRECATED]             deliveredAt: new Date(),
-// [LEGACY E-COMMERCE - DEPRECATED]           }
-// [LEGACY E-COMMERCE - DEPRECATED]         );
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]         console.log(`✅ Order ${order._id} marked as delivered`);
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]         // TODO: Send delivery confirmation email
-// [LEGACY E-COMMERCE - DEPRECATED]       } else if (trackingStatus === 'TRANSIT' || trackingStatus === 'IN_TRANSIT') {
-// [LEGACY E-COMMERCE - DEPRECATED]         await Order.findByIdAndUpdate(
-// [LEGACY E-COMMERCE - DEPRECATED]           order._id,
-// [LEGACY E-COMMERCE - DEPRECATED]           { orderStatus: 'in_transit' }
-// [LEGACY E-COMMERCE - DEPRECATED]         );
-// [LEGACY E-COMMERCE - DEPRECATED]         console.log(`🚚 Order ${order._id} in transit`);
-// [LEGACY E-COMMERCE - DEPRECATED]       }
-// [LEGACY E-COMMERCE - DEPRECATED]     }
-// [LEGACY E-COMMERCE - DEPRECATED] 
-// [LEGACY E-COMMERCE - DEPRECATED]     res.json({ received: true });
-// [LEGACY E-COMMERCE - DEPRECATED]   } catch (error) {
-// [LEGACY E-COMMERCE - DEPRECATED]     console.error('❌ Shippo webhook error:', error);
-// [LEGACY E-COMMERCE - DEPRECATED]     res.status(500).json({ error: 'Webhook processing failed' });
-// [LEGACY E-COMMERCE - DEPRECATED]   }
-// [LEGACY E-COMMERCE - DEPRECATED] });
+// Shippo webhook endpoint - DISABLED (legacy e-commerce feature removed for security)
+app.post('/api/shippo-webhook', express.raw({ type: 'application/json' }), (req, res) => {
+  logger.warn('Blocked request to deprecated Shippo webhook endpoint');
+  return res.status(410).json({
+    error: 'Shippo webhook disabled',
+    message: 'Legacy Shippo integration has been removed for security reasons'
+  });
+});
 
 // Get customers list (aggregated from orders)
-app.get('/api/customers', authenticateToken, async (req, res) => {
+app.get('/api/customers', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const collection = await getCollection('orders');
 
@@ -1995,7 +1956,7 @@ app.get('/api/customers', authenticateToken, async (req, res) => {
 });
 
 // Get customer details by email and name
-app.get('/api/customers/:email/:name', authenticateToken, async (req, res) => {
+app.get('/api/customers/:email/:name', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { email, name } = req.params;
     const collection = await getCollection('orders');
@@ -2039,7 +2000,7 @@ app.get('/api/customers/:email/:name', authenticateToken, async (req, res) => {
 });
 
 // Update customer details (email, name, and/or shipping address)
-app.put('/api/customers/:email/:name', authenticateToken, async (req, res) => {
+app.put('/api/customers/:email/:name', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { email, name } = req.params;
     const { newName, newEmail, newShippingName, newShippingAddress } = req.body;
@@ -3296,14 +3257,20 @@ app.use((err, req, res, next) => {
 
 // ============================================
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`💳 Stripe integration active`);
-  console.log(`🌐 Accepting requests from: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
-  if (process.env.NODE_ENV === 'production') {
-    console.log('🔒 Production security features enabled: HTTPS, HSTS, CSRF, CORS');
-  } else {
-    console.log('🔓 Development mode: Enhanced error messages enabled');
-  }
-});
+// Only start server if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on http://localhost:${PORT}`);
+    console.log(`💳 Stripe integration active`);
+    console.log(`🌐 Accepting requests from: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+    if (process.env.NODE_ENV === 'production') {
+      console.log('🔒 Production security features enabled: HTTPS, HSTS, CSRF, CORS');
+    } else {
+      console.log('🔓 Development mode: Enhanced error messages enabled');
+    }
+  });
+}
+
+// Export app for testing
+export default app;
