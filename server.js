@@ -29,7 +29,6 @@ import { BlockedIP } from './db/models/BlockedIP.js';
 import { Service } from './db/models/Service.js';
 import { Staff } from './db/models/Staff.js';
 import { Booking } from './db/models/Booking.js';
-import { Availability } from './db/models/Availability.js';
 import { RecurringBooking } from './db/models/RecurringBooking.js';
 import { generateOrderConfirmationEmail, generateBookingConfirmationEmail } from './utils/emailTemplates.js';
 import { authenticateToken, generateToken, requireAdmin } from './middleware/auth.js';
@@ -39,6 +38,7 @@ import { ObjectId } from 'mongodb';
 import { validateContactForm, validateNewsletterSubscription, validateProductData, validateNewsletterContent, isHoneypotFilled } from './utils/security.js';
 import { doubleCsrf } from 'csrf-csrf';
 import logger, { requestLogger } from './utils/logger.js';
+import { availabilityRouter } from './api/routes/availabilityRoutes.js';
 
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -1579,91 +1579,7 @@ app.get('/api/staff/stats/summary', authenticateToken, async (req, res) => {
 // AVAILABILITY ENDPOINTS
 // ============================================
 
-// Get availability for a staff member
-app.get('/api/availability/staff/:staffId', async (req, res) => {
-  try {
-    const availability = await Availability.findByStaff(req.params.staffId);
-
-    if (!availability) {
-      return res.status(404).json({ error: 'Availability not found for this staff member' });
-    }
-
-    res.json(availability);
-  } catch (error) {
-    console.error('Error fetching availability:', error);
-    res.status(500).json({ error: 'Failed to fetch availability' });
-  }
-});
-
-// Get available time slots for a staff member on a specific date
-app.get('/api/availability/slots', async (req, res) => {
-  try {
-    const { staffId, date, duration, bufferTime = 0 } = req.query;
-
-    if (!staffId || !date || !duration) {
-      return res.status(400).json({ error: 'staffId, date, and duration are required' });
-    }
-
-    const slots = await Availability.getAvailableSlots(
-      staffId,
-      new Date(date),
-      parseInt(duration),
-      parseInt(bufferTime)
-    );
-
-    res.json({ slots });
-  } catch (error) {
-    console.error('Error fetching available slots:', error);
-    res.status(500).json({ error: 'Failed to fetch available slots' });
-  }
-});
-
-// Create or update availability schedule (admin/staff only)
-app.post('/api/availability/staff/:staffId', authenticateToken, async (req, res) => {
-  try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
-    // Check if availability exists
-    const existing = await Availability.findByStaff(req.params.staffId);
-
-    let availability;
-    if (existing) {
-      availability = await Availability.update(existing._id, req.body);
-    } else {
-      availability = await Availability.create({
-        staffId: req.params.staffId,
-        ...req.body
-      });
-    }
-
-    res.json(availability);
-  } catch (error) {
-    console.error('Error setting availability:', error);
-    res.status(500).json({ error: 'Failed to set availability' });
-  }
-});
-
-// Add exception (time off or special hours)
-app.post('/api/availability/:id/exceptions', authenticateToken, async (req, res) => {
-  try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Forbidden: Admin access required' });
-    }
-
-    const availability = await Availability.addException(req.params.id, req.body);
-
-    if (!availability) {
-      return res.status(404).json({ error: 'Availability not found' });
-    }
-
-    res.json(availability);
-  } catch (error) {
-    console.error('Error adding exception:', error);
-    res.status(500).json({ error: 'Failed to add exception' });
-  }
-});
+app.use('/api/availability', availabilityRouter);
 
 // ============================================
 // RECURRING BOOKING ENDPOINTS

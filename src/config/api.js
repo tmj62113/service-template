@@ -44,8 +44,10 @@ export const API_ENDPOINTS = {
 
   // Availability
   AVAILABILITY: '/api/availability',
+  AVAILABILITY_BY_ID: (id) => `/api/availability/${id}`,
   AVAILABILITY_SLOTS: '/api/availability/slots',
   AVAILABILITY_STAFF: (staffId) => `/api/availability/staff/${staffId}`,
+  AVAILABILITY_EXCEPTIONS: (availabilityId) => `/api/availability/${availabilityId}/exceptions`,
 
   // Messages
   MESSAGES: '/api/messages',

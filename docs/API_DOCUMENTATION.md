@@ -384,6 +384,125 @@ Authorization: Required (Admin)
 
 ---
 
+## Availability
+
+Endpoints for managing staff availability schedules.
+
+### Get Availability for Staff Member
+```http
+GET /api/availability/staff/:staffId
+```
+
+**Response:**
+```json
+{
+  "_id": "677f1f77bcf86cd799439011",
+  "staffId": "677f1f77bcf86cd799439010",
+  "schedule": [
+    {
+      "dayOfWeek": 1,
+      "timeSlots": [
+        { "startTime": "09:00", "endTime": "12:00" },
+        { "startTime": "13:00", "endTime": "17:00" }
+      ]
+    }
+  ],
+  "exceptions": [],
+  "overrides": [],
+  "effectiveFrom": "2025-01-01T05:00:00.000Z",
+  "effectiveTo": null
+}
+```
+
+### Get Available Time Slots
+```http
+GET /api/availability/slots?staffId=ID&date=2025-02-01&duration=60&bufferTime=15
+```
+
+**Query Parameters:**
+- `staffId` (required) – Staff member ID
+- `date` (required) – ISO date string for the day to query
+- `duration` (required) – Appointment length in minutes
+- `bufferTime` (optional) – Buffer between slots in minutes
+
+**Response:**
+```json
+{
+  "slots": [
+    "2025-02-01T14:00:00.000Z",
+    "2025-02-01T15:15:00.000Z"
+  ]
+}
+```
+
+### Create Availability (Admin or Provider)
+```http
+POST /api/availability/staff/:staffId
+Content-Type: application/json
+Authorization: Required (Admin or owning Provider)
+
+{
+  "schedule": [
+    {
+      "dayOfWeek": 1,
+      "timeSlots": [
+        { "startTime": "09:00", "endTime": "12:00" },
+        { "startTime": "13:00", "endTime": "17:00" }
+      ]
+    }
+  ],
+  "effectiveFrom": "2025-01-01"
+}
+```
+
+**Notes:** Returns `409 Conflict` if the staff member already has an availability schedule.
+
+### Update Availability (Admin or Provider)
+```http
+PUT /api/availability/:id
+Content-Type: application/json
+Authorization: Required (Admin or owning Provider)
+
+{
+  "schedule": [
+    {
+      "dayOfWeek": 2,
+      "timeSlots": [
+        { "startTime": "10:00", "endTime": "16:00" }
+      ]
+    }
+  ]
+}
+```
+
+### Delete Availability (Admin or Provider)
+```http
+DELETE /api/availability/:id
+Authorization: Required (Admin or owning Provider)
+```
+
+**Response:**
+```json
+{
+  "message": "Availability deleted successfully"
+}
+```
+
+### Add Exception to Availability (Admin or Provider)
+```http
+POST /api/availability/:id/exceptions
+Content-Type: application/json
+Authorization: Required (Admin or owning Provider)
+
+{
+  "date": "2025-02-14",
+  "type": "unavailable",
+  "reason": "Company retreat"
+}
+```
+
+---
+
 ## Contact
 
 ### Submit Contact Form
