@@ -43,12 +43,10 @@ describe("HeroSlider", () => {
       expect(nextButton).toHaveTextContent("2");
     });
 
-    it("renders slide info section with title and description", () => {
+    it("renders slide info section with title", () => {
       render(<HeroSlider />);
       expect(screen.getByText("Life Coaches")).toBeInTheDocument();
-      expect(
-        screen.getByText("The scheduling platform that never misses a beat")
-      ).toBeInTheDocument();
+      // Note: Description is not currently rendered in the component
     });
   });
 
@@ -252,12 +250,7 @@ describe("HeroSlider", () => {
       });
     });
 
-    it("displays the same description for all slides", () => {
-      render(<HeroSlider />);
-      expect(
-        screen.getByText("The scheduling platform that never misses a beat")
-      ).toBeInTheDocument();
-    });
+    // Note: Description display removed from component, test no longer needed
   });
 
   describe("Accessibility", () => {
