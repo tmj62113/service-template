@@ -510,4 +510,16 @@ export class Booking {
       })
       .toArray();
   }
+
+  /**
+   * Hard delete booking from database
+   * WARNING: This permanently removes the booking. Consider using cancel() instead for audit trail.
+   * @param {string} bookingId - MongoDB ObjectId
+   * @returns {Promise<boolean>} Success status
+   */
+  static async delete(bookingId) {
+    const collection = await getCollection(COLLECTION_NAME);
+    const result = await collection.deleteOne({ _id: new ObjectId(bookingId) });
+    return result.deletedCount > 0;
+  }
 }
