@@ -80,6 +80,12 @@ export default function MobileMenu() {
             Services
           </Link>
           <Link
+            to="/staff"
+            className={location.pathname.startsWith('/staff') ? 'active' : ''}
+          >
+            Team
+          </Link>
+          <Link
             to="/about"
             className={location.pathname === '/about' ? 'active' : ''}
           >

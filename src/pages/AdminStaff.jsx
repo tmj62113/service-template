@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import StaffEditModal from '../components/StaffEditModal';
 import { getApiUrl } from '../config/api';
@@ -16,10 +16,16 @@ export default function AdminStaff() {
   const [sortBy, setSortBy] = useState('date');
   const [sortOrder, setSortOrder] = useState('desc');
 
+  // Filter state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [bookingFilter, setBookingFilter] = useState('all');
+  const [serviceFilter, setServiceFilter] = useState('all');
+
   useEffect(() => {
     fetchStaff();
     fetchServices();
-  }, []);
+  }, [fetchStaff, fetchServices]);
 
   // Check for staffId in URL params and open modal
   useEffect(() => {
@@ -36,7 +42,7 @@ export default function AdminStaff() {
     }
   }, [staff, searchParams, setSearchParams]);
 
-  const fetchStaff = async () => {
+  const fetchStaff = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(getApiUrl('/api/staff'), {
@@ -55,9 +61,9 @@ export default function AdminStaff() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchServices = async () => {
+  const fetchServices = useCallback(async () => {
     try {
       const response = await fetch(getApiUrl('/api/services'), {
         credentials: 'include',
@@ -72,7 +78,7 @@ export default function AdminStaff() {
     } catch (err) {
       console.error('Failed to load services:', err);
     }
-  };
+  }, []);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -200,7 +206,7 @@ export default function AdminStaff() {
     }
   };
 
-  const getSortedStaff = () => {
+  const getSortedStaff = useMemo(() => {
     const sorted = [...staff].sort((a, b) => {
       let aVal, bVal;
 
@@ -235,7 +241,45 @@ export default function AdminStaff() {
     });
 
     return sorted;
-  };
+  }, [staff, sortBy, sortOrder]);
+
+  const visibleStaff = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+
+    return getSortedStaff.filter((member) => {
+      // Status filter
+      if (statusFilter === 'active' && !member.isActive) return false;
+      if (statusFilter === 'inactive' && member.isActive) return false;
+
+      // Booking filter
+      if (bookingFilter === 'accepting' && !member.acceptingBookings) return false;
+      if (bookingFilter === 'paused' && member.acceptingBookings) return false;
+
+      // Service filter
+      if (
+        serviceFilter !== 'all' &&
+        !(member.serviceIds || []).map((id) => id.toString()).includes(serviceFilter)
+      ) {
+        return false;
+      }
+
+      // Search filter
+      if (!normalizedSearch) return true;
+
+      const haystack = [
+        member.name,
+        member.email,
+        member.title,
+        member.bio,
+        ...(member.specialties || []),
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+
+      return haystack.includes(normalizedSearch);
+    });
+  }, [getSortedStaff, searchTerm, statusFilter, bookingFilter, serviceFilter]);
 
   const getSortLabel = () => {
     const labels = {
@@ -259,6 +303,53 @@ export default function AdminStaff() {
           <span className="material-symbols-outlined">add</span>
           Add Staff Member
         </button>
+
+        <div className="products-filters">
+          <div className="search-bar">
+            <span className="material-symbols-outlined">search</span>
+            <input
+              type="search"
+              placeholder="Search staff by name, email, title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Search staff"
+            />
+          </div>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            aria-label="Filter by status"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+          <select
+            value={bookingFilter}
+            onChange={(e) => setBookingFilter(e.target.value)}
+            aria-label="Filter by booking availability"
+          >
+            <option value="all">All Booking Status</option>
+            <option value="accepting">Accepting Bookings</option>
+            <option value="paused">Not Accepting</option>
+          </select>
+
+          <select
+            value={serviceFilter}
+            onChange={(e) => setServiceFilter(e.target.value)}
+            aria-label="Filter by service"
+          >
+            <option value="all">All Services</option>
+            {services.map((service) => (
+              <option key={service._id} value={service._id}>
+                {service.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="products-actions">
           <button className="btn btn-secondary" onClick={handleExportData}>
             <span className="material-symbols-outlined">download</span>
@@ -297,7 +388,7 @@ export default function AdminStaff() {
             </tr>
           </thead>
           <tbody>
-            {getSortedStaff().map((staffMember) => (
+            {visibleStaff.map((staffMember) => (
               <tr
                 key={staffMember._id}
                 onClick={() => handleViewStaff(staffMember)}
@@ -327,6 +418,9 @@ export default function AdminStaff() {
         </table>
         {staff.length === 0 && (
           <div className="no-data">No staff members found. Add your first staff member to get started!</div>
+        )}
+        {staff.length > 0 && visibleStaff.length === 0 && (
+          <div className="no-data">No staff members match your filters. Try adjusting your search or filters.</div>
         )}
       </div>
 

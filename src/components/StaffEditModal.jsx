@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { getApiUrl } from "../config/api";
+import { uploadImage } from "../utils/uploadImage";
 
 export default function StaffEditModal({
   staffMember,
@@ -17,6 +18,7 @@ export default function StaffEditModal({
     bio: "",
     specialties: [],
     serviceIds: [],
+    photo: "",
     timeZone: "America/New_York",
     defaultBookingBuffer: 15,
     isActive: true,
@@ -28,6 +30,8 @@ export default function StaffEditModal({
   const [specialtyInput, setSpecialtyInput] = useState("");
   const closeButtonRef = useRef(null);
   const previousFocusRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   useEffect(() => {
     if (staffMember) {
@@ -39,6 +43,7 @@ export default function StaffEditModal({
         bio: staffMember.bio || "",
         specialties: staffMember.specialties || [],
         serviceIds: staffMember.serviceIds?.map(id => id.toString()) || [],
+        photo: staffMember.photo || "",
         timeZone: staffMember.timeZone || "America/New_York",
         defaultBookingBuffer: staffMember.defaultBookingBuffer || 15,
         isActive: staffMember.isActive !== undefined ? staffMember.isActive : true,
@@ -53,6 +58,7 @@ export default function StaffEditModal({
         bio: "",
         specialties: [],
         serviceIds: [],
+        photo: "",
         timeZone: "America/New_York",
         defaultBookingBuffer: 15,
         isActive: true,
@@ -176,6 +182,49 @@ export default function StaffEditModal({
     return service ? service.name : 'Unknown Service';
   };
 
+  const handlePhotoSelect = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setError('Please upload a valid image file');
+      event.target.value = '';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Please upload an image smaller than 5MB');
+      event.target.value = '';
+      return;
+    }
+
+    setUploadingPhoto(true);
+    setError(null);
+
+    try {
+      const uploadedUrl = await uploadImage(file);
+      setFormData((prev) => ({
+        ...prev,
+        photo: uploadedUrl,
+      }));
+    } catch (uploadError) {
+      console.error('Failed to upload staff photo:', uploadError);
+      setError(uploadError.message || 'Failed to upload photo');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setFormData((prev) => ({
+      ...prev,
+      photo: "",
+    }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -203,6 +252,24 @@ export default function StaffEditModal({
             {viewMode && !isEditing ? (
               // View Mode
               <div className="product-view">
+                <div className="view-row" style={{ alignItems: 'flex-start' }}>
+                  <label>Photo:</label>
+                  {formData.photo ? (
+                    <img
+                      src={formData.photo}
+                      alt={`Portrait of ${formData.name}`}
+                      style={{
+                        width: '120px',
+                        height: '120px',
+                        objectFit: 'cover',
+                        borderRadius: 'var(--radius-md)',
+                        boxShadow: 'var(--shadow-sm)'
+                      }}
+                    />
+                  ) : (
+                    <span style={{ color: 'var(--color-text-lighter)' }}>No photo uploaded</span>
+                  )}
+                </div>
                 <div className="view-row">
                   <label>Name:</label>
                   <p>{formData.name}</p>
@@ -259,6 +326,71 @@ export default function StaffEditModal({
             ) : (
               // Edit Mode
               <>
+                <div className="form-group">
+                  <label htmlFor="staffPhoto">Profile Photo</label>
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: 'var(--spacing-md)',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '96px',
+                        height: '96px',
+                        borderRadius: 'var(--radius-md)',
+                        overflow: 'hidden',
+                        background: 'rgba(var(--rgb-primary), 0.35)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: formData.photo ? 'var(--shadow-sm)' : 'none',
+                      }}
+                    >
+                      {formData.photo ? (
+                        <img
+                          src={formData.photo}
+                          alt={formData.name ? `Portrait of ${formData.name}` : 'Uploaded staff portrait'}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <span className="material-symbols-outlined" aria-hidden="true">person</span>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        id="staffPhoto"
+                        name="photo"
+                        accept="image/*"
+                        onChange={handlePhotoSelect}
+                        aria-describedby="staffPhotoHelp"
+                      />
+                      <small id="staffPhotoHelp" style={{ color: 'var(--color-text-lighter)' }}>
+                        Upload a square image (max 5MB). We'll optimize and crop to focus on faces.
+                      </small>
+                      {formData.photo && (
+                        <button
+                          type="button"
+                          className="btn btn-tertiary"
+                          onClick={handleRemovePhoto}
+                          style={{ alignSelf: 'flex-start' }}
+                        >
+                          Remove photo
+                        </button>
+                      )}
+                      {uploadingPhoto && (
+                        <span style={{ color: 'var(--color-text-lighter)', fontSize: 'var(--font-size-sm)' }}>
+                          Uploading photo...
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="form-row">
                   <div className="form-group">
                     <label htmlFor="name">Full Name *</label>

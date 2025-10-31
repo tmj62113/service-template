@@ -36,6 +36,8 @@ import ClientDetail from './pages/ClientDetail';
 import TestUtilities from './pages/TestUtilities';
 import StyleGuide from './pages/StyleGuide';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import StaffDirectory from './pages/StaffDirectory';
+import StaffProfile from './pages/StaffProfile';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import ToastContainer from './components/toast/ToastContainer';
@@ -77,6 +79,8 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/services/:id" element={<ServiceDetail />} />
+                    <Route path="/staff" element={<StaffDirectory />} />
+                    <Route path="/staff/:id" element={<StaffProfile />} />
                     <Route path="/book" element={<BookingFlow />} />
                     <Route path="/booking/review" element={<BookingReview />} />
                     <Route path="/booking/confirmation" element={<BookingConfirmation />} />

@@ -1560,6 +1560,45 @@ app.delete('/api/staff/:id', authenticateToken, async (req, res) => {
   }
 });
 
+// Upload image to Cloudinary (admin only)
+app.post('/api/admin/upload', authenticateToken, requireAdmin, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image provided' });
+    }
+
+    const uploadResult = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'clockwork/staff',
+          resource_type: 'image',
+          transformation: [
+            { width: 600, height: 600, crop: 'fill', gravity: 'faces', quality: 'auto' },
+            { fetch_format: 'auto' }
+          ],
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+
+      stream.end(req.file.buffer);
+    });
+
+    return res.json({
+      url: uploadResult.secure_url,
+      publicId: uploadResult.public_id,
+    });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return res.status(500).json({ error: 'Failed to upload image' });
+  }
+});
+
 // Get staff statistics (admin only)
 app.get('/api/staff/stats/summary', authenticateToken, async (req, res) => {
   try {

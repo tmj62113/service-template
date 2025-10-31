@@ -28,6 +28,7 @@ export default function Header() {
             <nav className="nav-bar desktop-nav" role="navigation" aria-label="Main navigation">
               <ul className="nav-content">
                 <li><a href="/services">Services</a></li>
+                <li><a href="/staff">Team</a></li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
                 {user?.role === 'admin' && (
