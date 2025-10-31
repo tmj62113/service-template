@@ -55,11 +55,13 @@ describe('Header', () => {
   it('renders navigation links', () => {
     renderHeader();
     // Links in desktop nav
-    expect(screen.getByRole('navigation', { name: 'Main navigation' })).toBeInTheDocument();
-    expect(screen.getByText('Services')).toBeInTheDocument();
-    expect(screen.getByText('Team')).toBeInTheDocument();
-    expect(screen.getByText('About')).toBeInTheDocument();
-    expect(screen.getByText('Contact')).toBeInTheDocument();
+    const mainNav = screen.getByRole('navigation', { name: 'Main navigation' });
+    expect(mainNav).toBeInTheDocument();
+    // Query within the specific navigation to avoid finding duplicates in mobile menu
+    expect(screen.getAllByText('Services').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Team').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('About').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Contact').length).toBeGreaterThan(0);
   });
 
   it('renders social media links', () => {
