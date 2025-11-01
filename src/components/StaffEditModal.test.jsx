@@ -12,8 +12,8 @@ import { uploadImage } from '../utils/uploadImage';
 
 describe('StaffEditModal', () => {
   const mockServices = [
-    { _id: '1', name: 'Service 1' },
-    { _id: '2', name: 'Service 2' },
+    { _id: '1', name: 'Service 1', duration: 60 },
+    { _id: '2', name: 'Service 2', duration: 45 },
   ];
 
   const mockStaffMember = {
@@ -44,6 +44,32 @@ describe('StaffEditModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     global.fetch = vi.fn();
+  });
+
+  describe('Form Fields', () => {
+    it('renders all core form fields for staff details', () => {
+      render(<StaffEditModal {...defaultProps} />);
+
+      expect(screen.getByLabelText('Profile Photo')).toBeInTheDocument();
+      expect(screen.getByLabelText('Full Name *')).toBeInTheDocument();
+      expect(screen.getByLabelText('Email *')).toBeInTheDocument();
+      expect(screen.getByLabelText('Phone')).toBeInTheDocument();
+      expect(screen.getByLabelText('Title')).toBeInTheDocument();
+      expect(screen.getByLabelText('Bio')).toBeInTheDocument();
+    });
+
+    it('renders specialty input, service checkboxes, and status toggles', () => {
+      render(<StaffEditModal {...defaultProps} />);
+
+      expect(screen.getByPlaceholderText('e.g., Leadership Coaching')).toBeInTheDocument();
+      expect(screen.getByText('Service 1 (60 min)')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(/Active \(staff member is active\)/i)
+      ).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(/Accepting Bookings \(available for new bookings\)/i)
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Photo Upload', () => {
@@ -259,7 +285,7 @@ describe('StaffEditModal', () => {
     it('renders modal with title for new staff', () => {
       render(<StaffEditModal {...defaultProps} />);
 
-      expect(screen.getByText('Add Staff Member')).toBeInTheDocument();
+      expect(screen.getByText('New Staff Member')).toBeInTheDocument();
     });
 
     it('renders modal with title for editing staff', () => {
@@ -283,7 +309,7 @@ describe('StaffEditModal', () => {
         />
       );
 
-      expect(screen.getByText('Staff Details')).toBeInTheDocument();
+      expect(screen.getByText('Staff Member Details')).toBeInTheDocument();
     });
 
     it('calls onClose when close button is clicked', async () => {
@@ -340,6 +366,136 @@ describe('StaffEditModal', () => {
             method: 'POST',
             body: expect.stringContaining(uploadedUrl),
           })
+        );
+      });
+    });
+  });
+
+  describe('Service Assignment', () => {
+    it('displays available services as checkboxes', () => {
+      render(<StaffEditModal {...defaultProps} />);
+
+      const serviceCheckboxes = screen.getAllByRole('checkbox', { name: /Service/ });
+      expect(serviceCheckboxes).toHaveLength(2);
+    });
+
+    it('allows selecting multiple services and saves them', async () => {
+      const user = userEvent.setup();
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          ...mockStaffMember,
+          serviceIds: ['1', '2'],
+        }),
+      });
+
+      render(<StaffEditModal {...defaultProps} />);
+
+      const nameInput = screen.getByLabelText('Full Name *');
+      const emailInput = screen.getByLabelText('Email *');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Dana Coach');
+      await user.clear(emailInput);
+      await user.type(emailInput, 'dana@example.com');
+
+      const serviceCheckboxes = screen.getAllByRole('checkbox', { name: /Service/ });
+      await user.click(serviceCheckboxes[0]);
+      await user.click(serviceCheckboxes[1]);
+
+      const saveButton = screen.getByRole('button', { name: /Create Staff Member/i });
+      await user.click(saveButton);
+
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith(
+          expect.stringContaining('/api/staff'),
+          expect.objectContaining({
+            method: 'POST',
+            body: expect.stringContaining('"serviceIds":["1","2"]'),
+          })
+        );
+        expect(defaultProps.onSave).toHaveBeenCalledWith(
+          expect.objectContaining({ serviceIds: ['1', '2'] })
+        );
+      });
+    });
+  });
+
+  describe('Specialty Tags', () => {
+    it('displays existing specialties as removable chips', () => {
+      render(
+        <StaffEditModal
+          {...defaultProps}
+          staffMember={mockStaffMember}
+          viewMode={false}
+        />
+      );
+
+      expect(screen.getByText('Leadership')).toBeInTheDocument();
+      expect(screen.getByLabelText('Remove Leadership')).toBeInTheDocument();
+    });
+
+    it('allows adding a new specialty tag', async () => {
+      const user = userEvent.setup();
+      render(<StaffEditModal {...defaultProps} />);
+
+      const specialtyInput = screen.getByPlaceholderText('e.g., Leadership Coaching');
+      await user.type(specialtyInput, 'Mindfulness');
+
+      await user.click(screen.getByRole('button', { name: 'Add' }));
+
+      expect(screen.getByText('Mindfulness')).toBeInTheDocument();
+    });
+
+    it('allows removing specialty tags', async () => {
+      const user = userEvent.setup();
+      render(
+        <StaffEditModal
+          {...defaultProps}
+          staffMember={mockStaffMember}
+          viewMode={false}
+        />
+      );
+
+      await user.click(screen.getByLabelText('Remove Leadership'));
+
+      expect(screen.queryByText('Leadership')).not.toBeInTheDocument();
+    });
+
+    it('saves specialties on submit', async () => {
+      const user = userEvent.setup();
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          ...mockStaffMember,
+          specialties: ['Leadership', 'Strategy', 'Mindfulness'],
+        }),
+      });
+
+      render(<StaffEditModal {...defaultProps} />);
+
+      const nameInput = screen.getByLabelText('Full Name *');
+      const emailInput = screen.getByLabelText('Email *');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Dana Coach');
+      await user.clear(emailInput);
+      await user.type(emailInput, 'dana@example.com');
+
+      const specialtyInput = screen.getByPlaceholderText('e.g., Leadership Coaching');
+      await user.type(specialtyInput, 'Mindfulness');
+      await user.click(screen.getByRole('button', { name: 'Add' }));
+
+      const saveButton = screen.getByRole('button', { name: /Create Staff Member/i });
+      await user.click(saveButton);
+
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith(
+          expect.stringContaining('/api/staff'),
+          expect.objectContaining({
+            body: expect.stringContaining('"specialties":["Mindfulness"]'),
+          })
+        );
+        expect(defaultProps.onSave).toHaveBeenCalledWith(
+          expect.objectContaining({ specialties: ['Leadership', 'Strategy', 'Mindfulness'] })
         );
       });
     });
