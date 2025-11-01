@@ -1,18 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import AdminStaff from './AdminStaff';
 
+const modalProps = { current: null };
+
 // Mock the StaffEditModal component
 vi.mock('../components/StaffEditModal', () => ({
-  default: ({ onClose, staffMember, viewMode }) => (
-    <div data-testid="staff-edit-modal">
-      <button onClick={onClose}>Close Modal</button>
-      <div>View Mode: {viewMode ? 'Yes' : 'No'}</div>
-      {staffMember && <div>Editing: {staffMember.name}</div>}
-    </div>
-  ),
+  default: (props) => {
+    modalProps.current = props;
+    const { onClose, staffMember, viewMode } = props;
+    return (
+      <div data-testid="staff-edit-modal">
+        <button onClick={onClose}>Close Modal</button>
+        <div>View Mode: {viewMode ? 'Yes' : 'No'}</div>
+        {staffMember && <div>Editing: {staffMember.name}</div>}
+      </div>
+    );
+  },
 }));
 
 const mockStaff = [
@@ -71,6 +77,7 @@ describe('AdminStaff', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     global.fetch = vi.fn();
+    modalProps.current = null;
   });
 
   describe('Initial Load', () => {
@@ -82,7 +89,7 @@ describe('AdminStaff', () => {
       expect(screen.getByText('Loading staff...')).toBeInTheDocument();
     });
 
-    it('fetches and displays staff members', async () => {
+    it('fetches and displays staff members with service names and statuses', async () => {
       global.fetch
         .mockResolvedValueOnce({
           ok: true,
@@ -99,7 +106,20 @@ describe('AdminStaff', () => {
         expect(screen.getByText('Alice Johnson')).toBeInTheDocument();
         expect(screen.getByText('Bob Smith')).toBeInTheDocument();
         expect(screen.getByText('Charlie Brown')).toBeInTheDocument();
+        expect(screen.getByText('Coaching Session, Consulting Session')).toBeInTheDocument();
+        expect(screen.getByText('Coaching Session')).toBeInTheDocument();
+        const activeBadges = screen.getAllByText('Active');
+        expect(activeBadges[0]).toHaveClass('status-badge', { exact: false });
+        expect(screen.getByText('Inactive')).toHaveClass('status-badge', { exact: false });
+        expect(screen.getByText('Yes')).toHaveClass('status-badge', { exact: false });
+        expect(screen.getByText('No')).toHaveClass('status-badge', { exact: false });
       });
+
+      const tableRows = screen.getAllByRole('row');
+      // 1 header row + 3 staff rows
+      expect(tableRows).toHaveLength(4);
+      const aliceRow = tableRows[1];
+      expect(within(aliceRow).getByText('STF-1')).toBeInTheDocument();
     });
 
     it('displays error when fetch fails', async () => {
@@ -447,6 +467,33 @@ describe('AdminStaff', () => {
         expect(screen.getByTestId('staff-edit-modal')).toBeInTheDocument();
       });
     });
+
+    it('adds a newly created staff member to the table', async () => {
+      const user = userEvent.setup();
+      const addButton = screen.getByRole('button', { name: /Add Staff Member/i });
+
+      await user.click(addButton);
+
+      await waitFor(() => expect(modalProps.current).not.toBeNull());
+
+      const newStaff = {
+        _id: '4',
+        name: 'Dana White',
+        email: 'dana@example.com',
+        title: 'Wellness Coach',
+        specialties: ['Wellness'],
+        serviceIds: ['service1'],
+        isActive: true,
+        acceptingBookings: true,
+        createdAt: '2024-04-01T10:00:00Z',
+      };
+
+      modalProps.current.onSave(newStaff);
+
+      await waitFor(() => {
+        expect(screen.getByText('Dana White')).toBeInTheDocument();
+      });
+    });
   });
 
   describe('View Staff Member', () => {
@@ -478,6 +525,27 @@ describe('AdminStaff', () => {
         expect(screen.getByTestId('staff-edit-modal')).toBeInTheDocument();
         expect(screen.getByText('View Mode: Yes')).toBeInTheDocument();
         expect(screen.getByText('Editing: Alice Johnson')).toBeInTheDocument();
+      });
+    });
+
+    it('updates an existing staff member when modal saves changes', async () => {
+      const user = userEvent.setup();
+      const aliceRow = screen.getByText('Alice Johnson').closest('tr');
+
+      await user.click(aliceRow);
+
+      await waitFor(() => expect(modalProps.current).not.toBeNull());
+
+      const updatedStaff = {
+        ...mockStaff[0],
+        name: 'Alice Updated',
+      };
+
+      modalProps.current.onSave(updatedStaff);
+
+      await waitFor(() => {
+        expect(screen.getByText('Alice Updated')).toBeInTheDocument();
+        expect(screen.queryByText('Alice Johnson')).not.toBeInTheDocument();
       });
     });
   });
@@ -549,6 +617,70 @@ describe('AdminStaff', () => {
           screen.getByText(/No staff members found. Add your first staff member/i)
         ).toBeInTheDocument();
       });
+    });
+  });
+
+  describe('Deactivate Staff Member', () => {
+    beforeEach(async () => {
+      global.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ staff: mockStaff }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ services: mockServices }),
+        })
+        .mockResolvedValue({
+          ok: true,
+          json: async () => ({ success: true }),
+        });
+
+      window.confirm = vi.fn().mockReturnValue(true);
+      window.alert = vi.fn();
+
+      renderAdminStaff();
+
+      await waitFor(() => {
+        expect(screen.getByText('Alice Johnson')).toBeInTheDocument();
+      });
+    });
+
+    it('confirms and deactivates staff member', async () => {
+      const user = userEvent.setup();
+      const aliceRow = screen.getByText('Alice Johnson').closest('tr');
+
+      await user.click(aliceRow);
+
+      await waitFor(() => expect(modalProps.current).not.toBeNull());
+
+      await modalProps.current.onDelete(mockStaff[0]._id);
+
+      await waitFor(() => {
+        expect(window.confirm).toHaveBeenCalled();
+        expect(global.fetch).toHaveBeenLastCalledWith(
+          expect.stringContaining(`/api/staff/${mockStaff[0]._id}`),
+          expect.objectContaining({ method: 'DELETE' })
+        );
+        expect(screen.getByText('Inactive')).toBeInTheDocument();
+        expect(screen.getByText('No')).toBeInTheDocument();
+      });
+    });
+
+    it('does not deactivate when confirmation is cancelled', async () => {
+      window.confirm.mockReturnValueOnce(false);
+
+      const user = userEvent.setup();
+      const aliceRow = screen.getByText('Alice Johnson').closest('tr');
+
+      await user.click(aliceRow);
+
+      await waitFor(() => expect(modalProps.current).not.toBeNull());
+
+      await modalProps.current.onDelete(mockStaff[0]._id);
+
+      expect(global.fetch).toHaveBeenCalledTimes(2); // initial staff & services
+      expect(screen.getByText('Active')).toBeInTheDocument();
     });
   });
 });
